@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f16ac9de27be2e4f8c966f5bd0083ba, type: 3}
+  m_Name: ChickenCooked-ChickenBurned
+  m_EditorClassIdentifier: 
+  input: {fileID: 11400000, guid: 256acba26812f484eb0ae8f36de81d2d, type: 2}
+  output: {fileID: 11400000, guid: 09d32e0775dae6a4aa2ba1409ffe12cd, type: 2}
+  BurningTimerMax: 10

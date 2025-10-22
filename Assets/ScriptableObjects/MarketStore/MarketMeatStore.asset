@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 755a50e64e05ad847920ec4d1cc6fd03, type: 3}
+  m_Name: MarketMeatStore
+  m_EditorClassIdentifier: 
+  storeObjects:
+  - {fileID: 11400000, guid: 70dca47b1a2226a4a9a0ac0868053acc, type: 2}
+  - {fileID: 11400000, guid: f4e274a2a53448f47a67ac782a498060, type: 2}
+  - {fileID: 11400000, guid: a06e9d0f0d5ca2c4f997c2b34aeddb36, type: 2}
+  - {fileID: 11400000, guid: d54b4476724184141b10f6922ed68d9a, type: 2}

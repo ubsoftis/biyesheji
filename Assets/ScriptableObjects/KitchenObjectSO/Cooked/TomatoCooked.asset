@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b221a9bfc94cce4985c9aa51cd944ce, type: 3}
+  m_Name: TomatoCooked
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 4702173501966350563, guid: 78e1c891c5c284b47b2a1a8c22b98bd9, type: 3}
+  sprite: {fileID: 21300000, guid: 2386b5e9210db2b4aba08a518b31185f, type: 3}
+  ObjectNamae: TomatoCooked
+  price: 2
+  number: 0

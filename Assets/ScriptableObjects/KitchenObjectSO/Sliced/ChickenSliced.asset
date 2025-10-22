@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b221a9bfc94cce4985c9aa51cd944ce, type: 3}
+  m_Name: ChickenSliced
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1293221905785410641, guid: fb3dad1e84d93c84f8286779c51721a8, type: 3}
+  sprite: {fileID: 21300000, guid: f1bbdb62469bd3540a6c030fa68020e4, type: 3}
+  ObjectNamae: ChickenSliced
+  price: 3
+  number: 0
