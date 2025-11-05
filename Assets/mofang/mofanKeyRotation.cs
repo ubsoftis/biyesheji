@@ -27,6 +27,12 @@ public class mofanKeyRotation : MonoBehaviour
     private Vector3 boxPrevPos;
 		private Quaternion boxPrevRot;
 
+    // 初始状态快照（用于一键重置）
+    private List<Transform> cubeTransforms = new List<Transform>();
+    private Dictionary<Transform, Transform> initParent = new Dictionary<Transform, Transform>();
+    private Dictionary<Transform, Vector3> initLocalPos = new Dictionary<Transform, Vector3>();
+    private Dictionary<Transform, Quaternion> initLocalRot = new Dictionary<Transform, Quaternion>();
+
     // 每个面的方向系数，便于纠正顺时针/逆时针差异（1 或 -1）
     public int dir_R = 1;
     public int dir_L = -1;
@@ -194,6 +200,50 @@ public class mofanKeyRotation : MonoBehaviour
         List_Str.Add("U''");
         List_Str.Add("B");
         List_Str.Add("B''");
+
+        // 记录初始姿态，便于“重置”按钮一键恢复
+        CaptureInitialState();
+    }
+
+    void CaptureInitialState()
+    {
+        if (CubeRoot == null) return;
+        cubeTransforms.Clear();
+        initParent.Clear();
+        initLocalPos.Clear();
+        initLocalRot.Clear();
+        var trs = CubeRoot.GetComponentsInChildren<Transform>(true);
+        foreach (var t in trs)
+        {
+            // 只记录魔方块相关节点：Layer 为 Cube 的物体以及它们的父节点（如 Pivot_）
+            bool isCubeLayer = t.gameObject.layer == LayerMask.NameToLayer("Cube");
+            bool isPivot = t.name.StartsWith("Pivot_");
+            if (!isCubeLayer && !isPivot) continue;
+            cubeTransforms.Add(t);
+            initParent[t] = t.parent;
+            initLocalPos[t] = t.localPosition;
+            initLocalRot[t] = t.localRotation;
+        }
+    }
+
+    public void ResetCube()
+    {
+        // 归还到初始父子关系并还原局部位姿
+        foreach (var t in cubeTransforms)
+        {
+            if (t == null) continue;
+            Transform p;
+            if (initParent.TryGetValue(t, out p))
+            {
+                t.SetParent(p, false);
+            }
+            Vector3 lp;
+            if (initLocalPos.TryGetValue(t, out lp)) t.localPosition = lp;
+            Quaternion lr;
+            if (initLocalRot.TryGetValue(t, out lr)) t.localRotation = lr;
+        }
+        List_History.Clear();
+        isAuto = false;
     }
 
     void Update ()
