@@ -100,10 +100,10 @@ TextureImporter:
       name: "\u4E3B\u89D2\u548C\u540C\u4E8B_2"
       rect:
         serializedVersion: 2
-        x: 619
-        y: 106
-        width: 1243
-        height: 3865
+        x: 601
+        y: 28
+        width: 1338
+        height: 3990
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,7 +147,7 @@ TextureImporter:
         width: 1000
         height: 1000
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -168,7 +168,7 @@ TextureImporter:
         width: 1000
         height: 1000
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
