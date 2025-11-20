@@ -20,15 +20,19 @@ Shader "Ymck/Test"
             #pragma fragment frag 
             //顶点构成的三角形内部的每个显示在屏幕上的像素的着色
             
-            float _ColorIntensity;
-            float4 _MainColor;
+            CBUFFER_START(UnityPerMaterial)
+                float4 _MainTex_ST;
+                float _ColorIntensity;
+                float4 _MainColor;
+            CBUFFER_END
+            
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
             
             struct appdata//顶点数据
             {
                 //字段类型 字段名称：字段语义
-                float3 pos:POSITION;//顶点位置数据
+                float4 pos:POSITION;//顶点位置数据
                 float2 uv:TEXCOORD0;
             };
             
@@ -41,15 +45,16 @@ Shader "Ymck/Test"
             v2f vert(appdata IN)//将appdata转换为v2f类型
             {
                 v2f OUT=(v2f)0;//申明v2f变量 并赋值为0
-                OUT.pos=mul(UNITY_MATRIX_MVP,float4(IN.pos,1));
-                OUT.uv=IN.uv;
-                TRANSFORM_TEX();
+                VertexPositionInputs vertexInput = GetVertexPositionInputs(IN.pos.xyz);
+                OUT.pos = vertexInput.positionCS;
+                OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
                 return OUT;
             }
             
             float4 frag(v2f IN):SV_TARGET//申明渲染的颜色
             {
-                return float4(_MainColor)*_ColorIntensity;
+                half4 texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, IN.uv);
+                return texColor * _MainColor * _ColorIntensity;
             }
             ENDHLSL
         }
