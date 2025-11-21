@@ -20,7 +20,7 @@ Shader "Custom/stencil"
 
             Stencil
             {
-                Ref 1
+                Ref [_index]
                 Comp Always
                 Pass Replace
                 Fail Keep
