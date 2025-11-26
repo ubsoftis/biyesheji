@@ -22,7 +22,7 @@ Shader "mian3"
 		LOD 0
 
 		
-		Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" "Queue"="AlphaTest+20" }
+		Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Transparent" "Queue"="Transparent" }
 		
 		Cull Back
 		AlphaToMask Off
@@ -136,8 +136,8 @@ Shader "mian3"
 			Name "Forward"
 			Tags { "LightMode"="UniversalForward" }
 			
-			Blend One Zero, One Zero
-			ZWrite On
+			Blend SrcAlpha OneMinusSrcAlpha
+			ZWrite Off
 			ZTest LEqual
 			Offset 0 , 0
 			ColorMask RGBA
@@ -356,8 +356,9 @@ Shader "mian3"
 				
 				float3 BakedAlbedo = 0;
 				float3 BakedEmission = 0;
-				float3 Color = tex2D( _TextureSample0, uv_TextureSample0 ).rgb;
-				float Alpha = 1;
+				float4 texSample = tex2D( _TextureSample0, uv_TextureSample0 );
+				float3 Color = texSample.rgb;
+				float Alpha = texSample.a;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 
