@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: main6
+  m_Name: main6 5
   m_Shader: {fileID: 4800000, guid: b38c0b4a8d76a7641b8aa3ce4d033399, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -86,7 +86,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: 47e6e85c8d23cfc4b9ae0a9c31397a05, type: 3}
+        m_Texture: {fileID: 2800000, guid: f1d60c2a454717e40850e554c9190466, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
