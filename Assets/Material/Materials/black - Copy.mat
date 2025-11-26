@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: black
+  m_Name: black - Copy
   m_Shader: {fileID: 4800000, guid: d840880b619373446991dc0fb7dcdf9b, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
