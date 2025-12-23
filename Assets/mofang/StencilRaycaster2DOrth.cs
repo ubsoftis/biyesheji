@@ -1,4 +1,4 @@
-using UnityEngine;
+ using UnityEngine;
 
 /// <summary>
 /// 示例射线脚本：只检测指定 Layer（例如与 stencilCollide 相同的 Active Layer）
@@ -14,6 +14,12 @@ public class StencilRaycaster2DOrth : MonoBehaviour
 
     [Tooltip("正交相机世界坐标的 Z 平面（通常与 2D 场景平面一致）")]
     public float projectionPlaneZ = 0f;
+
+    [Tooltip("是否点击到了物体")]
+    public bool isHit = false;
+
+    [Tooltip("当点击命中时激活的 UI 物体")]
+    public GameObject uiObjectToActivate;
 
     int layerMask;
 
@@ -60,11 +66,27 @@ public class StencilRaycaster2DOrth : MonoBehaviour
         {
             HandleHit(hit);
         }
+        else
+        {
+            // 未命中时关闭 UI，但不改变 isHit 状态
+            if (uiObjectToActivate != null)
+            {
+                uiObjectToActivate.SetActive(false);
+            }
+        }
     }
 
     void HandleHit(Collider2D collider)
     {
+        isHit = true;
         Debug.Log($"[StencilRaycaster2D] 点击到 {collider.name}");
+        
+        // 激活 UI 物体
+        if (uiObjectToActivate != null)
+        {
+            uiObjectToActivate.SetActive(true);
+        }
+        
         // 在这里触发你自己的逻辑，比如调用某个接口或发事件
         var clickable = collider.GetComponent<IStencilClickable>();
         if (clickable != null)
