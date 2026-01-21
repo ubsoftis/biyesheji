@@ -1,4 +1,4 @@
-  using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,42 +17,53 @@ public class start : MonoBehaviour
     private bool dragging = false;
     private Vector3 lastMousePosition;
 
-    private void OnMouseDown()
+    void Update()
     {
-        dragging = true;
-        lastMousePosition = Input.mousePosition;
-    }
-
-    private void OnMouseDrag()
-    {
-        if (!dragging) return;
-
-        Vector3 delta = Input.mousePosition - lastMousePosition;
-
-        // 上下拖动让物体绕摄像机右轴转，左右拖动绕上轴转
-        float rotX = delta.y * rotationSpeed * Time.deltaTime;
-        float rotY = -delta.x * rotationSpeed * Time.deltaTime;
-
-        if (Camera.main != null)
+        // 检测鼠标右键按下
+        if (Input.GetMouseButtonDown(1)) // 1 = 右键
         {
-            if (allowX)
-                transform.Rotate(Camera.main.transform.right, rotX, Space.World);
-            if (allowY)
-                transform.Rotate(Vector3.up, rotY, Space.World);
-        }
-        else
-        {
-            if (allowX)
-                transform.Rotate(Vector3.right, rotX, Space.World);
-            if (allowY)
-                transform.Rotate(Vector3.up, rotY, Space.World);
+            // 使用射线检测判断是否点击到了当前物体
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            
+            if (Physics.Raycast(ray, out hit) && hit.collider.gameObject == gameObject)
+            {
+                dragging = true;
+                lastMousePosition = Input.mousePosition;
+            }
         }
 
-        lastMousePosition = Input.mousePosition;
-    }
+        // 检测鼠标右键拖拽
+        if (dragging && Input.GetMouseButton(1))
+        {
+            Vector3 delta = Input.mousePosition - lastMousePosition;
 
-    private void OnMouseUp()
-    {
-        dragging = false;
+            // 上下拖动让物体绕摄像机右轴转，左右拖动绕上轴转
+            float rotX = delta.y * rotationSpeed * Time.deltaTime;
+            float rotY = -delta.x * rotationSpeed * Time.deltaTime;
+
+            if (Camera.main != null)
+            {
+                if (allowX)
+                    transform.Rotate(Camera.main.transform.right, rotX, Space.World);
+                if (allowY)
+                    transform.Rotate(Vector3.up, rotY, Space.World);
+            }
+            else
+            {
+                if (allowX)
+                    transform.Rotate(Vector3.right, rotX, Space.World);
+                if (allowY)
+                    transform.Rotate(Vector3.up, rotY, Space.World);
+            }
+
+            lastMousePosition = Input.mousePosition;
+        }
+
+        // 检测鼠标右键抬起
+        if (Input.GetMouseButtonUp(1))
+        {
+            dragging = false;
+        }
     }
 }
