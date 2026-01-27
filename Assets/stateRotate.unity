@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 481103773}
   - component: {fileID: 481103772}
   - component: {fileID: 481103775}
+  - component: {fileID: 481103776}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -259,6 +260,23 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &481103776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481103771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64c1a64057f59e44b408b522b71da2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 100
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  showDebugInfo: 1
 --- !u!1 &899060070 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 968110291956441189, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
@@ -379,12 +397,12 @@ PrefabInstance:
     - target: {fileID: 2039184618735476701, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2039184618735476701, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2039184618735476701, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
         type: 3}
@@ -675,7 +693,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allowX: 0
   allowY: 1
-  rotationSpeed: 50
+  rotationSpeed: 20
 --- !u!65 &1720711305
 BoxCollider:
   m_ObjectHideFlags: 0
