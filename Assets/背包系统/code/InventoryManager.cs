@@ -1,58 +1,30 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// 背包格子（存储物品+数量）
-[System.Serializable]
-public class InventorySlot
-{
-    public ItemSO item;
-    public int amount;
-
-    // 初始化格子
-    public InventorySlot(ItemSO newItem, int newAmount)
-    {
-        item = newItem;
-        amount = newAmount;
-    }
-
-    // 增加物品数量
-    public void AddAmount(int value)
-    {
-        amount += value;
-    }
-
-    // 减少物品数量
-    public bool RemoveAmount(int value)
-    {
-        if (amount - value < 0) return false;
-        amount -= value;
-        if (amount == 0) item = null; // 数量为0时清空物品
-        return true;
-    }
-}
+using UnityEngine.UI;
 
 /// <summary>
-/// 背包管理器：单例，负责添加/移除物品、查询背包状态。
-/// 挂到场景里一个空物体上即可使用。
+/// 背包数据处理中心：管理格子、添加/移除/查找。单例，挂场景里一个物体上。
+/// 可选：配置 slotPrefab + gridParent 则在 Start 时自动生成格子 UI，并提供 RefreshAllSlots。
 /// </summary>
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
-    [Header("背包设置")]
-    [Tooltip("背包格子总数")]
+    [Header("背包数据")]
+    [Tooltip("格子总数")]
     public int inventorySize = 20;
-    [Tooltip("背包格子列表（运行时自动初始化）")]
+    [Tooltip("格子列表（运行时自动初始化，与 InventorySlotUI 的 slotIndex 对应）")]
     public List<InventorySlot> inventorySlots;
+
+    [Header("可选：自动生成格子 UI")]
+    [Tooltip("不填则需手动在场景里摆好格子并设 slotIndex")]
+    public GameObject slotPrefab;
+    public Transform gridParent;
 
     private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-            // 可选：跨场景不销毁
-            // DontDestroyOnLoad(gameObject);
-        }
         else
         {
             Destroy(gameObject);
@@ -67,12 +39,26 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    /// <summary> 添加物品到背包。返回 true 表示全部放入，false 表示背包满或部分放入。 </summary>
+    private void Start()
+    {
+        if (slotPrefab != null && gridParent != null)
+        {
+            for (int i = 0; i < inventorySize; i++)
+            {
+                GameObject slotObj = Instantiate(slotPrefab, gridParent);
+                var slotUI = slotObj.GetComponent<InventorySlotUI>();
+                if (slotUI != null) slotUI.slotIndex = i;
+                var btn = slotObj.GetComponent<Button>();
+                if (btn != null && slotUI != null) btn.onClick.AddListener(slotUI.OnSlotClick);
+            }
+        }
+    }
+
+    // ---------- 添加 ----------
     public bool AddItem(ItemSO item, int amount = 1)
     {
-        if (item == null || amount <= 0) return false;
+        if (item == null || amount <= 0 || inventorySlots == null) return false;
 
-        // 1. 可堆叠：先往已有该物品的格子里堆
         if (item.isStackable)
         {
             foreach (var slot in inventorySlots)
@@ -80,19 +66,18 @@ public class InventoryManager : MonoBehaviour
                 if (amount <= 0) return true;
                 if (slot.item == item && slot.amount < item.maxStack)
                 {
-                    int addAmount = Mathf.Min(amount, item.maxStack - slot.amount);
-                    slot.AddAmount(addAmount);
-                    amount -= addAmount;
+                    int add = Mathf.Min(amount, item.maxStack - slot.amount);
+                    slot.AddAmount(add);
+                    amount -= add;
                 }
             }
         }
 
-        // 2. 剩余数量用空格子装（每个格子最多 maxStack，不可堆叠则 1 个/格）
         int perSlot = item.isStackable ? item.maxStack : 1;
         foreach (var slot in inventorySlots)
         {
             if (amount <= 0) return true;
-            if (slot.item == null)
+            if (slot.IsEmpty)
             {
                 int put = Mathf.Min(amount, perSlot);
                 slot.item = item;
@@ -101,13 +86,13 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        return amount == 0; // 若 amount 还有剩余说明背包满了
+        return amount == 0;
     }
 
-    /// <summary> 从背包移除指定物品数量。返回 true 表示移除成功。 </summary>
+    // ---------- 移除 ----------
     public bool RemoveItem(ItemSO item, int amount = 1)
     {
-        if (item == null || amount <= 0) return false;
+        if (item == null || amount <= 0 || inventorySlots == null) return false;
         int left = amount;
         foreach (var slot in inventorySlots)
         {
@@ -115,37 +100,37 @@ public class InventoryManager : MonoBehaviour
             if (slot.item == item)
             {
                 int remove = Mathf.Min(left, slot.amount);
-                if (slot.RemoveAmount(remove))
-                {
-                    left -= remove;
-                }
+                if (slot.RemoveAmount(remove)) left -= remove;
             }
         }
         return left == 0;
     }
 
-    /// <summary> 获取背包中该物品的总数量。 </summary>
+    // ---------- 查找 ----------
     public int GetItemCount(ItemSO item)
     {
-        if (item == null) return 0;
+        if (item == null || inventorySlots == null) return 0;
         int count = 0;
         foreach (var slot in inventorySlots)
             if (slot.item == item) count += slot.amount;
         return count;
     }
 
-    /// <summary> 是否拥有该物品（至少 1 个）。 </summary>
-    public bool HasItem(ItemSO item)
-    {
-        return GetItemCount(item) > 0;
-    }
+    public bool HasItem(ItemSO item) => GetItemCount(item) > 0;
 
-    /// <summary> 当前空格子数量。 </summary>
     public int GetEmptySlotCount()
     {
+        if (inventorySlots == null) return 0;
         int n = 0;
         foreach (var slot in inventorySlots)
-            if (slot.item == null) n++;
+            if (slot.IsEmpty) n++;
         return n;
+    }
+
+    /// <summary> 刷新所有格子显示（拾取/移除后调用；若未用 slotPrefab 则需外部用 FindObjectsOfType InventorySlotUI 刷新）。 </summary>
+    public void RefreshAllSlots()
+    {
+        foreach (var slotUI in FindObjectsOfType<InventorySlotUI>(true))
+            slotUI.UpdateSlotUI();
     }
 }

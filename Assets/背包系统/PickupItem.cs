@@ -25,7 +25,14 @@ public class PickupItem : MonoBehaviour, IPointerClickHandler
 
     private void RefreshInventoryUI()
     {
-        foreach (var slotUI in FindObjectsOfType<InventorySlotUI>())
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.RefreshAllSlots();
+            return;
+        }
+
+        // 兜底：包含未激活的格子（背包关闭时 bag 下的格子都是 inactive）
+        foreach (var slotUI in FindObjectsOfType<InventorySlotUI>(true))
             slotUI.UpdateSlotUI();
     }
 
