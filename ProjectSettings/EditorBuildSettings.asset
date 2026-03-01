@@ -5,25 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/BRP Sample Scene.unity
-    guid: 923d0fdfeea77274ca966167e1470f7e
   - enabled: 1
-    path: Assets/StartSecne 1.unity
-    guid: 2985e81cbc9527746aaf1fbad48203eb
-  - enabled: 0
-    path: Assets/Scenes/Location soccer field.unity
-    guid: b02f46ebb4f474b40bc3e09f976972fb
-  - enabled: 0
-    path: Assets/Scenes/Desert.unity
-    guid: 7af07c2516e46ab44bd921afca5031a4
-  - enabled: 0
-    path: Assets/StartSecne.unity
-    guid: ac40e830a7f06884ebf081d4abde6f5b
-  - enabled: 1
-    path: "Assets/G/\u6B63\u5F0F\u573A\u666F-G.unity"
-    guid: a7c6f5c2a32d1e744a14d5f87b25279d
-  - enabled: 1
-    path: "Assets/G/\u7B2C\u4E00\u5173-G.unity"
-    guid: 1858ef49d946a694ab1d87a8e4414a00
+    path: "Assets/\u5F00\u5E55/\u5F00\u5E55-\u7B2C\u4E00\u5E55.unity"
+    guid: 7c5c0fea14f8f8643bdd670dd593d16a
   m_configObjects: {}
