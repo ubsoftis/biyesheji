@@ -6,18 +6,16 @@ using NodeCanvas.DialogueTrees;
 
 public class StartDialogue : MonoBehaviour
 {
-    DialogueTreeController dialogueTree;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        dialogueTree = GetComponent<DialogueTreeController>();
-    }
+    [SerializeField] DialogueTreeController dialogueTree;
 
     public void Talk()
     {
-        dialogueTree.StartDialogue();
-
+        if (dialogueTree == null)
+            dialogueTree = GetComponent<DialogueTreeController>();
+        if (dialogueTree != null)
+            dialogueTree.StartDialogue();
+        else
+            Debug.LogWarning("[StartDialogue] 未找到 DialogueTreeController，请在 Inspector 中拖入带 DialogueTreeController 的物体上的组件。");
     }
     // Update is called once per frame
 

@@ -12,7 +12,7 @@ public class StencilCubeRaycaster2D : MonoBehaviour
     [Tooltip("射线使用的摄像机；留空则取 Camera.main")]
     public Camera rayCamera;
 
-    [Tooltip("射线检测的 Layer（通常为魔方小方块的 Cube 层）")]
+    [Tooltip("射线检测的 Layer。必须包含「可点击目标」所在的层（如奇怪的房子），否则正面时仍无法点到；若也点魔方小块则再勾选 Cube")]
     public LayerMask raycastLayer;
 
     [Tooltip("射线最长检测距离")]
@@ -90,16 +90,46 @@ public class StencilCubeRaycaster2D : MonoBehaviour
         }
 
         dir.Normalize();
-        hit = Physics2D.Raycast(origin, dir, rayDistance, raycastLayer);
 
-        if (!hit)
+        // 使用 RaycastAll：射线可能先命中魔方，但目标（奇怪的房子）在后方。优先选择可点击目标。
+        RaycastHit2D[] hits = Physics2D.RaycastAll(origin, dir, rayDistance, raycastLayer);
+
+        Collider2D targetCol = null;
+        Vector2 targetPoint = Vector2.zero;
+
+        foreach (var h in hits)
         {
-            if (debugLog)
-                Debug.Log("[StencilCubeRaycaster2D] 未命中任何魔方方块。");
-            return;
+            if (!h) continue;
+            var c = h.collider;
+            if (c == null || !c.enabled) continue;
+
+            var clickable = c.GetComponent<IStencilClickable>();
+            if (clickable != null)
+            {
+                // 可点击目标：优先响应（即使魔方在射线路径上挡住）
+                targetCol = c;
+                targetPoint = h.point;
+                break;
+            }
+
+            if (targetCol == null)
+            {
+                targetCol = c;
+                targetPoint = h.point;
+            }
         }
 
-        HandleHit(hit);
+        if (targetCol != null)
+        {
+            HandleHit(targetCol, targetPoint);
+        }
+        else if (debugLog)
+        {
+            if (hits.Length > 0)
+                Debug.Log("[StencilCubeRaycaster2D] 射线命中了碰撞体，但无 IStencilClickable。请确认目标物体：1) 挂有 IStencilClickable；2) 在 raycastLayer 内；3) StencilMultiFaceClickController 已启用其 Collider2D。");
+            else
+                Debug.Log("[StencilCubeRaycaster2D] 未命中任何碰撞体，请检查 raycastLayer 是否包含目标所在层。");
+        }
     }
 
     void HandleHit(RaycastHit2D hit)
