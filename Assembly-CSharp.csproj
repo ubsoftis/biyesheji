@@ -113,6 +113,7 @@
     <Compile Include="Assets\mofang\启动关卡\start.cs" />
     <Compile Include="Assets\mofang\HouseClick.cs" />
     <Compile Include="Assets\Scenes\SampleScenes\Menu\Scripts\PauseMenu.cs" />
+    <Compile Include="Assets\mofang\ActiveHitandGone.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\Sprites\camera.cs" />
