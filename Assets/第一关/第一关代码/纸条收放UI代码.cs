@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 可展开/收回的纸条UI控制脚本（无缩放版）
+/// 可展开/收回的纸条UI控制脚本（带旋转版）
 /// 挂载对象：纸条的根Canvas/Image对象
 /// </summary>
 public class 纸条收放UI代码 : MonoBehaviour
@@ -14,6 +14,12 @@ public class 纸条收放UI代码 : MonoBehaviour
     public Vector2 expandedPosition = new Vector2(0, 0); // 默认左侧展开位置
     [Tooltip("移动动画时长（秒）")]
     public float moveDuration = 0.5f; // 可自定义移动速度
+
+    [Header("旋转配置")]
+    [Tooltip("纸条展开时的旋转角度（Z轴，单位：度）")]
+    public float expandedRotation = 0f; // 展开时默认不旋转
+    [Tooltip("纸条收起时的旋转角度（Z轴，单位：度）")]
+    public float retractedRotation = 15f; // 收起时默认旋转15度
 
     [Header("增强动画配置")]
     [Tooltip("展开时的透明度（1=不透明）")]
@@ -32,6 +38,7 @@ public class 纸条收放UI代码 : MonoBehaviour
     private float currentMoveTime = 0f; // 当前动画进度
     private Vector2 targetPosition; // 目标位置
     private float targetAlpha; // 目标透明度值
+    private float targetRotation; // 新增：目标旋转角度
 
     void Start()
     {
@@ -50,8 +57,9 @@ public class 纸条收放UI代码 : MonoBehaviour
             Debug.LogWarning("纸条对象没有Image组件，透明度动画将失效！");
         }
 
-        // 初始化位置、透明度为收起状态（去掉缩放初始化）
+        // 初始化位置、透明度、旋转为收起状态
         noteRect.anchoredPosition = retractedPosition;
+        noteRect.rotation = Quaternion.Euler(0, 0, retractedRotation); // 初始化旋转
         if (noteImage != null)
         {
             Color tempColor = noteImage.color;
@@ -59,9 +67,10 @@ public class 纸条收放UI代码 : MonoBehaviour
             noteImage.color = tempColor;
         }
 
-        // 初始化目标状态
+        // 初始化目标状态（包含旋转）
         targetPosition = retractedPosition;
         targetAlpha = retractedAlpha;
+        targetRotation = retractedRotation; // 初始化目标旋转角度
 
         // 绑定按钮点击事件
         if (toggleButton != null)
@@ -76,7 +85,7 @@ public class 纸条收放UI代码 : MonoBehaviour
 
     void Update()
     {
-        // 检查是否已到达所有目标状态（位置+透明度）
+        // 检查是否已到达所有目标状态（位置+透明度+旋转）
         if (IsTargetReached())
         {
             currentMoveTime = 0f;
@@ -89,16 +98,22 @@ public class 纸条收放UI代码 : MonoBehaviour
         // 缓动曲线（先快后慢，动画更丝滑）
         float easeProgress = EaseOutCubic(progress);
 
-        // 1. 位置平滑移动（缓动效果保留）
+        // 1. 位置平滑移动
         noteRect.anchoredPosition = Vector2.Lerp(noteRect.anchoredPosition, targetPosition, easeProgress);
 
-        // 2. 透明度动画（保留，去掉缩放动画）
+        // 2. 透明度动画
         if (noteImage != null)
         {
             Color tempColor = noteImage.color;
             tempColor.a = Mathf.Lerp(tempColor.a, targetAlpha, easeProgress);
             noteImage.color = tempColor;
         }
+
+        // 3. 新增：旋转动画（Z轴角度插值）
+        float currentRotation = noteRect.rotation.eulerAngles.z;
+        // 处理角度插值的环绕问题（比如从350度旋转到10度时走最短路径）
+        float newRotation = Mathf.LerpAngle(currentRotation, targetRotation, easeProgress);
+        noteRect.rotation = Quaternion.Euler(0, 0, newRotation);
 
         // 动画完成后强制对齐目标状态（避免浮点误差）
         if (progress >= 1f)
@@ -113,9 +128,10 @@ public class 纸条收放UI代码 : MonoBehaviour
     public void ToggleNoteState()
     {
         isExpanded = !isExpanded;
-        // 更新目标位置、透明度（去掉缩放目标）
+        // 更新目标位置、透明度、旋转角度
         targetPosition = isExpanded ? expandedPosition : retractedPosition;
         targetAlpha = isExpanded ? expandedAlpha : retractedAlpha;
+        targetRotation = isExpanded ? expandedRotation : retractedRotation; // 更新目标旋转角度
         currentMoveTime = 0f; // 重置动画进度
     }
 
@@ -130,7 +146,10 @@ public class 纸条收放UI代码 : MonoBehaviour
         {
             alphaReached = Mathf.Abs(noteImage.color.a - targetAlpha) < 0.01f;
         }
-        return posReached && alphaReached;
+        // 新增：检查旋转角度是否到达目标
+        bool rotationReached = Mathf.Abs(Mathf.DeltaAngle(noteRect.rotation.eulerAngles.z, targetRotation)) < 0.01f;
+
+        return posReached && alphaReached && rotationReached;
     }
 
     /// <summary>
@@ -139,6 +158,7 @@ public class 纸条收放UI代码 : MonoBehaviour
     private void ResetToTargetState()
     {
         noteRect.anchoredPosition = targetPosition;
+        noteRect.rotation = Quaternion.Euler(0, 0, targetRotation); // 强制对齐旋转角度
         if (noteImage != null)
         {
             Color tempColor = noteImage.color;

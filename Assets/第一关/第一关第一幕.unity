@@ -4609,6 +4609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c96f50f9811d544ebc381217e0f175a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueTree: {fileID: 0}
 --- !u!114 &1103788156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6746,6 +6747,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c96f50f9811d544ebc381217e0f175a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueTree: {fileID: 0}
 --- !u!114 &1535140536
 MonoBehaviour:
   m_ObjectHideFlags: 0
