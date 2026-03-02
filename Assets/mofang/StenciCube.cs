@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StenciCube : MonoBehaviour
 {
-   [Header("相机与蒙版贴图")]
+    [Header("相机与蒙版贴图")]
     public Camera mainCamera;          // 真正玩游戏看的相机（你现在的 Camera）
     public Camera maskCamera;          // 专门渲染蒙版的相机
     public RenderTexture maskTexture;  // maskCamera 的 TargetTexture，例如 64x64
@@ -17,9 +17,21 @@ public class StenciCube : MonoBehaviour
     [Header("检测频率")]
     public int framesInterval = 1;          // 每几帧检测一次，1=每帧
 
+    [Header("点击 + 白块离开 组合状态")]
+    [Tooltip("当前这一帧，蒙版上该点是否是目标颜色（白块还在）")]
+    public bool isVisible = false;
+
+    [Tooltip("是否已经：先被点击过（HouseClick.isClicked == true），然后白块从当前视图中消失")]
+    public bool hitAndGone = false;
+
+    [Tooltip("对应的奇怪房子（或其它可点击对象）的 HouseClick 脚本引用")]
+    public HouseClick linkedClick;
+
     Collider2D _col;
     Texture2D _readTex;
     int _frameCount;
+
+    bool _lastVisible = false;   // 记录上一帧的可见状态
 
     void Awake()
     {
@@ -59,12 +71,15 @@ public class StenciCube : MonoBehaviour
         {
             // 在相机背后，肯定点不到
             _col.enabled = false;
+            isVisible = false;
             return;
         }
-// 超出屏幕范围，也不用点
+
+        // 超出屏幕范围，也不用点
         if (vp.x < 0f || vp.x > 1f || vp.y < 0f || vp.y > 1f)
         {
             _col.enabled = false;
+            isVisible = false;
             return;
         }
 
@@ -83,10 +98,22 @@ public class StenciCube : MonoBehaviour
 
         // 4. 比较颜色是否接近 targetColor
         bool visible = ColorsClose(c, targetColor, colorTolerance);
+        isVisible = visible;
 
-        Debug.Log($"[StenciCube] pos={vp}, pixel=({px},{py}), color={c}, target={targetColor}, tol={colorTolerance}, visible={visible}");
-
+        // 控制 Collider：只有白块还在时才允许被射线打中
         _col.enabled = visible;
+
+        // 5. 检测“刚刚离开”的那一帧：
+        //    条件：上一帧可见，这一帧不可见，并且对应的 HouseClick 已经被点击过
+        if (_lastVisible && !visible && linkedClick != null && linkedClick.isClicked)
+        {
+            hitAndGone = true;
+        }
+
+        _lastVisible = visible;
+
+        // 如需调试，可打开这一句：
+        // Debug.Log($"[StenciCube] vp={vp}, pixel=({px},{py}), color={c}, visible={visible}, hitAndGone={hitAndGone}");
     }
 
     bool ColorsClose(Color a, Color b, float tol)
