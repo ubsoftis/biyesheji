@@ -96,13 +96,15 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         if (amountText != null)
         {
-            if (slot.item != null && slot.item.isStackable && slot.amount > 1)
+            // 显示所有可堆叠物品的数量（包括 1）
+            if (slot.item != null && slot.item.isStackable && slot.amount > 0)
             {
                 amountText.text = slot.amount.ToString();
                 amountText.enabled = true;
             }
             else
             {
+                // 非可堆叠物品或空格子隐藏数字
                 amountText.enabled = false;
             }
         }
