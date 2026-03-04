@@ -7,8 +7,11 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: "Assets/\u5F00\u5E55/\u5F00\u5E55.unity"
-    guid: 7c5c0fea14f8f8643bdd670dd593d16a
-  - enabled: 1
+    guid: da05eb03c5f115b4fb7b0b98dd9dd7d1
+  - enabled: 0
     path: "Assets/\u5F00\u5E55/\u5F00\u5E55-\u7B2C\u4E8C\u5E55.unity"
     guid: e8d53c66412d3e2418563be95787ea0b
+  - enabled: 1
+    path: "Assets/\u7B2C\u4E00\u5173/\u7B2C\u4E00\u5173\u7B2C\u4E00\u5E55.unity"
+    guid: 2ff55b0ef7cbcf140a3fe455f5256609
   m_configObjects: {}
