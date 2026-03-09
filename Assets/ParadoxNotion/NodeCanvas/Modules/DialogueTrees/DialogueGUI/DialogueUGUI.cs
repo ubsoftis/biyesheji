@@ -128,8 +128,48 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
             actorName.text = actor.name;
             actorSpeech.color = actor.dialogueColor;
 
-            actorPortrait.gameObject.SetActive(actor.portraitSprite != null);
-            actorPortrait.sprite = actor.portraitSprite;
+            // actorPortrait.gameObject.SetActive(actor.portraitSprite != null);
+            //actorPortrait.sprite = actor.portraitSprite;//核心删除的两行
+            //接下来的是我黏贴的
+            // 修复版：动画连续播+对话框文字正常显示
+            DialogueActor curActor = info.actor as DialogueActor;
+            actorPortrait.gameObject.SetActive(true);
+            SpriteRenderer animSourceRender = null;
+            Animator animSourceAnim = null;
+
+            // 初始化动画源组件
+            if (curActor != null && curActor.portraitAnimSource != null)
+            {
+                GameObject animSource = curActor.portraitAnimSource;
+                animSource.SetActive(true);
+                animSourceRender = animSource.GetComponent<SpriteRenderer>();
+                animSourceAnim = animSource.GetComponent<Animator>();
+                // 对话触发时强制动画从头播放
+                if (animSourceAnim != null) animSourceAnim.Play(0, -1, 0f);
+            }
+
+            // 每帧同步动画帧（单独写方法，不阻塞字幕代码）
+            StartCoroutine(SyncAnimToUI(animSourceRender));
+
+            // 无动画/非主角：恢复原版静态头像逻辑
+            if (animSourceRender == null && curActor != null)
+            {
+                actorPortrait.sprite = curActor.portraitSprite;
+                actorPortrait.gameObject.SetActive(curActor.portraitSprite != null);
+            }
+
+            // 动画同步协程：单独执行，和字幕代码并行
+            IEnumerator SyncAnimToUI(SpriteRenderer sourceRender)
+            {
+                // 对话框打开时，持续每帧同步
+                while (subtitlesGroup.gameObject.activeSelf && sourceRender != null)
+                {
+                    actorPortrait.sprite = sourceRender.sprite;
+                    yield return null; // 等待一帧，不阻塞主线程
+                }
+            }
+
+            //上面是我黏贴的
 
             if ( audio != null ) {
                 var actorSource = actor.transform?.GetComponent<AudioSource>();

@@ -13,6 +13,7 @@ namespace NodeCanvas.DialogueTrees
         protected string _name;
         [SerializeField]
         protected Texture2D _portrait;
+        [SerializeField] public GameObject portraitAnimSource;//我在这里
         [SerializeField]
         protected Color _dialogueColor = Color.white;
         [SerializeField]
