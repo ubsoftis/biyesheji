@@ -70,66 +70,34 @@ public class StencilCubeRaycaster2D : MonoBehaviour
         }
 
         Vector3 worldPos = rayCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, planeDepth));
-        Vector2 origin = (Vector2)rayCamera.transform.position;
-        Vector2 end = new Vector2(worldPos.x, worldPos.y);
-        Vector2 dir = end - origin;
+        Vector2 point = new Vector2(worldPos.x, worldPos.y);
 
-        RaycastHit2D hit;
-        if (dir.sqrMagnitude < 0.0001f)
+        // 点击判定应以“鼠标所在点”为准，而不是从相机发射一条长射线。
+        // 使用 OverlapPointAll：同一点可能叠着魔方与目标物体，优先响应可点击目标。
+        var cols = Physics2D.OverlapPointAll(point, raycastLayer);
+        if (cols == null || cols.Length == 0)
         {
-            // 点击在相机正前方时用 OverlapPoint 检测该点上的碰撞体
-            Collider2D col = Physics2D.OverlapPoint(end, raycastLayer);
-            if (col != null)
-            {
-                HandleHit(col, end);
-                return;
-            }
             if (debugLog)
-                Debug.Log("[StencilCubeRaycaster2D] 未命中任何魔方方块（OverlapPoint）。");
+                Debug.Log("[StencilCubeRaycaster2D] 未命中任何碰撞体（OverlapPointAll）。");
             return;
         }
 
-        dir.Normalize();
-
-        // 使用 RaycastAll：射线可能先命中魔方，但目标（奇怪的房子）在后方。优先选择可点击目标。
-        RaycastHit2D[] hits = Physics2D.RaycastAll(origin, dir, rayDistance, raycastLayer);
-
         Collider2D targetCol = null;
-        Vector2 targetPoint = Vector2.zero;
-
-        foreach (var h in hits)
+        for (int i = 0; i < cols.Length; i++)
         {
-            if (!h) continue;
-            var c = h.collider;
+            var c = cols[i];
             if (c == null || !c.enabled) continue;
-
-            var clickable = c.GetComponent<IStencilClickable>();
-            if (clickable != null)
+            if (c.GetComponent<IStencilClickable>() != null)
             {
-                // 可点击目标：优先响应（即使魔方在射线路径上挡住）
                 targetCol = c;
-                targetPoint = h.point;
                 break;
             }
-
             if (targetCol == null)
-            {
                 targetCol = c;
-                targetPoint = h.point;
-            }
         }
 
         if (targetCol != null)
-        {
-            HandleHit(targetCol, targetPoint);
-        }
-        else if (debugLog)
-        {
-            if (hits.Length > 0)
-                Debug.Log("[StencilCubeRaycaster2D] 射线命中了碰撞体，但无 IStencilClickable。请确认目标物体：1) 挂有 IStencilClickable；2) 在 raycastLayer 内；3) StencilMultiFaceClickController 已启用其 Collider2D。");
-            else
-                Debug.Log("[StencilCubeRaycaster2D] 未命中任何碰撞体，请检查 raycastLayer 是否包含目标所在层。");
-        }
+            HandleHit(targetCol, point);
     }
 
     void HandleHit(RaycastHit2D hit)
