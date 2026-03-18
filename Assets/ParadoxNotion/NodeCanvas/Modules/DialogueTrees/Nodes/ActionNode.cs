@@ -34,7 +34,15 @@ namespace NodeCanvas.DialogueTrees
             }
 
             status = Status.Running;
-            StartCoroutine(UpdateAction(finalActor.transform));
+            // finalActor can be null if the node has no actor selected / actor refs not set.
+            // Fall back to the dialogue agent to avoid NullReference and allow tasks to run.
+            // Many ActionTasks request Agent type 'UnityEngine.Transform', so always pass a Transform.
+            var actionAgent = finalActor != null ? finalActor.transform : ( agent != null ? agent.transform : null );
+            if ( actionAgent == null ) {
+                return Error("Dialogue Action Node has no valid action agent Transform (finalActor and agent are null)");
+            }
+
+            StartCoroutine(UpdateAction(actionAgent));
             return status;
         }
 
