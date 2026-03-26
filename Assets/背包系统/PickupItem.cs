@@ -15,6 +15,17 @@ public class PickupItem : MonoBehaviour, IPointerClickHandler
     [Header("调试")]
     public bool debugLog;
 
+    private InventoryManager GetInventoryManager()
+    {
+        if (InventoryManager.Instance != null) return InventoryManager.Instance;
+
+        InventoryManager found = FindObjectOfType<InventoryManager>(true);
+        if (found != null)
+            InventoryManager.Instance = found;
+
+        return found;
+    }
+
     /// <summary>
     /// UI 被点击时由 EventSystem 调用（apple 是 Canvas 下的 Image 时会走这里）。
     /// </summary>
@@ -25,9 +36,10 @@ public class PickupItem : MonoBehaviour, IPointerClickHandler
 
     private void RefreshInventoryUI()
     {
-        if (InventoryManager.Instance != null)
+        var manager = GetInventoryManager();
+        if (manager != null)
         {
-            InventoryManager.Instance.RefreshAllSlots();
+            manager.RefreshAllSlots();
             return;
         }
 
@@ -48,13 +60,14 @@ public class PickupItem : MonoBehaviour, IPointerClickHandler
             Debug.LogWarning("[PickupItem] 未设置 item。");
             return;
         }
-        if (InventoryManager.Instance == null)
+        var managerRef = GetInventoryManager();
+        if (managerRef == null)
         {
             Debug.LogWarning("[PickupItem] 场景里没有 InventoryManager。");
             return;
         }
 
-        bool isAdded = InventoryManager.Instance.AddItem(item, amount);
+        bool isAdded = managerRef.AddItem(item, amount);
         if (isAdded)
         {
             if (debugLog) Debug.Log("[PickupItem] 拾取成功: " + item.itemName);

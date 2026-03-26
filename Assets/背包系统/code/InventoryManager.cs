@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 /// <summary>
 /// 背包数据处理中心：管理格子、添加/移除/查找。单例，挂场景里一个物体上。
@@ -21,6 +22,12 @@ public class InventoryManager : MonoBehaviour
     public GameObject slotPrefab;
     public Transform gridParent;
 
+    [Header("选中状态（运行时）")]
+    [Tooltip("当前选中的格子索引，-1 表示未选中")]
+    public int selectedSlotIndex = -1;
+
+    public event Action<int> OnSelectionChanged;
+
     private void Awake()
     {
         if (Instance == null)
@@ -31,6 +38,11 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
+        EnsureInitialized();
+    }
+
+    private void EnsureInitialized()
+    {
         if (inventorySlots == null || inventorySlots.Count == 0)
         {
             inventorySlots = new List<InventorySlot>();
@@ -54,9 +66,50 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public ItemSO GetSelectedItem()
+    {
+        if (inventorySlots == null) return null;
+        if (selectedSlotIndex < 0 || selectedSlotIndex >= inventorySlots.Count) return null;
+
+        InventorySlot slot = inventorySlots[selectedSlotIndex];
+        if (slot == null || slot.IsEmpty) return null;
+        return slot.item;
+    }
+
+    public bool SelectSlot(int slotIndex)
+    {
+        if (inventorySlots == null) return false;
+
+        if (slotIndex < 0 || slotIndex >= inventorySlots.Count)
+        {
+            ClearSelection();
+            return false;
+        }
+
+        InventorySlot slot = inventorySlots[slotIndex];
+        if (slot == null || slot.IsEmpty)
+        {
+            ClearSelection();
+            return false;
+        }
+
+        if (selectedSlotIndex == slotIndex) return true;
+        selectedSlotIndex = slotIndex;
+        OnSelectionChanged?.Invoke(selectedSlotIndex);
+        return true;
+    }
+
+    public void ClearSelection()
+    {
+        if (selectedSlotIndex == -1) return;
+        selectedSlotIndex = -1;
+        OnSelectionChanged?.Invoke(selectedSlotIndex);
+    }
+
     // ---------- 添加 ----------
     public bool AddItem(ItemSO item, int amount = 1)
     {
+        EnsureInitialized();
         if (item == null || amount <= 0 || inventorySlots == null) return false;
 
         if (item.isStackable)
@@ -103,7 +156,39 @@ public class InventoryManager : MonoBehaviour
                 if (slot.RemoveAmount(remove)) left -= remove;
             }
         }
-        return left == 0;
+        bool success = left == 0;
+
+        if (selectedSlotIndex >= 0 && selectedSlotIndex < inventorySlots.Count)
+        {
+            var selectedSlot = inventorySlots[selectedSlotIndex];
+            if (selectedSlot == null || selectedSlot.IsEmpty)
+                ClearSelection();
+        }
+
+        return success;
+    }
+
+    public bool RemoveItemFromSlot(int slotIndex, int amount = 1)
+    {
+        if (inventorySlots == null || amount <= 0) return false;
+        if (slotIndex < 0 || slotIndex >= inventorySlots.Count) return false;
+
+        InventorySlot slot = inventorySlots[slotIndex];
+        if (slot == null || slot.IsEmpty) return false;
+
+        bool ok = slot.RemoveAmount(amount);
+        if (!ok) return false;
+
+        if (slot.IsEmpty && selectedSlotIndex == slotIndex)
+            ClearSelection();
+
+        return true;
+    }
+
+    public bool TryConsumeSelectedItem(int amount = 1)
+    {
+        if (selectedSlotIndex < 0) return false;
+        return RemoveItemFromSlot(selectedSlotIndex, amount);
     }
 
     // ---------- 查找 ----------

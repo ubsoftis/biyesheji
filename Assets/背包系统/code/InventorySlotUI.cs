@@ -24,13 +24,25 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public Vector2 tooltipOffset = new Vector2(10f, -10f);
 
     [Header("点击行为")]
-    [Tooltip("勾选时，点击格子会从背包移除 1 个该物品")]
-    public bool clickToRemove = true;
+    [Tooltip("选中时图标颜色")]
+    public Color selectedIconColor = new Color(1f, 1f, 0.6f, 1f);
+    [Tooltip("未选中时图标颜色")]
+    public Color normalIconColor = Color.white;
+    [Tooltip("可选：用于高亮边框（选中显示，未选中隐藏）")]
+    public GameObject selectedHighlightObject;
     [Tooltip("点击格子时触发，参数为当前格子索引（可在 Inspector 中绑定其他逻辑）")]
     public UnityEvent<int> onSlotClicked;
 
     private InventoryManager inventory;
     private Text tooltipTextComponent;
+    private bool warnedHighlightBinding;
+    private Button cachedButton;
+
+    private void Awake()
+    {
+        cachedButton = GetComponent<Button>();
+        EnsureValidVisualDefaults();
+    }
 
     private void Start()
     {
@@ -64,6 +76,28 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         }
 
         UpdateSlotUI();
+        UpdateSelectionVisual();
+    }
+
+    private void OnValidate()
+    {
+        EnsureValidVisualDefaults();
+    }
+
+    private void OnEnable()
+    {
+        if (inventory == null) inventory = InventoryManager.Instance;
+        if (inventory != null) inventory.OnSelectionChanged += OnSelectionChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (inventory != null) inventory.OnSelectionChanged -= OnSelectionChanged;
+    }
+
+    private void OnSelectionChanged(int _)
+    {
+        UpdateSelectionVisual();
     }
 
     /// <summary>
@@ -85,6 +119,8 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             if (slot.item != null)
             {
+                if (!itemIcon.gameObject.activeSelf)
+                    itemIcon.gameObject.SetActive(true);
                 itemIcon.sprite = slot.item.icon;
                 itemIcon.enabled = true;
             }
@@ -108,6 +144,8 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
                 amountText.enabled = false;
             }
         }
+
+        UpdateSelectionVisual();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -134,6 +172,10 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        // 若同物体上有 Button，OnClick 已经会调用 OnSlotClick，避免一次点击触发两次
+        if (cachedButton != null)
+            return;
+
         OnSlotClick();
     }
 
@@ -146,14 +188,67 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (slotIndex < 0 || slotIndex >= inventory.inventorySlots.Count) return;
 
         InventorySlot slot = inventory.inventorySlots[slotIndex];
-        if (slot.item == null) return;
+        bool hasItem = slot.item != null && !slot.IsEmpty;
 
-        if (clickToRemove)
+        // 再次点击已选中格子 -> 取消选中
+        if (inventory.selectedSlotIndex == slotIndex)
         {
-            inventory.RemoveItem(slot.item, 1);
-            UpdateSlotUI();
+            inventory.ClearSelection();
+            UpdateSelectionVisual();
+            onSlotClicked?.Invoke(slotIndex);
+            return;
         }
 
+        // 点击空格子 -> 取消当前选中
+        if (!hasItem)
+        {
+            inventory.ClearSelection();
+            UpdateSelectionVisual();
+            onSlotClicked?.Invoke(slotIndex);
+            return;
+        }
+
+        // 点击其它有物品格子 -> 切换选中
+        inventory.SelectSlot(slotIndex);
+        UpdateSelectionVisual();
+
         onSlotClicked?.Invoke(slotIndex);
+    }
+
+    private void UpdateSelectionVisual()
+    {
+        if (inventory == null) return;
+
+        bool selected = inventory.selectedSlotIndex == slotIndex;
+
+        if (itemIcon != null)
+            itemIcon.color = selected ? selectedIconColor : normalIconColor;
+
+        if (selectedHighlightObject != null)
+        {
+            // 保护：若高亮对象误绑成 IconImage 本体，会导致未选中时图标被整块隐藏
+            if (itemIcon != null && selectedHighlightObject == itemIcon.gameObject)
+            {
+                if (!warnedHighlightBinding)
+                {
+                    Debug.LogWarning("[InventorySlotUI] selectedHighlightObject 与 itemIcon 指向同一对象，已忽略显隐控制以避免图标消失。");
+                    warnedHighlightBinding = true;
+                }
+            }
+            else
+            {
+                selectedHighlightObject.SetActive(selected);
+            }
+        }
+    }
+
+    private void EnsureValidVisualDefaults()
+    {
+        // 兼容老预制体/老场景：新增颜色字段可能被序列化为全透明，导致图标看不见
+        if (normalIconColor.a <= 0.001f)
+            normalIconColor = Color.white;
+
+        if (selectedIconColor.a <= 0.001f)
+            selectedIconColor = new Color(1f, 1f, 0.6f, 1f);
     }
 }
