@@ -16,6 +16,12 @@ public class FishChildrenCheck : MonoBehaviour
     [Min(0)]
     public int fixedTotalCount = 0;
 
+    [Header("子物体检测（虾）")]
+    [Tooltip("要检测的子物体名称，默认检测 \"虾(Clone)\"")]
+    public string shrimpChildName = "虾(Clone)";
+    [Tooltip("root 下（不含 root 自身）是否存在名称为 shrimpChildName 的子物体")]
+    public bool hasShrimpChild;
+
     [Header("结果（只读）")]
     public int totalCount;
     public int activeCount;
@@ -57,6 +63,7 @@ public class FishChildrenCheck : MonoBehaviour
         if (root == null) { lessOrEqualHalf = false; return; }
 
         activeCount = CountActiveChildren();
+        hasShrimpChild = HasChildNamed(shrimpChildName);
 
         // “小于等于一半”：activeCount <= totalCount/2
         // 用整数避免浮点误差：activeCount * 2 <= totalCount
@@ -79,6 +86,20 @@ public class FishChildrenCheck : MonoBehaviour
             count++;
         }
         return count;
+    }
+
+    bool HasChildNamed(string targetName)
+    {
+        if (root == null || string.IsNullOrEmpty(targetName)) return false;
+
+        var trs = root.GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < trs.Length; i++)
+        {
+            if (!includeRoot && trs[i] == root) continue;
+            if (trs[i].name == targetName)
+                return true;
+        }
+        return false;
     }
 
     int CountActiveChildren()

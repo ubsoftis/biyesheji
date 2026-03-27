@@ -2254,6 +2254,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 482752821273516804, guid: 61468a577d7035245a5017b785460b45,
     type: 3}
   gridParent: {fileID: 5216796}
+  selectedSlotIndex: -1
 --- !u!1 &398768811
 GameObject:
   m_ObjectHideFlags: 0
@@ -5019,7 +5020,7 @@ GameObject:
   - component: {fileID: 942851607}
   m_Layer: 0
   m_Name: MaskCamera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5271,7 +5272,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957283462}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -5296,7 +5297,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.23353481, y: 0.13253927}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -5307,7 +5308,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4.74, y: 3.27}
+  m_Size: {x: 17.217478, y: 12.370864}
   m_EdgeRadius: 0
 --- !u!212 &957283464
 SpriteRenderer:

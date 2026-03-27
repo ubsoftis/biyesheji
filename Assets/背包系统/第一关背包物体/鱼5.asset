@@ -17,3 +17,5 @@ MonoBehaviour:
   itemType: 0
   maxStack: 1
   description: "\u6761\u4EF61:\u5C06\u9C7C\u7F38\u5185\u751F\u7269\u79FB\u9664\u81F3\u539F\u672C\u4E00\u534A\u53CA\u4EE5\u4E0B\u4E00-\u653E\u5165\u80CC\u5305"
+  placedPrefab: {fileID: 5124153244226892250, guid: 50fabce5ac378fa469a83e9d423f0aad,
+    type: 3}

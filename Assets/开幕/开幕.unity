@@ -3955,6 +3955,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 482752821273516804, guid: 61468a577d7035245a5017b785460b45,
     type: 3}
   gridParent: {fileID: 5216796}
+  selectedSlotIndex: -1
 --- !u!1 &398768811
 GameObject:
   m_ObjectHideFlags: 0
@@ -8369,7 +8370,7 @@ GameObject:
   - component: {fileID: 942851607}
   m_Layer: 0
   m_Name: MaskCamera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

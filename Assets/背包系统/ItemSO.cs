@@ -23,4 +23,8 @@ public class ItemSO : UnityEngine.ScriptableObject
     public bool isStackable => maxStack > 1; // 是否可堆叠
     [TextArea]
     public string description = "";       // 物品描述
+
+    [Header("场景放置（可选）")]
+    [Tooltip("将该物品放入场景容器（例如鱼缸）时实例化的预制体")]
+    public GameObject placedPrefab;
 }

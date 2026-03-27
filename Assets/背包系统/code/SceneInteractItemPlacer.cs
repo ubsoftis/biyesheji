@@ -1,14 +1,10 @@
 using UnityEngine;
 
-public interface IItemPlacementReceiver
-{
-    bool TryPlaceItem(ItemSO item);
-}
-
 /// <summary>
 /// 场景交互放置器：
-/// 点击 tag 为可互动 的物体，将背包当前选中物品放入目标。
-/// 目标物体需挂载实现 IItemPlacementReceiver 的组件。
+/// - 左键点击场景中 tag 为「可互动」的物体
+/// - 读取当前背包选中的 ItemSO
+/// - 按目标物体上的配置，把对应预制体实例化到指定父节点下面，作为子级
 /// </summary>
 public class SceneInteractItemPlacer : MonoBehaviour
 {
@@ -48,16 +44,29 @@ public class SceneInteractItemPlacer : MonoBehaviour
         if (target == null) return;
         if (!target.CompareTag(interactableTag)) return;
 
-        var receiver = target.GetComponent<IItemPlacementReceiver>();
-        if (receiver == null)
+        // 目标物体上挂一个 ScenePlacementTarget，用来提供默认父节点
+        var targetConfig = target.GetComponent<ScenePlacementTarget>();
+        if (targetConfig == null)
         {
-            Debug.LogWarning($"[SceneInteractItemPlacer] 目标 {target.name} 未实现 IItemPlacementReceiver，无法放入物品。");
+            Debug.LogWarning($"[SceneInteractItemPlacer] 目标 {target.name} 没有 ScenePlacementTarget 组件，无法放置物品。");
             return;
         }
 
-        bool placed = receiver.TryPlaceItem(selectedItem);
-        if (!placed) return;
+        // 1. 决定父级（优先用 ScenePlacementTarget.defaultParent，其次用点击到的物体自身）
+        Transform parent = targetConfig.defaultParent != null ? targetConfig.defaultParent : target.transform;
 
+        // 2. 决定预制体：直接使用 ItemSO 上配置的 placedPrefab
+        GameObject prefab = selectedItem.placedPrefab;
+        if (prefab == null)
+        {
+            Debug.LogWarning($"[SceneInteractItemPlacer] {selectedItem.itemName} 没有可用的放置预制体 (placedPrefab 未设置)。");
+            return;
+        }
+
+        // 3. 实例化为子级，保持预制体自身局部 Transform
+        GameObject instance = Object.Instantiate(prefab, parent, false);
+
+        // 4. 成功后消耗背包物品
         if (consumeOnSuccess && !inv.TryConsumeSelectedItem(1))
             Debug.LogWarning("[SceneInteractItemPlacer] 放置成功，但消耗背包物品失败。");
 
