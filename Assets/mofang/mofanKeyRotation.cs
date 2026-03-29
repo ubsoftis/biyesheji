@@ -15,6 +15,12 @@ public class mofanKeyRotation : MonoBehaviour
     public GameObject Coller_back;
     public Transform CubeRoot; // 旋转后归还子物体的稳定根节点
 
+    [Header("可选：前中后分层 + RT 拾取（CubeLayerRTPicker）")]
+    public CubeLayerRTPicker layerRTPicker;
+
+    /// <summary>与 Check_Coller 一致：若使用 CubeBack/Mid/Front，请在 Inspector 勾选这三层 + 原 Cube（或只勾选合并后的层）</summary>
+    public LayerMask cubeColliderMask;
+
     public float duration = 0.1f; // 旋转持续时间
     private GameObject BoxColler;
 
@@ -244,6 +250,8 @@ public class mofanKeyRotation : MonoBehaviour
         }
         List_History.Clear();
         isAuto = false;
+        if (layerRTPicker != null)
+            layerRTPicker.RefreshLayerAssignment();
     }
 
     void Update ()
@@ -310,7 +318,9 @@ public class mofanKeyRotation : MonoBehaviour
             return;
         }
 
-        int layerMask = LayerMask.GetMask("Cube");
+        int layerMask = cubeColliderMask.value != 0
+            ? cubeColliderMask.value
+            : LayerMask.GetMask("Cube");
 
         // 使用有向包围盒，保证任意朝向下选中正确的一层
         Vector3 centerWorld = box.transform.TransformPoint(box.center);
@@ -455,6 +465,8 @@ public class mofanKeyRotation : MonoBehaviour
         BoxColler.transform.rotation = boxPrevRot;
 
         isComplete = true;
+        if (layerRTPicker != null)
+            layerRTPicker.RefreshLayerAssignment();
     }
 
     //复原魔方

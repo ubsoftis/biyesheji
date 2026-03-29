@@ -125,6 +125,25 @@ public class StencilCubeRaycaster2D : MonoBehaviour
         if (clickable == null)
             clickable = cubeRoot.GetComponent<IStencilClickable>();
 
+        // 若目标挂了 Stencil 可见性门控脚本，则以 isVisible 作为“是否允许响应点击”的条件。
+        // 这样可以避免通过禁用 Collider 来做 gating，从而不影响其它拾取/RT 判断逻辑。
+        var gate = col.GetComponent<StenciCube>();
+        if (gate == null) gate = cubeRoot.GetComponent<StenciCube>();
+        if (gate != null && !gate.isVisible)
+        {
+            if (debugLog)
+                Debug.Log($"[StencilCubeRaycaster2D] 命中 {cubeRoot.name} 但 isVisible=false，已忽略点击。");
+            return;
+        }
+        var gatePlant = col.GetComponent<StencilCubePlant>();
+        if (gatePlant == null) gatePlant = cubeRoot.GetComponent<StencilCubePlant>();
+        if (gatePlant != null && !gatePlant.isVisible)
+        {
+            if (debugLog)
+                Debug.Log($"[StencilCubeRaycaster2D] 命中 {cubeRoot.name} 但 isVisible=false(Plant)，已忽略点击。");
+            return;
+        }
+
         if (clickable != null)
         {
             clickable.OnStencilClick();

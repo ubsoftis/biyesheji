@@ -24,6 +24,22 @@ public class StencilCubePlant : MonoBehaviour
     [Tooltip("是否已经：白块从当前视图中消失（上一帧可见，这一帧不可见）")]
     public bool hitAndGone = false;
 
+    [Header("点击门控方式")]
+    [Tooltip("为 true 时，用 isVisible 自动开关 Collider2D；为 false 时不再改 Collider，由点击射线逻辑自行读取 isVisible 做 gating。")]
+    public bool controlColliderByVisibility = true;
+
+    [Header("RT 三层遮挡判定（黑色为空）")]
+    [Tooltip("为 true 时，用 CubeLayerRTPicker 的三张 RT（Back/Mid/Front）采样决定 isVisible。")]
+    public bool useThreeRTForVisibility = true;
+    [Tooltip("需要时可手动拖引用；不填会运行时自动 FindObjectOfType。")]
+    public CubeLayerRTPicker rtPicker;
+    [Tooltip("判定黑色为空的 RGB 阈值（RGB 最大值 <= 该值认为黑）")]
+    public float blackRgbThreshold = 0.02f;
+    [Tooltip("判定为空的 Alpha 阈值（alpha <= 该值认为黑）。")]
+    public float blackAlphaThreshold = 0.01f;
+    [Tooltip("若为 true，则 isVisible 反转（把黑当成可见/白当成不可见）。")]
+    public bool invertIsVisible = false;
+
     Collider2D _col;
     Texture2D _readTex;
     int _frameCount;
@@ -47,14 +63,76 @@ public class StencilCubePlant : MonoBehaviour
             maskTexture = maskCamera.targetTexture;
         }
 
-        if (maskTexture != null)
-        {
-            _readTex = new Texture2D(1, 1, TextureFormat.RGB24, false);
-        }
+        // 无论用不用 maskTexture，都需要一个 1x1 读像素纹理（用于 RT 采样）
+        if (_readTex == null)
+            _readTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
     }
 
     void Update()
     {
+        if (_readTex == null)
+            return;
+
+        if (useThreeRTForVisibility)
+        {
+            if (mainCamera == null)
+                mainCamera = Camera.main;
+            if (rtPicker == null)
+                rtPicker = FindObjectOfType<CubeLayerRTPicker>();
+            if (rtPicker == null)
+                return;
+
+            rtPicker.EnsureRTRenderedForSampling();
+            var rtBack = rtPicker.RtBack;
+            var rtMid = rtPicker.RtMid;
+            var rtFront = rtPicker.RtFront;
+            if (rtBack == null || rtMid == null || rtFront == null)
+                return;
+
+            _frameCount++;
+            if (_frameCount % framesInterval != 0)
+                return;
+
+            Vector3 vpRT = mainCamera.WorldToViewportPoint(transform.position);
+            if (vpRT.z <= 0f || vpRT.x < 0f || vpRT.x > 1f || vpRT.y < 0f || vpRT.y > 1f)
+            {
+                isVisible = false;
+                if (controlColliderByVisibility && _col != null) _col.enabled = false;
+                return;
+            }
+
+            int w = rtFront.width;
+            int h = rtFront.height;
+            int pxRt = Mathf.Clamp(Mathf.RoundToInt(vpRT.x * w), 0, w - 1);
+            int pyRt = Mathf.Clamp(Mathf.RoundToInt(vpRT.y * h), 0, h - 1);
+
+            Color cBack = SampleRT(rtBack, pxRt, pyRt);
+            Color cMid = SampleRT(rtMid, pxRt, pyRt);
+            Color cFront = SampleRT(rtFront, pxRt, pyRt);
+
+            bool backEmpty = IsBlackEmpty(cBack);
+            bool midEmpty = IsBlackEmpty(cMid);
+            bool frontEmpty = IsBlackEmpty(cFront);
+
+            bool foundNonEmpty = false;
+            bool visibleRt = false;
+            if (!backEmpty) { foundNonEmpty = true; visibleRt = true; }
+            if (!midEmpty) { foundNonEmpty = true; visibleRt = true; }
+            if (!frontEmpty) { foundNonEmpty = true; visibleRt = true; }
+
+            visibleRt = invertIsVisible ? !visibleRt : visibleRt;
+            isVisible = visibleRt;
+
+            if (controlColliderByVisibility && _col != null)
+                _col.enabled = isVisible;
+
+            // “刚刚离开”：从可见 -> 不可见
+            if (_lastVisible && !isVisible)
+                hitAndGone = true;
+            _lastVisible = isVisible;
+            return;
+        }
+
         if (mainCamera == null || maskCamera == null || maskTexture == null || _readTex == null)
             return;
 
@@ -67,7 +145,7 @@ public class StencilCubePlant : MonoBehaviour
         if (vp.z <= 0f)
         {
             // 在相机背后，肯定点不到
-            _col.enabled = false;
+            if (controlColliderByVisibility && _col != null) _col.enabled = false;
             isVisible = false;
             return;
         }
@@ -75,7 +153,7 @@ public class StencilCubePlant : MonoBehaviour
         // 超出屏幕范围，也不用点
         if (vp.x < 0f || vp.x > 1f || vp.y < 0f || vp.y > 1f)
         {
-            _col.enabled = false;
+            if (controlColliderByVisibility && _col != null) _col.enabled = false;
             isVisible = false;
             return;
         }
@@ -98,7 +176,8 @@ public class StencilCubePlant : MonoBehaviour
         isVisible = visible;
 
         // 控制 Collider：只有白块还在时才允许被射线打中
-        _col.enabled = visible;
+        if (controlColliderByVisibility && _col != null)
+            _col.enabled = visible;
 
         // 5. 检测“刚刚离开”的那一帧：
         //    条件：上一帧可见，这一帧不可见
@@ -119,5 +198,23 @@ public class StencilCubePlant : MonoBehaviour
         float dg = a.g - b.g;
         float db = a.b - b.b;
         return (dr * dr + dg * dg + db * db) <= tol * tol;
+    }
+
+    Color SampleRT(RenderTexture rt, int px, int py)
+    {
+        var currentRT = RenderTexture.active;
+        RenderTexture.active = rt;
+        _readTex.ReadPixels(new Rect(px, py, 1, 1), 0, 0);
+        _readTex.Apply();
+        RenderTexture.active = currentRT;
+        return _readTex.GetPixel(0, 0);
+    }
+
+    bool IsBlackEmpty(Color c)
+    {
+        float maxRgb = Mathf.Max(c.r, Mathf.Max(c.g, c.b));
+        bool blackRgb = maxRgb <= blackRgbThreshold;
+        bool blackAlpha = c.a <= blackAlphaThreshold;
+        return blackRgb && blackAlpha;
     }
 }

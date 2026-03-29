@@ -6,7 +6,7 @@ Shader "mian1"
 	{
 		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
-		[ASEEnd][ASEBegin]_TextureSample0("Texture Sample 0", 2D) = "white" {}
+		[ASEEnd][ASEBegin]_MainTex("Texture", 2D) = "white" {}
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 		//_TessPhongStrength( "Tess Phong Strength", Range( 0, 1 ) ) = 0.5
@@ -22,7 +22,7 @@ Shader "mian1"
 		LOD 0
 
 		
-		Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Transparent" "Queue"="Transparent" }
+		Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" "Queue"="Geometry" }
 		
 		Cull Back
 		AlphaToMask Off
@@ -136,8 +136,8 @@ Shader "mian1"
 			Name "Forward"
 			Tags { "LightMode"="UniversalForward" }
 			
-			Blend SrcAlpha OneMinusSrcAlpha
-			ZWrite Off
+			Blend One Zero
+			ZWrite On
 			ZTest LEqual
 			Offset 0 , 0
 			ColorMask RGBA
@@ -198,7 +198,7 @@ Shader "mian1"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _TextureSample0_ST;
+			float4 _MainTex_ST;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -208,7 +208,7 @@ Shader "mian1"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			sampler2D _TextureSample0;
+			sampler2D _MainTex;
 
 
 						
@@ -352,11 +352,11 @@ Shader "mian1"
 						ShadowCoords = TransformWorldToShadowCoord( WorldPosition );
 					#endif
 				#endif
-				float2 uv_TextureSample0 = IN.ase_texcoord3.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
+				float2 uv_MainTex = IN.ase_texcoord3.xy * _MainTex_ST.xy + _MainTex_ST.zw;
 				
 				float3 BakedAlbedo = 0;
 				float3 BakedEmission = 0;
-				float4 texSample = tex2D( _TextureSample0, uv_TextureSample0 );
+				float4 texSample = tex2D( _MainTex, uv_MainTex );
 				float3 Color = texSample.rgb;
 				float Alpha = texSample.a;
 				float AlphaClipThreshold = 0.5;
@@ -374,7 +374,8 @@ Shader "mian1"
 					Color = MixFog( Color, IN.fogFactor );
 				#endif
 
-				return half4( Color, Alpha );
+				clip( Alpha - 0.001 );
+				return half4( Color, 1 );
 			}
 
 			ENDHLSL
@@ -431,7 +432,7 @@ Shader "mian1"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _TextureSample0_ST;
+			float4 _MainTex_ST;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -665,7 +666,7 @@ Shader "mian1"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float4 _TextureSample0_ST;
+			float4 _MainTex_ST;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
