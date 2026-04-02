@@ -24,6 +24,24 @@ public class StenciCube2 : MonoBehaviour
     [Header("检测频率")]
     public int framesInterval = 1;
 
+    [Header("采样点十字显示（Game 视图）")]
+    [Tooltip("是否在 Game 视图叠加绘制采样点十字（运行时）")]
+    public bool showSampleCrossInGame = true;
+    [Tooltip("十字颜色")]
+    public Color sampleCrossColor = Color.yellow;
+    [Tooltip("十字臂长（屏幕像素，一半）")]
+    public float sampleCrossHalfSizePixels = 12f;
+    [Tooltip("十字线粗细（像素）")]
+    public float sampleCrossLineThickness = 2f;
+    [Tooltip("ViewportToScreenPoint 用的相机前向距离（世界单位）")]
+    public float sampleCrossDepth = 2.0f;
+
+    [Header("采样点十字显示（仅 Scene Gizmos）")]
+    [Tooltip("是否在 Scene 视图显示 Gizmos 十字（Game 视图里看不到）")]
+    public bool showSampleCrossInScene = false;
+    [Tooltip("Scene Gizmos：十字半径（世界坐标）")]
+    public float sampleCrossHalfSizeWorld = 0.15f;
+
     [Header("触发：2 个目标同时出现")]
     [Tooltip("当前这一帧是否满足：2 个检测点同时命中目标颜色")]
     public bool allTargetsVisible = false;
@@ -50,6 +68,7 @@ public class StenciCube2 : MonoBehaviour
     bool _lastVisible = false;
     Collider2D _col;
     Texture2D _readTex;
+    Texture2D _whiteGuiTex;
     int _frameCount;
 
     void Awake()
@@ -67,6 +86,8 @@ public class StenciCube2 : MonoBehaviour
 
         if (_readTex == null)
             _readTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+
+        EnsureWhiteGuiTexture();
     }
 
     void Update()
@@ -128,6 +149,69 @@ public class StenciCube2 : MonoBehaviour
 
         Color c = _readTex.GetPixel(0, 0);
         return ColorsClose(c, targetColor, colorTolerance);
+    }
+
+    void OnGUI()
+    {
+        if (!showSampleCrossInGame)
+            return;
+
+        Camera cam = mainCamera != null ? mainCamera : Camera.main;
+        if (cam == null)
+            return;
+
+        EnsureWhiteGuiTexture();
+        float z = Mathf.Max(0.01f, sampleCrossDepth);
+        DrawCrossOnGameView(cam, sampleVp1, z);
+        DrawCrossOnGameView(cam, sampleVp2, z);
+    }
+
+    void EnsureWhiteGuiTexture()
+    {
+        if (_whiteGuiTex != null)
+            return;
+        _whiteGuiTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+        _whiteGuiTex.SetPixel(0, 0, Color.white);
+        _whiteGuiTex.Apply(false, true);
+    }
+
+    void DrawCrossOnGameView(Camera cam, Vector2 vp01, float zWorld)
+    {
+        Vector3 sp = cam.ViewportToScreenPoint(new Vector3(vp01.x, vp01.y, zWorld));
+        if (sp.z < 0f)
+            return;
+
+        float guiX = sp.x;
+        float guiY = Screen.height - sp.y;
+        float half = Mathf.Max(1f, sampleCrossHalfSizePixels);
+        float t = Mathf.Max(1f, sampleCrossLineThickness);
+
+        GUI.color = sampleCrossColor;
+        GUI.DrawTexture(new Rect(guiX - half, guiY - t * 0.5f, half * 2f, t), _whiteGuiTex);
+        GUI.DrawTexture(new Rect(guiX - t * 0.5f, guiY - half, t, half * 2f), _whiteGuiTex);
+        GUI.color = Color.white;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!showSampleCrossInScene)
+            return;
+
+        Camera cam = mainCamera != null ? mainCamera : Camera.main;
+        if (cam == null)
+            return;
+
+        float depth = Mathf.Max(0.01f, sampleCrossDepth);
+        Gizmos.color = sampleCrossColor;
+        DrawCrossAtViewport(cam, sampleVp1, depth, sampleCrossHalfSizeWorld);
+        DrawCrossAtViewport(cam, sampleVp2, depth, sampleCrossHalfSizeWorld);
+    }
+
+    void DrawCrossAtViewport(Camera cam, Vector2 vp01, float depth, float halfSize)
+    {
+        Vector3 world = cam.ViewportToWorldPoint(new Vector3(vp01.x, vp01.y, depth));
+        Gizmos.DrawLine(world + Vector3.left * halfSize, world + Vector3.right * halfSize);
+        Gizmos.DrawLine(world + Vector3.down * halfSize, world + Vector3.up * halfSize);
     }
 }
 

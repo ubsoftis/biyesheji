@@ -21,6 +21,10 @@ public class StencilCubePlant : MonoBehaviour
     [Tooltip("当前这一帧，蒙版上该点是否是目标颜色（白块还在）")]
     public bool isVisible = false;
 
+    [Header("hitAndGone 判断门控")]
+    [Tooltip("为 true 时才会根据“上一帧可见、本帧不可见”去置 hitAndGone=true；为 false 时不进行该判断，并保持 hitAndGone=false。")]
+    public bool enableHitAndGoneCheck = false;
+
     [Tooltip("是否已经：白块从当前视图中消失（上一帧可见，这一帧不可见）")]
     public bool hitAndGone = false;
 
@@ -126,9 +130,16 @@ public class StencilCubePlant : MonoBehaviour
             if (controlColliderByVisibility && _col != null)
                 _col.enabled = isVisible;
 
-            // “刚刚离开”：从可见 -> 不可见
-            if (_lastVisible && !isVisible)
-                hitAndGone = true;
+            // “刚刚离开”：从可见 -> 不可见（受门控控制）
+            if (enableHitAndGoneCheck)
+            {
+                if (_lastVisible && !isVisible)
+                    hitAndGone = true;
+            }
+            else
+            {
+                hitAndGone = false;
+            }
             _lastVisible = isVisible;
             return;
         }
@@ -181,9 +192,14 @@ public class StencilCubePlant : MonoBehaviour
 
         // 5. 检测“刚刚离开”的那一帧：
         //    条件：上一帧可见，这一帧不可见
-        if (_lastVisible && !visible)
+        if (enableHitAndGoneCheck)
         {
-            hitAndGone = true;
+            if (_lastVisible && !visible)
+                hitAndGone = true;
+        }
+        else
+        {
+            hitAndGone = false;
         }
 
         _lastVisible = visible;
