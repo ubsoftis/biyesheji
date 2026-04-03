@@ -20,7 +20,7 @@ public class StencilCubePlant : MonoBehaviour
     public bool singleSampleVisible = false;
 
     [Header("扩展：9 个采样点（任意命中即 true）")]
-    [Tooltip("为 true 时：会额外计算 9 点采样的 anyOf9Visible（任意一点命中即 true）。不影响原先 3 点判定。")]
+    [Tooltip("为 true 时：计算 anyOf9Visible。三层 RT 模式下仅对「屏幕左下角调试预览最左边那张」即 RtBack 做点采样（与 CubeLayerRTPicker 绘制顺序一致）。")]
     public bool enable9Samples = false;
     [Tooltip("9 个采样点的 Viewport 坐标(0-1)。建议按关卡检测位填写。")]
     public Vector2[] sampleVp9 = new Vector2[]
@@ -35,7 +35,7 @@ public class StencilCubePlant : MonoBehaviour
         new Vector2(0.50f, 0.45f),
         new Vector2(0.65f, 0.45f),
     };
-    [Tooltip("只读：9 点采样中是否任意一点命中目标颜色。")]
+    [Tooltip("只读：9 点采样中是否任意一点命中目标颜色（仅看 RtBack，与 CubeLayerRTPicker 调试预览最左侧那张一致）。")]
     public bool anyOf9Visible = false;
 
     [Header("判定颜色（面2 可见时的颜色）")]
@@ -62,7 +62,7 @@ public class StencilCubePlant : MonoBehaviour
     public bool controlColliderByVisibility = true;
 
     [Header("RT 三层遮挡判定（黑色为空）")]
-    [Tooltip("为 true 时，用 CubeLayerRTPicker 的三张 RT（Back/Mid/Front）采样决定可见。")]
+    [Tooltip("为 true 时，用三张 RT 采样：前层非黑且颜色贴近 targetColor 时 isVisible/singleSampleVisible 才为 true。")]
     public bool useThreeRTForVisibility = true;
     [Tooltip("需要时可手动拖引用；不填会运行时自动 FindObjectOfType。")]
     public CubeLayerRTPicker rtPicker;
@@ -131,13 +131,13 @@ public class StencilCubePlant : MonoBehaviour
 
         isVisible = SampleIsVisibleByThreeRT(mainSampleVp, rtBack, rtMid, rtFront);
 
-        // 与 StenciCube1 对齐：anyOf9Visible 按目标颜色命中判定，而不是“非黑即命中”
+        // anyOf9Visible：只认 RtBack（与 showDebugRTPreviews 时屏幕最左侧那张一致），避免与中/前层混淆
         bool any9 = false;
         if (enable9Samples && sampleVp9 != null && sampleVp9.Length > 0)
         {
             for (int i = 0; i < sampleVp9.Length; i++)
             {
-                if (SampleIsTargetColor(rtFront, sampleVp9[i]))
+                if (SampleIsTargetColor(rtBack, sampleVp9[i]))
                 {
                     any9 = true;
                     break;
@@ -234,7 +234,9 @@ public class StencilCubePlant : MonoBehaviour
         bool midEmpty = IsBlackEmpty(cMid);
         bool frontEmpty = IsBlackEmpty(cFront);
 
-        bool visibleRt = !frontEmpty;
+        // 前层有内容且该像素颜色与 targetColor 一致才算「点到目标面」；避免仅靠非黑当作可点。
+        bool colorHit = ColorsClose(cFront, targetColor, colorTolerance);
+        bool visibleRt = !frontEmpty && colorHit;
         return invertIsVisible ? !visibleRt : visibleRt;
     }
 

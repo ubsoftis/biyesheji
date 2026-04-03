@@ -46,6 +46,7 @@ public class activePaper1_3 : MonoBehaviour
     public bool triggerOnce = true;
 
     bool _triggered;
+    bool _toActivate2Fired;
 
     void Update()
     {
@@ -63,8 +64,9 @@ public class activePaper1_3 : MonoBehaviour
             stencilCubePlant.singleSampleVisible;
         conditionsMet = _triggered || liveConditionsMet;
 
-        // 只有在条件满足时，才允许 Plant 开启 hitAndGone 判断
-        if (stencilCubePlant != null)
+        // 纸条 1.4 启用后由 1.4 独占 Plant 的 hitAndGone 门控，避免本脚本每帧写回 false 把 1.4 卡死
+        bool paper14ControlsPlant = paper1_4Script != null && paper1_4Script.isActiveAndEnabled;
+        if (stencilCubePlant != null && !paper14ControlsPlant)
             stencilCubePlant.enableHitAndGoneCheck = liveConditionsMet;
 
         if (_triggered && triggerOnce) return;
@@ -73,7 +75,11 @@ public class activePaper1_3 : MonoBehaviour
         if (liveConditionsMet)
         {
             if (toActivate != null) toActivate.SetActive(true);
-            if (toActivate2 != null) toActivate2.SetActive(true);
+            if (toActivate2 != null && !_toActivate2Fired)
+            {
+                toActivate2.SetActive(true);
+                _toActivate2Fired = true;
+            }
             if (toDeactivate != null) toDeactivate.SetActive(false);
             _triggered = true;
         }
