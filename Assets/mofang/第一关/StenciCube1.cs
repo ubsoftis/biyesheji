@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class StenciCube1 : MonoBehaviour
 {
@@ -15,6 +12,25 @@ public class StenciCube1 : MonoBehaviour
     public Vector2 sampleVp1 = new Vector2(0.4f, 0.9f);
     public Vector2 sampleVp2 = new Vector2(0.5f, 0.9f);
     public Vector2 sampleVp3 = new Vector2(0.6f, 0.9f);
+
+    [Header("扩展：9 个采样点（任意命中即 true）")]
+    [Tooltip("为 true 时：会额外计算 9 点采样的 anyOf9Visible（任意一点命中即 true）。不影响原先 3 点判定。")]
+    public bool enable9Samples = false;
+    [Tooltip("9 个采样点的 Viewport 坐标(0-1)。建议按你 UI/格子位置填满 9 个。")]
+    public Vector2[] sampleVp9 = new Vector2[]
+    {
+        new Vector2(0.35f, 0.70f),
+        new Vector2(0.50f, 0.70f),
+        new Vector2(0.65f, 0.70f),
+        new Vector2(0.35f, 0.18f),
+        new Vector2(0.50f, 0.18f),
+        new Vector2(0.65f, 0.18f),
+        new Vector2(0.35f, 0.45f),
+        new Vector2(0.50f, 0.45f),
+        new Vector2(0.65f, 0.45f),
+    };
+    [Tooltip("只读：9 点采样中是否任意一点命中目标颜色。")]
+    public bool anyOf9Visible = false;
 
     [Header("判定颜色（面2 可见时的颜色）")]
     public Color targetColor = Color.red;   // 面2 用的纯色
@@ -46,22 +62,9 @@ public class StenciCube1 : MonoBehaviour
     [Tooltip("当前这一帧是否满足：3 个检测目标同时命中目标颜色")]
     public bool allTargetsVisible = false;
 
-    [Header("任意目标出现（至少 1 个点命中）")]
-    [Tooltip("当前这一帧是否满足：3 个检测点中至少有 1 个命中目标颜色")]
-    public bool anyTargetVisible = false;
-
-    [Header("任意目标出现 -> 激活物体（可开关）")]
-    [Tooltip("为 true 时：只要 anyTargetVisible=true 就会控制 objectToToggleWhenAnyVisible 的显隐。")]
-    public bool enableAnyTargetActivation = false;
-    [Tooltip("anyTargetVisible 为 true 时 SetActive(true)，否则 SetActive(false)。")]
-    public GameObject objectToToggleWhenAnyVisible;
-
     [Header("白块离开状态（与 StencilCubePlant 对齐）")]
     [Tooltip("当前这一帧，三个采样点是否同时命中目标颜色（白块还在）")]
     public bool isVisible = false;
-
-    [Tooltip("是否已经：白块从当前视图中消失（上一帧可见，这一帧不可见）")]
-    public bool hitAndGone = false;
 
     [Header("点击门控方式")]
     [Tooltip("为 true 时，用 isVisible 自动开关 Collider2D；为 false 时不再改 Collider。")]
@@ -79,22 +82,16 @@ public class StenciCube1 : MonoBehaviour
     [Tooltip("为 true：条件不满足时自动关闭该物体；为 false：只在满足时打开，不自动关闭。")]
     public bool deactivateWhenNotBothVisible = true;
 
-    [Header("自动控制多个物体（出现时：3 个 Active，2 个 Deactive）")]
-    [Tooltip("当 allTargetsVisible=true 时会 SetActive(true) 的物体（建议拖 3 个）。")]
+    // 这几个字段已由 `StenciCube1MultiObjectGate` 接管，用于在 Inspector 中统一配置。
+    // 为了不破坏你现有场景序列化数据，这里先保留字段但隐藏。
+    [HideInInspector]
     public GameObject[] objectsToActivate;
 
-    [Tooltip("当 allTargetsVisible=true 时会 SetActive(false) 的物体（建议拖 2 个）。")]
+    [HideInInspector]
     public GameObject[] objectsToDeactivate;
 
-    [Header("触发门控（bool 为 true 才执行）")]
-    [Tooltip("为 false 时，不会再根据 allTargetsVisible 执行 objectsToActivate/objectsToDeactivate 的显隐切换，也不会触发 onAllTargetsVisible。")]
-    public bool gateByBool = true;
-
-    [Tooltip("当 allTargetsVisible 从 false->true 时触发（只触发一次，直到再次变为 false）")]
-    public UnityEvent onAllTargetsVisible;
-
-    bool _allTargetsVisibleTriggered = false;
-    bool _lastVisible = false;
+    [HideInInspector]
+    public bool restoreDeactivatedWhenNotAllVisible = true;
 
     Collider2D _col;
     Texture2D _readTex;
@@ -139,27 +136,34 @@ public class StenciCube1 : MonoBehaviour
         if (_frameCount % framesInterval != 0)
             return;
 
-        // 固定采样 3 个点：三个检测目标同时出现才算通过
+        // 固定采样 3 个点：三个检测目标同时出现才算通过（保持原逻辑不变）
         bool v1 = SampleIsTargetColor(sampleVp1);
         bool v2 = SampleIsTargetColor(sampleVp2);
         bool v3 = SampleIsTargetColor(sampleVp3);
-        bool visible = v1 && v2 && v3;
-        anyTargetVisible = v1 || v2 || v3;
-        isVisible = visible;
+        bool visible3Mask = v1 && v2 && v3;
+
+        bool any9Mask = false;
+        if (enable9Samples && sampleVp9 != null && sampleVp9.Length > 0)
+        {
+            for (int i = 0; i < sampleVp9.Length; i++)
+            {
+                if (SampleIsTargetColor(sampleVp9[i]))
+                {
+                    any9Mask = true;
+                    break;
+                }
+            }
+        }
+        anyOf9Visible = any9Mask;
+
+        isVisible = visible3Mask;
         allTargetsVisible = isVisible;
 
         if (controlColliderByVisibility && _col != null)
             _col.enabled = isVisible;
 
-        if (_lastVisible && !isVisible)
-            hitAndGone = true;
-        _lastVisible = isVisible;
-
         if (objectToToggle != null)
             objectToToggle.SetActive(isVisible);
-
-        if (enableAnyTargetActivation && objectToToggleWhenAnyVisible != null)
-            objectToToggleWhenAnyVisible.SetActive(anyTargetVisible);
 
         bool bothVisible = isVisible && linkedCube2 != null && linkedCube2.allTargetsVisible;
         if (objectToActivateWhenBothVisible != null)
@@ -168,36 +172,6 @@ public class StenciCube1 : MonoBehaviour
                 objectToActivateWhenBothVisible.SetActive(bothVisible);
             else if (bothVisible)
                 objectToActivateWhenBothVisible.SetActive(true);
-        }
-
-        // 批量显隐：出现时激活一组、关闭另一组；未出现时反过来
-        if (gateByBool && objectsToActivate != null)
-        {
-            for (int i = 0; i < objectsToActivate.Length; i++)
-            {
-                GameObject go = objectsToActivate[i];
-                if (go != null) go.SetActive(isVisible);
-            }
-        }
-
-        if (gateByBool && objectsToDeactivate != null)
-        {
-            for (int i = 0; i < objectsToDeactivate.Length; i++)
-            {
-                GameObject go = objectsToDeactivate[i];
-                if (go != null) go.SetActive(!isVisible);
-            }
-        }
-
-        bool canFireAllTargetsVisible = gateByBool && isVisible;
-        if (canFireAllTargetsVisible && !_allTargetsVisibleTriggered)
-        {
-            _allTargetsVisibleTriggered = true;
-            onAllTargetsVisible?.Invoke();
-        }
-        else if (!canFireAllTargetsVisible)
-        {
-            _allTargetsVisibleTriggered = false;
         }
     }
 

@@ -1,44 +1,95 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using NodeCanvas.Framework;
 public class activePaper1_2 : MonoBehaviour
 {
+    private const string TriggerKey = "纸条1.2可以触发";
+    public GlobalBlackboard gbb;
+    private bool _hasTriggered;
+    [Header("对话树联动脚本控制")]
+    public StenciCube1MultiObjectGate canTriggerControlledScript;
+    [Header("剧情可触发开关")]
+    public bool canTrigger;
+
     [Header("条件：这两个物体都必须是 Active")]
     public GameObject conditionA;
     public GameObject conditionB;
-
     [Header("输出：条件是否满足（bool）")]
     [Tooltip("当且仅当 conditionA 与 conditionB 都处于 ActiveInHierarchy 时为 true。")]
     public bool conditionsMet;
 
-    [Header("满足条件后执行")]
+
+    [Header("满足条件后：要 SetActive(true)")]
     public GameObject toActivate;
-     public GameObject toActivate2;
+    public GameObject toActivate2;
+    [Tooltip("纸条")]
+    public GameObject paperActivateExtra1;
+    public GameObject paperActivateExtra2;
+    public GameObject paperActivateExtra3;
+    public GameObject paperActivateExtra4;
+
+    [Header("满足条件后：要 SetActive(false)")]
     public GameObject toDeactivate;
 
     [Tooltip("只执行一次（推荐）")]
     public bool triggerOnce = true;
 
-    bool _triggered;
+    void Start()
+    {
+        SyncFromBlackboard();
+    }
 
     void Update()
     {
+        SyncFromBlackboard();
+
+        // 图二：脚本开关只由 canTrigger 控制
+        if (canTriggerControlledScript != null)
+        {
+            canTriggerControlledScript.enabled = canTrigger;
+        }
+
         bool hasConditions = conditionA != null && conditionB != null;
         conditionsMet = hasConditions && conditionA.activeInHierarchy && conditionB.activeInHierarchy;
 
-        if (_triggered && triggerOnce) return;
+        if (triggerOnce && _hasTriggered) return;
         if (!hasConditions) return;
-        if (conditionsMet)
+        if (canTrigger && conditionsMet)
         {
-            if (toActivate != null) toActivate.SetActive(true);
-            if (toActivate2 != null) toActivate2.SetActive(true);
+            ActivateIfAssigned(toActivate);
+            ActivateIfAssigned(toActivate2);
+            ActivateIfAssigned(paperActivateExtra1);
+            ActivateIfAssigned(paperActivateExtra2);
+            ActivateIfAssigned(paperActivateExtra3);
+            ActivateIfAssigned(paperActivateExtra4);
             if (toDeactivate != null) toDeactivate.SetActive(false);
-            _triggered = true;
-        }
+    
+            _hasTriggered = true;
+        }            
         else
         {
-            if (!triggerOnce) _triggered = false;
+            if (!triggerOnce)
+            {
+                canTrigger = false;
+                SyncToBlackboard();
+            }
+         
         }
+    }
+
+    void SyncFromBlackboard()
+    {
+        if (gbb == null) return;
+        canTrigger = gbb.GetVariableValue<bool>(TriggerKey);
+    }
+
+    void SyncToBlackboard()
+    {
+        if (gbb == null) return;
+        gbb.SetVariableValue(TriggerKey, canTrigger);
+    }
+
+    static void ActivateIfAssigned(GameObject go)
+    {
+        if (go != null) go.SetActive(true);
     }
 }
