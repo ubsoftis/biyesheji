@@ -14,9 +14,10 @@ public class activePaper1_2 : MonoBehaviour
     public GameObject conditionA;
     public GameObject conditionB;
     [Header("输出：条件是否满足（bool）")]
-    [Tooltip("当且仅当 conditionA 与 conditionB 都处于 ActiveInHierarchy 时为 true。")]
+    [Tooltip("当且仅当 conditionA 与 conditionB 都处于 ActiveInHierarchy 时为 true（不含“已触发过”锁存）。")]
+    public bool liveConditionsMet;
+    [Tooltip("对话分支用：实时条件满足，或纸条流程已触发过一次（避免触发后关掉 condition 物体导致读回 false）。")]
     public bool conditionsMet;
-
 
     [Header("满足条件后：要 SetActive(true)")]
     public GameObject toActivate;
@@ -49,14 +50,20 @@ public class activePaper1_2 : MonoBehaviour
         }
 
         bool hasConditions = conditionA != null && conditionB != null;
-        conditionsMet = hasConditions && conditionA.activeInHierarchy && conditionB.activeInHierarchy;
+        liveConditionsMet = hasConditions && conditionA.activeInHierarchy && conditionB.activeInHierarchy;
+        conditionsMet = _hasTriggered || liveConditionsMet;
+
+        // 纸条提示 UI（toActivate2）只要实时条件满足就点亮，和剧情开关独立
+        if (liveConditionsMet)
+        {
+            ActivateIfAssigned(toActivate2);
+        }
 
         if (triggerOnce && _hasTriggered) return;
         if (!hasConditions) return;
-        if (canTrigger && conditionsMet)
+        if (canTrigger && liveConditionsMet)
         {
             ActivateIfAssigned(toActivate);
-            ActivateIfAssigned(toActivate2);
             ActivateIfAssigned(paperActivateExtra1);
             ActivateIfAssigned(paperActivateExtra2);
             ActivateIfAssigned(paperActivateExtra3);

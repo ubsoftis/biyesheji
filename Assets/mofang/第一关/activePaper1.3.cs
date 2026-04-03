@@ -17,6 +17,10 @@ public class activePaper1_3 : MonoBehaviour
     public NightWorldHearingBoostGate hearingBoostScript;
     public bool canTriggerHearingBoost;
 
+    [Header("联动：当 canTriggerHearingBoost=true 时，顺便打开纸条1.4脚本")]
+    [Tooltip("拖入纸条1.4上的 activePaper1_4 组件（会在 canTriggerHearingBoost=true 时 enabled=true）。")]
+    public activePaper1_4 paper1_4Script;
+
     [Header("联动条件来源")]
     [Tooltip("读取 lessOrEqualHalf 与 hasShrimpChild")]
     public FishChildrenCheck fishChildrenCheck;
@@ -33,7 +37,9 @@ public class activePaper1_3 : MonoBehaviour
     public GameObject toDeactivate;
 
     [Header("输出：条件是否满足（bool）")]
-    [Tooltip("当所有联动条件都满足时为 true。")]
+    [Tooltip("当前帧实时满足所有联动条件（未锁存）。")]
+    public bool liveConditionsMet;
+    [Tooltip("对话用：实时满足，或本段已触发过一次（避免触发后状态变化读回 false）。")]
     public bool conditionsMet;
 
     [Tooltip("只执行一次（触发后不再重复触发）")]
@@ -46,23 +52,25 @@ public class activePaper1_3 : MonoBehaviour
         SyncTriggerStatesFromBlackboard();
         if (countdown30sScript != null) countdown30sScript.enabled = canTriggerCountdown;
         if (hearingBoostScript != null) hearingBoostScript.enabled = canTriggerHearingBoost;
+        if (canTriggerHearingBoost && paper1_4Script != null) paper1_4Script.enabled = true;
 
         bool hasRefs = fishChildrenCheck != null && stenciCube2 != null && stencilCubePlant != null;
-        conditionsMet =
+        liveConditionsMet =
             hasRefs &&
             fishChildrenCheck.lessOrEqualHalf &&
             fishChildrenCheck.hasShrimpChild &&
             stenciCube2.allTargetsVisible &&
             stencilCubePlant.singleSampleVisible;
+        conditionsMet = _triggered || liveConditionsMet;
 
         // 只有在条件满足时，才允许 Plant 开启 hitAndGone 判断
         if (stencilCubePlant != null)
-            stencilCubePlant.enableHitAndGoneCheck = conditionsMet;
+            stencilCubePlant.enableHitAndGoneCheck = liveConditionsMet;
 
         if (_triggered && triggerOnce) return;
         if (!hasRefs) return;
 
-        if (conditionsMet)
+        if (liveConditionsMet)
         {
             if (toActivate != null) toActivate.SetActive(true);
             if (toActivate2 != null) toActivate2.SetActive(true);
