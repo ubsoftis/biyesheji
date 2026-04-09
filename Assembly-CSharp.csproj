@@ -69,6 +69,7 @@
     <Compile Include="Assets\Lowpoly Style\Shared Scripts\FlickerLight.cs" />
     <Compile Include="Assets\G\heipingruchang.cs" />
     <Compile Include="Assets\背包系统\ItemSO.cs" />
+    <Compile Include="Assets\mofang\第一关\StenciCube1MultiObjectGate.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\mofang\IStencilClickable.cs" />
     <Compile Include="Assets\mofang\第一关\StenciCube2.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DistortTunnel\DistortTunnelPass_CopyColor.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\SharedAssets\Scripts\AutoLoadPipelineAsset.cs" />
     <Compile Include="Assets\mofang\开幕\HouseClick.cs" />
+    <Compile Include="Assets\mofang\第一关\NightWorldHearingBoostGate.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DepthBlit\DepthBlitEdgePass.cs" />
     <Compile Include="Assets\G\ChestController.cs" />
     <Compile Include="Assets\mofang\第一关\activePaper1.3.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="Assets\G\StartDialogue.cs" />
     <Compile Include="Assets\mofang\第一关\activePaper1.2.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\LensFlares\Scripts\ScreenSpacePlacement.cs" />
+    <Compile Include="Assets\mofang\第一关\activePaper1.4.cs" />
     <Compile Include="Assets\Scenes\Standard Assets\Character Controllers\Sources\Scripts\FirstPersonController.cs" />
     <Compile Include="Assets\mofang\mofanKeyRotation.cs" />
     <Compile Include="Assets\mofang\第一关\ViewportSamplePicker.cs" />
@@ -119,8 +122,11 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\mofang\开幕\raycastButton.cs" />
+    <Compile Include="Assets\mofang\第一关\activeAni.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DistortTunnel\DistortTunnelPass_Distort.cs" />
     <Compile Include="Assets\mofang\开幕\ActiveHitandGone.cs" />
+    <Compile Include="Assets\mofang\第一关\Countdown30s.cs" />
+    <Compile Include="Assets\mofang\第一关\死亡结局\QuitGameButton.cs" />
     <Compile Include="Assets\Scenes\SampleScenes\Menu\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
@@ -141,8 +147,10 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\G\模型旋转.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\BlitToRTHandle\BlitToRTHandlePass.cs" />
+    <Compile Include="Assets\mofang\第一关\CountdownToGameOver.cs" />
     <Compile Include="Assets\背包系统\PickupItem.cs" />
     <Compile Include="Assets\mofang\魔方.cs" />
+    <Compile Include="Assets\mofang\第一关\死亡结局\ReloadCurrentLevelButton.cs" />
     <Compile Include="Assets\Scenes\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
@@ -156,6 +164,7 @@
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\KeepFrame\KeepFrameFeature.cs" />
     <Compile Include="Assets\G\KeyController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
+    <Compile Include="Assets\mofang\第一关\GameOverController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
