@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: "\u4E0D\u77E5\u540D\u679C\u5B50"
   m_EditorClassIdentifier: 
   itemName: "\u4E0D\u77E5\u540D\u679C\u5B50"
-  icon: {fileID: 21300000, guid: dce13295944a1904c85f03a948eb7107, type: 3}
+  icon: {fileID: 21300000, guid: 0aa6ee1610633b84bae83d65ff528bd2, type: 3}
   itemType: 0
   maxStack: 1
   description: "\u4E00\u4E2A\u602A\u4EBA\u7ED9\u7684\uFF0C\u540D\u5B57\u597D\u50CF\u53EB\u843D\u62D3\u67A3"
+  placedPrefab: {fileID: 5338939159315957417, guid: 26969931099bc6b43abecf51d8188845,
+    type: 3}

@@ -66,6 +66,8 @@ public class StencilCubePlant : MonoBehaviour
     public bool useThreeRTForVisibility = true;
     [Tooltip("需要时可手动拖引用；不填会运行时自动 FindObjectOfType。")]
     public CubeLayerRTPicker rtPicker;
+    [Tooltip("隐藏屏幕左下角 RT 调试预览（对应 CubeLayerRTPicker.showDebugRTPreviews）。")]
+    public bool hideRTDebugPreview = true;
     [Tooltip("判定黑色为空的 RGB 阈值（RGB 最大值 <= 该值认为黑）。")]
     public float blackRgbThreshold = 0.02f;
     [Tooltip("判定为空的 Alpha 阈值（alpha <= 该值认为黑）。")]
@@ -121,6 +123,9 @@ public class StencilCubePlant : MonoBehaviour
             rtPicker = FindObjectOfType<CubeLayerRTPicker>();
         if (rtPicker == null)
             return;
+
+        // 由本脚本统一控制左下角 RT 预览是否显示，避免调试图遮挡画面。
+        rtPicker.showDebugRTPreviews = !hideRTDebugPreview;
 
         rtPicker.EnsureRTRenderedForSampling();
         var rtBack = rtPicker.RtBack;

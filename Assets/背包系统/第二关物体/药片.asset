@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: "\u836F\u7247"
   m_EditorClassIdentifier: 
   itemName: "\u836F\u7247"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: e2893e70b401d7e46a87cbb0c659c22d, type: 3}
   itemType: 0
   maxStack: 1
   description: "\u7ED9\u602A\u4EBA\u7684\u836F\u7247"
+  placedPrefab: {fileID: 0}

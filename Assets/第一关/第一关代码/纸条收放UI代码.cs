@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// 可展开/收回的纸条UI控制脚本（带旋转版）
 /// 挂载对象：纸条的根Canvas/Image对象
 /// </summary>
-public class 纸条收放UI代码 : MonoBehaviour
+public class 纸条收放UI代码 : MonoBehaviour, IPointerClickHandler
 {
     [Header("核心配置")]
     [Tooltip("纸条收起时的位置（基于RectTransform的anchoredPosition）")]
@@ -27,6 +28,24 @@ public class 纸条收放UI代码 : MonoBehaviour
     [Tooltip("收起时的透明度（0.8=轻微半透）")]
     [Range(0f, 1f)] public float retractedAlpha = 0.8f;
 
+    [Header("判定区域可视化")]
+    [Tooltip("是否在Scene视图中显示判定区域")]
+    public bool showJudgeAreaGizmo = true;
+    [Tooltip("收起状态区域颜色")]
+    public Color retractedAreaColor = new Color(1f, 0.7f, 0f, 0.9f);
+    [Tooltip("展开状态区域颜色")]
+    public Color expandedAreaColor = new Color(0f, 1f, 1f, 0.9f);
+    [Tooltip("是否在Game视图显示判定区域（运行时）")]
+    public bool showJudgeAreaInGame = true;
+    [Tooltip("Game视图判定区域填充透明度")]
+    [Range(0f, 1f)] public float gameAreaFillAlpha = 0.2f;
+    [Tooltip("收起状态判定区域尺寸（宽,高）。填0则跟随纸条自身尺寸")]
+    public Vector2 retractedJudgeAreaSize = Vector2.zero;
+    [Tooltip("展开状态判定区域尺寸（宽,高）。填0则跟随纸条自身尺寸")]
+    public Vector2 expandedJudgeAreaSize = Vector2.zero;
+    [Tooltip("是否允许点击纸条本体切换展开/收回")]
+    public bool clickNoteToToggle = true;
+
     [Header("组件引用")]
     [Tooltip("控制展开/收回的按钮")]
     public Button toggleButton;
@@ -39,6 +58,8 @@ public class 纸条收放UI代码 : MonoBehaviour
     private Vector2 targetPosition; // 目标位置
     private float targetAlpha; // 目标透明度值
     private float targetRotation; // 新增：目标旋转角度
+    private RectTransform retractedDebugRect;
+    private RectTransform expandedDebugRect;
 
     void Start()
     {
@@ -72,6 +93,9 @@ public class 纸条收放UI代码 : MonoBehaviour
         targetAlpha = retractedAlpha;
         targetRotation = retractedRotation; // 初始化目标旋转角度
 
+        CreateGameJudgeAreaDebugUI();
+        RefreshGameJudgeAreaDebugUI();
+
         // 绑定按钮点击事件
         if (toggleButton != null)
         {
@@ -79,12 +103,14 @@ public class 纸条收放UI代码 : MonoBehaviour
         }
         else
         {
-            Debug.LogError("未指定控制按钮！");
+            Debug.Log("未指定控制按钮，将使用纸条本体点击切换（若已开启）");
         }
     }
 
     void Update()
     {
+        RefreshGameJudgeAreaDebugUI();
+
         // 检查是否已到达所有目标状态（位置+透明度+旋转）
         if (IsTargetReached())
         {
@@ -135,6 +161,16 @@ public class 纸条收放UI代码 : MonoBehaviour
         currentMoveTime = 0f; // 重置动画进度
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (!clickNoteToToggle)
+        {
+            return;
+        }
+
+        ToggleNoteState();
+    }
+
     /// <summary>
     /// 检查是否到达所有目标状态
     /// </summary>
@@ -173,5 +209,136 @@ public class 纸条收放UI代码 : MonoBehaviour
     private float EaseOutCubic(float x)
     {
         return 1 - Mathf.Pow(1 - x, 3);
+    }
+
+    private void CreateGameJudgeAreaDebugUI()
+    {
+        if (noteRect == null || noteRect.parent == null)
+        {
+            return;
+        }
+
+        retractedDebugRect = CreateSingleDebugArea("判定区域_收起", retractedAreaColor);
+        expandedDebugRect = CreateSingleDebugArea("判定区域_展开", expandedAreaColor);
+    }
+
+    private RectTransform CreateSingleDebugArea(string objName, Color baseColor)
+    {
+        Transform existing = noteRect.parent.Find(objName);
+        GameObject go;
+        if (existing != null)
+        {
+            go = existing.gameObject;
+        }
+        else
+        {
+            go = new GameObject(objName, typeof(RectTransform), typeof(Image));
+            go.transform.SetParent(noteRect.parent, false);
+        }
+
+        RectTransform rect = go.GetComponent<RectTransform>();
+        Image img = go.GetComponent<Image>();
+        img.raycastTarget = false;
+        Color c = baseColor;
+        c.a = gameAreaFillAlpha;
+        img.color = c;
+        return rect;
+    }
+
+    private void RefreshGameJudgeAreaDebugUI()
+    {
+        if (retractedDebugRect == null || expandedDebugRect == null || noteRect == null)
+        {
+            return;
+        }
+
+        bool shouldShow = Application.isPlaying && showJudgeAreaInGame;
+        retractedDebugRect.gameObject.SetActive(shouldShow);
+        expandedDebugRect.gameObject.SetActive(shouldShow);
+        if (!shouldShow)
+        {
+            return;
+        }
+
+        ApplyAreaRectState(retractedDebugRect, retractedPosition, retractedRotation, retractedAreaColor);
+        ApplyAreaRectState(expandedDebugRect, expandedPosition, expandedRotation, expandedAreaColor);
+    }
+
+    private void ApplyAreaRectState(RectTransform debugRect, Vector2 anchoredPos, float zRotation, Color baseColor)
+    {
+        bool isRetractedRect = debugRect == retractedDebugRect;
+        Vector2 judgeSize = GetJudgeAreaSize(noteRect, isRetractedRect);
+
+        debugRect.anchorMin = noteRect.anchorMin;
+        debugRect.anchorMax = noteRect.anchorMax;
+        debugRect.pivot = noteRect.pivot;
+        debugRect.anchoredPosition = anchoredPos;
+        debugRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, judgeSize.x);
+        debugRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, judgeSize.y);
+        debugRect.localScale = Vector3.one;
+        debugRect.localRotation = Quaternion.Euler(0f, 0f, zRotation);
+
+        Image img = debugRect.GetComponent<Image>();
+        if (img != null)
+        {
+            Color c = baseColor;
+            c.a = gameAreaFillAlpha;
+            img.color = c;
+        }
+    }
+
+    private Vector2 GetJudgeAreaSize(RectTransform rect, bool isRetractedState)
+    {
+        Vector2 customSize = isRetractedState ? retractedJudgeAreaSize : expandedJudgeAreaSize;
+        Vector2 baseSize = rect.rect.size;
+        float finalWidth = customSize.x > 0f ? customSize.x : baseSize.x;
+        float finalHeight = customSize.y > 0f ? customSize.y : baseSize.y;
+        return new Vector2(finalWidth, finalHeight);
+    }
+
+    /// <summary>
+    /// 在Scene视图中绘制纸条的判定区域（收起/展开）
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (!showJudgeAreaGizmo)
+        {
+            return;
+        }
+
+        RectTransform rect = GetComponent<RectTransform>();
+        if (rect == null)
+        {
+            return;
+        }
+
+        Vector2 retractedSize = GetJudgeAreaSize(rect, true);
+        Vector2 expandedSize = GetJudgeAreaSize(rect, false);
+        DrawAreaRect(rect, retractedPosition, retractedRotation, retractedSize, retractedAreaColor);
+        DrawAreaRect(rect, expandedPosition, expandedRotation, expandedSize, expandedAreaColor);
+    }
+
+    private void DrawAreaRect(RectTransform rect, Vector2 anchoredPos, float zRotation, Vector2 size, Color color)
+    {
+        // 以pivot为基准构建局部四角，再转换到世界坐标绘制线框
+        Vector2 pivot = rect.pivot;
+        Vector2 min = new Vector2(-pivot.x * size.x, -pivot.y * size.y);
+        Vector2 max = min + size;
+
+        Vector3[] localCorners = new Vector3[4];
+        localCorners[0] = new Vector3(min.x, min.y, 0f);
+        localCorners[1] = new Vector3(min.x, max.y, 0f);
+        localCorners[2] = new Vector3(max.x, max.y, 0f);
+        localCorners[3] = new Vector3(max.x, min.y, 0f);
+
+        Quaternion localRot = Quaternion.Euler(0f, 0f, zRotation);
+        Gizmos.color = color;
+
+        for (int i = 0; i < 4; i++)
+        {
+            Vector3 p1 = rect.TransformPoint((Vector3)anchoredPos + localRot * localCorners[i]);
+            Vector3 p2 = rect.TransformPoint((Vector3)anchoredPos + localRot * localCorners[(i + 1) % 4]);
+            Gizmos.DrawLine(p1, p2);
+        }
     }
 }
