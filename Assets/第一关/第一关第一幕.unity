@@ -5269,7 +5269,7 @@ MonoBehaviour:
   controlColliderByVisibility: 1
   useThreeRTForVisibility: 1
   rtPicker: {fileID: 0}
-  hideRTDebugPreview: 1
+  hideRTDebugPreview: 0
   blackRgbThreshold: 0.02
   blackAlphaThreshold: 0.01
   invertIsVisible: 0

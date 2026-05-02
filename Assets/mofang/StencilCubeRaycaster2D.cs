@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -18,11 +19,22 @@ public class StencilCubeRaycaster2D : MonoBehaviour
     [Tooltip("射线最长检测距离")]
     public float rayDistance = 100f;
 
-    [Tooltip("屏幕点转世界点时使用的深度（相对相机）。透视相机下建议设为魔方到相机的距离，正交相机可保持 0")]
+    [Tooltip(
+        "沿相机 forward、从相机位置量起的距离（世界单位），用于确定 OverlapPoint 所在的采样平面。\n" +
+        "应对齐「主要内容所在深度」：例如相机在 z=-10、物体约在 z≈-2，则约填 8。\n" +
+        "实际换算用 ScreenPointToRay 与该平面求交，相机有俯仰/滚动时比直接 ScreenToWorldPoint 稳。"
+    )]
     public float planeDepth = 10f;
 
     [Tooltip("是否忽略 UI 阻挡（点击在 UI 上时不触发魔方点击）")]
     public bool ignoreUIBlocking = true;
+
+    [Tooltip(
+        "仅当 ignoreUIBlocking 为 true 时生效。\n" +
+        "为 true：只有 GraphicRaycaster 结果里命中 Layer「UI」才算遮挡（全屏 RawImage 若在 Default 层则不再挡世界点击）。\n" +
+        "为 false：与 EventSystem.IsPointerOverGameObject() 一致。"
+    )]
+    public bool uiBlockingOnlyOnUiLayer = false;
 
     [Tooltip("是否每帧打印命中信息（调试用）")]
     public bool debugLog = false;
@@ -52,10 +64,43 @@ public class StencilCubeRaycaster2D : MonoBehaviour
             return;
         if (rayCamera == null)
             return;
-        if (ignoreUIBlocking && EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            return;
+        if (ignoreUIBlocking && EventSystem.current != null)
+        {
+            if (uiBlockingOnlyOnUiLayer)
+            {
+                if (IsUiLayerBlockingScreenPoint(Input.mousePosition))
+                    return;
+            }
+            else if (EventSystem.current.IsPointerOverGameObject())
+                return;
+        }
 
         CastRay(Input.mousePosition);
+    }
+
+    /// <summary>
+    /// 与 StencilActivateTwoOnClick.IsDirectPickBlockedByUi（directPickUiBlockingOnlyOnUiLayer）语义一致。
+    /// </summary>
+    bool IsUiLayerBlockingScreenPoint(Vector2 screenPosition)
+    {
+        var ped = new PointerEventData(EventSystem.current) { position = screenPosition };
+        var results = new List<RaycastResult>(8);
+        EventSystem.current.RaycastAll(ped, results);
+        if (results.Count == 0)
+            return false;
+
+        int uiLayer = LayerMask.NameToLayer("UI");
+        if (uiLayer < 0)
+            return EventSystem.current.IsPointerOverGameObject();
+
+        for (int i = 0; i < results.Count; i++)
+        {
+            var go = results[i].gameObject;
+            if (go != null && go.layer == uiLayer)
+                return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -69,8 +114,10 @@ public class StencilCubeRaycaster2D : MonoBehaviour
             return;
         }
 
-        Vector3 worldPos = rayCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, planeDepth));
-        Vector2 point = new Vector2(worldPos.x, worldPos.y);
+        Vector2 point = ScreenPointToWorldXYOnViewPlane(screenPosition);
+
+        // Physics2DSettings.m_AutoSyncTransforms==0 时，Transform 改动可能尚未同步到碰撞体。
+        Physics2D.SyncTransforms();
 
         // 点击判定应以“鼠标所在点”为准，而不是从相机发射一条长射线。
         // 使用 OverlapPointAll：同一点可能叠着魔方与目标物体，优先响应可点击目标。
@@ -78,7 +125,7 @@ public class StencilCubeRaycaster2D : MonoBehaviour
         if (cols == null || cols.Length == 0)
         {
             if (debugLog)
-                Debug.Log("[StencilCubeRaycaster2D] 未命中任何碰撞体（OverlapPointAll）。");
+                Debug.Log($"[StencilCubeRaycaster2D] 未命中任何碰撞体（OverlapPointAll）。worldXY={point}, planeDepth={planeDepth}, layerMask={raycastLayer.value}");
             return;
         }
 
@@ -98,6 +145,26 @@ public class StencilCubeRaycaster2D : MonoBehaviour
 
         if (targetCol != null)
             HandleHit(targetCol, point);
+    }
+
+    /// <summary>
+    /// 将屏幕像素换算到世界 XY：过该像素作相机射线，与「过 camera.position + forward*planeDepth、法线为 forward」的平面求交。
+    /// </summary>
+    Vector2 ScreenPointToWorldXYOnViewPlane(Vector2 screenPosition)
+    {
+        Ray ray = rayCamera.ScreenPointToRay(screenPosition);
+        Vector3 planeOrigin = rayCamera.transform.position + rayCamera.transform.forward * planeDepth;
+        var plane = new Plane(rayCamera.transform.forward, planeOrigin);
+        if (plane.Raycast(ray, out float enter))
+        {
+            Vector3 hit = ray.GetPoint(enter);
+            return new Vector2(hit.x, hit.y);
+        }
+
+        Vector3 fallback = rayCamera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, planeDepth));
+        if (debugLog)
+            Debug.LogWarning("[StencilCubeRaycaster2D] 射线与采样平面平行，已退回 ScreenToWorldPoint（请检查 planeDepth / 相机姿态）。");
+        return new Vector2(fallback.x, fallback.y);
     }
 
     void HandleHit(RaycastHit2D hit)

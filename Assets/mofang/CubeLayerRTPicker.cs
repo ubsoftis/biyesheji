@@ -448,6 +448,10 @@ public class CubeLayerRTPicker : MonoBehaviour
     void LateUpdate()
     {
         SyncRTCamerasToMain();
+        // OnGUI 只负责 DrawTexture，不会触发渲染；若不在此处刷新，预览会一直黑/空，
+        // 除非别的脚本（如 StencilActivateTwoOnClick）在同一帧调用了 EnsureRTRenderedForSampling。
+        if (showDebugRTPreviews && _camBack != null && viewCamera != null)
+            RenderAllLayersToRT();
     }
 
     void Update()
