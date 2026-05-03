@@ -7,6 +7,11 @@ using UnityEngine.Events;
 /// 背包格子的 UI 组件：显示图标、数量，支持悬停提示、点击事件。
 /// 每个格子需单独挂在一个 UI 物体上，并设置 slotIndex 对应背包中的索引。
 /// </summary>
+/// <remarks>
+/// 与场景放置配合：先点击格子（<see cref="OnSlotClick"/> → <see cref="InventoryManager.SelectSlot"/>），
+/// 再在<strong>非 UI 区域</strong>左键点击带 Tag「可互动」且挂 <see cref="ScenePlacementTarget"/> 的物体（如 NPC2），
+/// 由 <see cref="SceneInteractItemPlacer"/> 消耗物品并刷新格子；若同物体上有 <see cref="UnityEngine.UI.Button"/>，请把 OnClick 绑到 <see cref="OnSlotClick"/>。
+/// </remarks>
 public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("显示引用")]
@@ -106,6 +111,8 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     public void UpdateSlotUI()
     {
+        if (inventory == null)
+            inventory = InventoryManager.Instance;
         if (inventory == null || inventory.inventorySlots == null) return;
         if (slotIndex < 0 || slotIndex >= inventory.inventorySlots.Count)
         {
@@ -126,6 +133,7 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
             }
             else
             {
+                itemIcon.sprite = null;
                 itemIcon.enabled = false;
             }
         }
@@ -150,6 +158,8 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (inventory == null)
+            inventory = InventoryManager.Instance;
         if (inventory == null || inventory.inventorySlots == null) return;
         if (slotIndex < 0 || slotIndex >= inventory.inventorySlots.Count) return;
 
@@ -184,6 +194,8 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     public void OnSlotClick()
     {
+        if (inventory == null)
+            inventory = InventoryManager.Instance;
         if (inventory == null || inventory.inventorySlots == null) return;
         if (slotIndex < 0 || slotIndex >= inventory.inventorySlots.Count) return;
 
@@ -217,6 +229,8 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private void UpdateSelectionVisual()
     {
+        if (inventory == null)
+            inventory = InventoryManager.Instance;
         if (inventory == null) return;
 
         bool selected = inventory.selectedSlotIndex == slotIndex;

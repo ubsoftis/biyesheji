@@ -1,10 +1,10 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// 场景交互放置器：
-/// - 左键点击场景中 tag 为「可互动」的物体
-/// - 读取当前背包选中的 ItemSO
-/// - 按目标物体上的配置，把对应预制体实例化到指定父节点下面，作为子级
+/// - 先在 <see cref="InventorySlotUI"/> 里选中格子，再左键点击场景中 tag 为 <see cref="interactableTag"/> 且带 <see cref="ScenePlacementTarget"/> 的物体
+/// - 读取当前背包选中的 ItemSO，实例化 <see cref="ItemSO.placedPrefab"/>，并按设置消耗背包
 /// </summary>
 public class SceneInteractItemPlacer : MonoBehaviour
 {
@@ -32,6 +32,9 @@ public class SceneInteractItemPlacer : MonoBehaviour
 
     public void TryPlaceSelectedItemByMouse()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
+
         InventoryManager inv = InventoryManager.Instance;
         if (inv == null) return;
 
@@ -44,16 +47,16 @@ public class SceneInteractItemPlacer : MonoBehaviour
         if (target == null) return;
         if (!target.CompareTag(interactableTag)) return;
 
-        // 目标物体上挂一个 ScenePlacementTarget，用来提供默认父节点
-        var targetConfig = target.GetComponent<ScenePlacementTarget>();
+        // Collider 可在子物体上，用 InParent 找 ScenePlacementTarget
+        var targetConfig = target.GetComponentInParent<ScenePlacementTarget>();
         if (targetConfig == null)
         {
-            Debug.LogWarning($"[SceneInteractItemPlacer] 目标 {target.name} 没有 ScenePlacementTarget 组件，无法放置物品。");
+            Debug.LogWarning($"[SceneInteractItemPlacer] 目标 {target.name} 及其父级没有 ScenePlacementTarget，无法放置。请在 NPC 等物体上添加 ScenePlacementTarget。");
             return;
         }
 
-        // 1. 决定父级（优先用 ScenePlacementTarget.defaultParent，其次用点击到的物体自身）
-        Transform parent = targetConfig.defaultParent != null ? targetConfig.defaultParent : target.transform;
+        // 1. 决定父级（优先用 ScenePlacementTarget.defaultParent，其次用挂目标的物体自身）
+        Transform parent = targetConfig.defaultParent != null ? targetConfig.defaultParent : targetConfig.transform;
 
         // 2. 决定预制体：直接使用 ItemSO 上配置的 placedPrefab
         GameObject prefab = selectedItem.placedPrefab;
@@ -66,9 +69,10 @@ public class SceneInteractItemPlacer : MonoBehaviour
         // 3. 实例化为子级，保持预制体自身局部 Transform
         GameObject instance = Object.Instantiate(prefab, parent, false);
 
-        // 4. 成功后消耗背包物品
-        if (consumeOnSuccess && !inv.TryConsumeSelectedItem(1))
-            Debug.LogWarning("[SceneInteractItemPlacer] 放置成功，但消耗背包物品失败。");
+        // 4. 消耗：全局开关 + ItemSO 上的 per-item 开关
+        bool doConsume = consumeOnSuccess && selectedItem.consumeFromInventoryWhenPlaced;
+        if (doConsume && !inv.TryConsumeSelectedItem(1))
+            Debug.LogWarning("[SceneInteractItemPlacer] 放置成功，但消耗背包物品失败（请确认已先点击格子选中物品）。");
 
         inv.RefreshAllSlots();
     }

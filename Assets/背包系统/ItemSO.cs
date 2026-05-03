@@ -27,4 +27,6 @@ public class ItemSO : UnityEngine.ScriptableObject
     [Header("场景放置（可选）")]
     [Tooltip("将该物品放入场景容器（例如鱼缸）时实例化的预制体")]
     public GameObject placedPrefab;
+    [Tooltip("通过 SceneInteractItemPlacer 点到带 ScenePlacementTarget 的物体时，是否从背包扣除该物品（关闭则只生成预制体不扣数）")]
+    public bool consumeFromInventoryWhenPlaced = true;
 }

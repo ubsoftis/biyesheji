@@ -17,4 +17,6 @@ MonoBehaviour:
   itemType: 0
   maxStack: 1
   description: "\u7ED9\u602A\u4EBA\u7684\u836F\u7247"
-  placedPrefab: {fileID: 0}
+  placedPrefab: {fileID: 9172033140223624166, guid: d33353041f779e648b8acbadc05ac849,
+    type: 3}
+  consumeFromInventoryWhenPlaced: 1

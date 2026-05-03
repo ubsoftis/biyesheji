@@ -149,7 +149,7 @@ public class InventoryManager : MonoBehaviour
         int left = amount;
         foreach (var slot in inventorySlots)
         {
-            if (left <= 0) return true;
+            if (left <= 0) break;
             if (slot.item == item)
             {
                 int remove = Mathf.Min(left, slot.amount);
@@ -157,6 +157,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
         bool success = left == 0;
+        int removed = amount - left;
 
         if (selectedSlotIndex >= 0 && selectedSlotIndex < inventorySlots.Count)
         {
@@ -164,6 +165,9 @@ public class InventoryManager : MonoBehaviour
             if (selectedSlot == null || selectedSlot.IsEmpty)
                 ClearSelection();
         }
+
+        if (removed > 0)
+            RefreshAllSlots();
 
         return success;
     }
@@ -182,6 +186,7 @@ public class InventoryManager : MonoBehaviour
         if (slot.IsEmpty && selectedSlotIndex == slotIndex)
             ClearSelection();
 
+        RefreshAllSlots();
         return true;
     }
 

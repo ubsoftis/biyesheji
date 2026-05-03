@@ -19,3 +19,4 @@ MonoBehaviour:
   description: "\u6761\u4EF62:\u70B9\u51FB\u201C\u867E\u201D\u653E\u5165\u80CC\u5305\u5E76\u5728\u9009\u4E2D\u201C\u867E\u201D\u65F6\u518D\u6B21\u70B9\u51FB\u9C7C\u7F38\u5C06\u5176\u653E\u5165"
   placedPrefab: {fileID: 449938882620637933, guid: fa2f5246b0f24ae43a00a9127c634e4f,
     type: 3}
+  consumeFromInventoryWhenPlaced: 0
