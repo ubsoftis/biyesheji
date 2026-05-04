@@ -19,3 +19,4 @@ MonoBehaviour:
   description: "\u602A\u4EBA\u6B7B\u524D\u7ED9\u7684"
   placedPrefab: {fileID: 6782757916257749618, guid: 5637fbf51e5039145a2a3618f1b7d2eb,
     type: 3}
+  consumeFromInventoryWhenPlaced: 1

@@ -48,6 +48,10 @@ public class StencilTwoGateNineZonePairDriver : MonoBehaviour, IStencilClickable
     public bool gateDrivePairStayActiveAfterFirstShow = true;
 
     [Header("第二段：9 采样点 + 联动 → 再激活 2 个物体")]
+    [Tooltip("九区黄十字由 StenciCube1Only9Samples 绘制。为 true：Awake 时关掉其 Game 视图十字（可拖指定实例，留空则 FindObjectOfType）。")]
+    public bool turnOffNineSampleGameViewCross = true;
+    [Tooltip("要关十字的 StenciCube1Only9Samples；留空则用场景中第一个。")]
+    public StenciCube1Only9Samples nineSampleCrossBehaviour;
     public Vector2[] nineZoneViewports = new Vector2[9];
     [Tooltip("为 true：第二段也要求第一段门控仍成立；为 false：仅看九区+联动。")]
     public bool secondStageAlsoRequiresGate = true;
@@ -89,6 +93,15 @@ public class StencilTwoGateNineZonePairDriver : MonoBehaviour, IStencilClickable
 
         if (nineZoneViewports == null || nineZoneViewports.Length != 9)
             nineZoneViewports = BuildDefaultNineGrid();
+
+        if (turnOffNineSampleGameViewCross)
+        {
+            var nineCross = nineSampleCrossBehaviour != null
+                ? nineSampleCrossBehaviour
+                : FindObjectOfType<StenciCube1Only9Samples>();
+            if (nineCross != null)
+                nineCross.showSampleCrossInGame = false;
+        }
     }
 
     static Vector2[] BuildDefaultNineGrid()

@@ -56,7 +56,8 @@ public class StenciCube1Only9Samples : MonoBehaviour
     public GameObject objectToToggle;
 
     [Header("采样点十字显示（Game 视图）")]
-    public bool showSampleCrossInGame = true;
+    [Tooltip("默认关闭，避免 Game 视图叠黄十字；需要调试再勾选。")]
+    public bool showSampleCrossInGame = false;
     public Color sampleCrossColor = Color.yellow;
     public float sampleCrossHalfSizePixels = 12f;
     public float sampleCrossLineThickness = 2f;

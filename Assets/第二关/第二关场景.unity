@@ -258,6 +258,139 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1829561096544181205}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &37191373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 37191374}
+  - component: {fileID: 37191377}
+  - component: {fileID: 37191376}
+  - component: {fileID: 37191375}
+  m_Layer: 5
+  m_Name: "\u8DF3\u5173"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &37191374
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37191373}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1510303058}
+  m_Father: {fileID: 371996632}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &37191375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37191373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 37191376}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1028242113}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+--- !u!114 &37191376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37191373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &37191377
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37191373}
+  m_CullTransparentMesh: 1
 --- !u!1 &42084716
 GameObject:
   m_ObjectHideFlags: 0
@@ -2429,6 +2562,7 @@ RectTransform:
   - {fileID: 1151330650}
   - {fileID: 1722446979}
   - {fileID: 894627457}
+  - {fileID: 37191374}
   m_Father: {fileID: 1478587177}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 6.714}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2641,6 +2775,14 @@ MonoBehaviour:
   currentCount: 0
   peakCount: 0
   hasUsedOnce: 0
+  watchItemWhenInInventory: {fileID: 11400000, guid: 715051930616b354ba891425aee2ce44,
+    type: 2}
+  disableWhenWatchObjectAppears: {fileID: 836324342}
+  treatInitialItemInBackpackAsAlreadySeen: 1
+  activateWhenItemInInventory: {fileID: 11400000, guid: 1cd95789f49f4994fa27466dca341d97,
+    type: 2}
+  objectToActivateWhenItemAppears: {fileID: 1028242113}
+  treatInitialItemForActivateAsAlreadySeen: 1
   debugLog: 0
 --- !u!1 &398768811
 GameObject:
@@ -3077,27 +3219,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializedExposedParameters: []
-  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1455.3,\"y\":-1166.867},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"0\"},{\"_condition\":{\"valueA\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e00\\u6b21\",\"_targetVariableID\":\"5522a177-2277-4eb2-ace1-8b75d6071172\"},\"valueB\":{\"_value\":true},\"$type\":\"NodeCanvas.Tasks.Conditions.CheckBoolean\"},\"_position\":{\"x\":1476.804,\"y\":-1068.682},\"$type\":\"NodeCanvas.DialogueTrees.ConditionNode\",\"$id\":\"1\"},{\"statement\":{\"_text\":\"\\u540e\\u6765\\u4e0d\\u4ec5\\u662f\\u80fd\\u770b\\u89c1\\uff0c\\u6211\\u80fd\\u4e0e\\u5176\\u4ed6\\u4e16\\u754c\\u7684\\u2018\\u4eba\\u2019\\u4ea4\\u6d41\\u4e86\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1196.728,\"y\":-24.55677},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"2\"},{\"_action\":{\"boolVariable\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e00\\u6b21\",\"_targetVariableID\":\"5522a177-2277-4eb2-ace1-8b75d6071172\"},\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetBoolean\"},\"_position\":{\"x\":1262.76,\"y\":67.99579},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"3\"},{\"_action\":{\"boolVariable\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e8c\\u6b21\",\"_targetVariableID\":\"fd858bdc-eace-428b-a844-b0f92ee135f0\"},\"$type\":\"NodeCanvas.Tasks.Actions.SetBoolean\"},\"_position\":{\"x\":1264.605,\"y\":152.7584},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"4\"},{\"_action\":{\"actions\":[{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":2},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":3},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1336.633,\"y\":236.8626},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"5\"},{\"_position\":{\"x\":1764.068,\"y\":395.127},\"$type\":\"NodeCanvas.DialogueTrees.FinishNode\",\"$id\":\"6\"},{\"_condition\":{\"valueA\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e8c\\u6b21\",\"_targetVariableID\":\"fd858bdc-eace-428b-a844-b0f92ee135f0\"},\"valueB\":{\"_value\":true},\"$type\":\"NodeCanvas.Tasks.Conditions.CheckBoolean\"},\"_position\":{\"x\":1578.143,\"y\":-831.4374},\"$type\":\"NodeCanvas.DialogueTrees.ConditionNode\",\"$id\":\"7\"},{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1596.205,\"y\":-214.7621},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"8\"},{\"statement\":{\"_text\":\"\\u5148\\u8bd5\\u7740\\u76f8\\u4fe1\\u6211\\u5427\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":1660.552,\"y\":-51.57761},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"9\"},{\"_action\":{\"actions\":[{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":5},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":6},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1638.976,\"y\":62.91953},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"10\"},{\"_action\":{\"boolVariable\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e09\\u6b21\",\"_targetVariableID\":\"f7c69699-6241-4e06-949d-7e7c81ec995c\"},\"$type\":\"NodeCanvas.Tasks.Actions.SetBoolean\"},\"_position\":{\"x\":1661.893,\"y\":235.3881},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"11\"},{\"_condition\":{\"valueA\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e09\\u6b21\",\"_targetVariableID\":\"f7c69699-6241-4e06-949d-7e7c81ec995c\"},\"valueB\":{\"_value\":true},\"$type\":\"NodeCanvas.Tasks.Conditions.CheckBoolean\"},\"_position\":{\"x\":1818.707,\"y\":-696.6309},\"$type\":\"NodeCanvas.DialogueTrees.ConditionNode\",\"$id\":\"12\"},{\"statement\":{\"_text\":\"......\\u7a0d\\u7b49\\uff0c\\u6211\\u5148\\u5931\\u966a\\u4e00\\u4e0b\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2012.898,\"y\":-300.1496},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"13\"},{\"availableChoices\":[{\"statement\":{\"_text\":\"\\u56de\\u5fc6\"}},{\"statement\":{\"_text\":\"\\u7b49\\u5f85\"}}],\"_position\":{\"x\":2125.561,\"y\":-7.075283},\"$type\":\"NodeCanvas.DialogueTrees.MultipleChoiceNode\",\"$id\":\"14\"},{\"statement\":{\"_text\":\"\\u6211\\u597d\\u50cf\\u8fd8\\u60f3\\u8d77\\u6765\\u4ec0\\u4e48......\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1979.931,\"y\":191.5045},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"15\"},{\"_action\":{\"actions\":[{\"fadeTime\":3.0,\"$type\":\"NodeCanvas.Tasks.Actions.FadeOut\"},{\"sceneName\":{\"_value\":\"\\u7b2c\\u4e09\\u5173\"},\"mode\":{},\"$type\":\"NodeCanvas.Tasks.Actions.LoadScene\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":2225.116,\"y\":295.869},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"16\"},{\"statement\":{\"_text\":\"\\u4ec0\\u4e48\\u65f6\\u5019\\u5f00\\u59cb\\u7684\\uff1f\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":715.0356,\"y\":-900.2349},\"_comment\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"17\"},{\"statement\":{\"_text\":\"\\u5927\\u6982\\u4e00\\u4e2a\\u6708\\u4e4b\\u524d\\u5427\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":723.3704,\"y\":-795.4547},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"18\"},{\"statement\":{\"_text\":\"\\u6709\\u6ca1\\u6709\\u5177\\u4f53\\u70b9\\u7684\\u65e5\\u671f\\uff1f\"},\"_actorName\":\"NPC\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":719.0295,\"y\":-700.6472},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"19\"},{\"statement\":{\"_text\":\"......\\u6211\\u4e0d\\u8bb0\\u5f97\\u4e86\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":722.0566,\"y\":-611.9111},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"20\"},{\"statement\":{\"_text\":\"...\\u597d\\u7684\"},\"_actorName\":\"NPC\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":720.4474,\"y\":-531.2551},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"21\"},{\"statement\":{\"_text\":\"\\u90a3\\u4e48\\uff0c\\u6709\\u54ea\\u4e9b\\u4f60\\u89c9\\u5f97\\u4e0d\\u592a\\u2018\\u65e5\\u5e38\\u2019\\u7684\\u60c5\\u51b5\\u5462\\uff1f\\u8bf7\\u5c3d\\u91cf\\u8bf4\\u5f97\\u5177\\u4f53\\u4e00\\u70b9\\u3002\"},\"_actorName\":\"NPC\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":583.6205,\"y\":-443.9741},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"22\"},{\"statement\":{\"_text\":\"\\u5982\\u679c\\u6ca1\\u5934\\u7eea\\u7684\\u8bdd\\u4e5f\\u53ef\\u4ee5\\u6309\\u65f6\\u95f4\\u6765\\u8bf4\"},\"_actorName\":\"NPC\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":669.6434,\"y\":-362.7863},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"23\"},{\"statement\":{\"_text\":\"...\\u8d77\\u521d\\uff0c\\u6211\\u53ea\\u662f\\u80fd\\u770b\\u5230\\u4e00\\u4e9b\\u4e00\\u770b\\u5c31\\u4e0d\\u7b26\\u5408\\u6211\\u8ba4\\u77e5\\u7684\\u7269\\u4f53\\u4e0e\\u573a\\u666f\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":589.8705,\"y\":-281.3619},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"24\"},{\"statement\":{\"_text\":\"\\u5c31\\u50cf\\u662f\\u5403\\u4e86\\u6bd2\\u83cc\\u5b50\\u7684\\u5e7b\\u89c9\\u4e00\\u822c\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":674.1744,\"y\":-203.4818},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"25\"},{\"statement\":{\"_text\":\"\\u4ed6......\\u81ea\\u8bf4\\u81ea\\u8bdd\\u5c31\\u5f80\\u6211\\u624b\\u5fc3\\u585e\\u4e86\\u4e00\\u9897......\\u4e0d\\u77e5\\u9053\\u662f\\u7cd6\\u8fd8\\u662f\\u836f\\u7684\\u4e1c\\u897f\\uff0c\\u6211\\u4e00\\u76f4\\u4ee5\\u4e3a\\u90a3\\u662f\\u5e7b\\u89c9\\uff0c\\u4f46\\u4f38\\u624b\\u63a5\\u8fc7\\u65f6\\u662f\\u6709\\u5b9e\\u611f\\u7684\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1537.605,\"y\":-2405.576},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"26\"},{\"statement\":{\"_text\":\"\\u4e00\\u5f00\\u59cb\\u6211\\u53ea\\u662f\\u4ee5\\u4e3a\\u90a3\\u662f\\u4e2a\\u4e00\\u76f4\\u529d\\u6211\\u53bb\\u533b\\u9662\\u7684\\u597d\\u5fc3\\u602a\\u4eba\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1507.54,\"y\":-2330.686},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"27\"},{\"statement\":{\"_text\":\"\\u6211\\u5e76\\u4e0d\\u77e5\\u9053\\u90a3\\u662f\\u4ec0\\u4e48\\u4e1c\\u897f\\uff0c\\u4e5f\\u4e0d\\u6562\\u968f\\u610f\\u4e22\\u6389\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1533.683,\"y\":-2236.745},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"28\"},{\"statement\":{\"_text\":\"\\u54c8\\uff0c\\u4e0d\\u4e71\\u4e22\\u4e1c\\u897f\\uff0c\\u597d\\u4e60\\u60ef\\u3002\\u62b1\\u6b49\\uff0c\\u4f60\\u7ee7\\u7eed\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":1610.51,\"y\":-2162.02},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"29\"},{\"statement\":{\"_text\":\"\\u6211\\u5012\\u4e5f\\u4e0d\\u4f1a\\u968f\\u4fbf\\u4e22\\u5728\\u5927\\u8857\\u4e0a\\u3002\\u5230\\u516c\\u53f8\\u540e\\uff0c\\u6211\\u7684\\u540c\\u4e8b\\u6ce8\\u610f\\u5230\\u4e86\\u6211\\u7684\\u624b\\u4e2d\\u4e00\\u76f4\\u6525\\u7740\\u7684\\u4e1c\\u897f\\uff0c\\u6211\\u7ed9\\u5979\\u770b\\u540e\\u5979\\u5374\\u8bf4\\uff1a\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1688.109,\"y\":-2060.815},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"30\"},{\"statement\":{\"_text\":\"\\u8fd9\\u4e0d\\u662f\\u6211\\u4e00\\u76f4\\u5728\\u5403\\u7684\\u7ef4\\u751f\\u7d20\\u7247\\u4e48\\uff0c\\u8fd8\\u95ee\\u6211\\u4e3a\\u4ec0\\u4e48\\u4e00\\u76f4\\u62ff\\u7740\\u4e0d\\u5403\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1695.519,\"y\":-1975.278},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"31\"},{\"statement\":{\"_text\":\"\\u53ef\\u662f...\\u6211\\u5e76\\u6ca1\\u6709\\u5403\\u7ef4\\u751f\\u7d20\\u7684\\u4e60\\u60ef\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1773.92,\"y\":-1900.565},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"32\"},{\"statement\":{\"_text\":\"\\u6216\\u8bb8\\u662f\\u4f60\\u4e4b\\u524d\\u5403\\u8fc7\\u4f46\\u662f\\u4e0d\\u8bb0\\u5f97\\u4e86\\u5462\\uff1f\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":1756.177,\"y\":-1827.737},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"33\"},{\"statement\":{\"_text\":\"...\\u6211\\u4e0d\\u77e5\\u9053\\uff0c\\u90a3\\u5c31\\u5f53\\u662f\\u8fd9\\u6837\\u5427\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1773.972,\"y\":-1750.326},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"34\"},{\"statement\":{\"_text\":\"\\u6211\\u5148\\u7ee7\\u7eed\\u8bf4\\u4e86\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1828.961,\"y\":-1663.149},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"35\"},{\"statement\":{\"_text\":\"\\u6709\\u65f6\\u6211\\u4f1a\\u770b\\u5230\\u67d0\\u4e9b\\u5730\\u65b9\\u7a81\\u7136\\u53d8\\u5f97\\u5f88\\u6697\\uff0c\\u5c31\\u50cf\\u5149\\u7ebf\\u7167\\u5c04\\u4e0d\\u5230\\u4e00\\u6837\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1716.233,\"y\":-1600.931},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"36\"},{\"statement\":{\"_text\":\"\\u5176\\u4ed6\\u4eba\\u8d70\\u8fc7\\u8fd9\\u79cd\\u5730\\u65b9\\u5e76\\u6ca1\\u6709\\u4ec0\\u4e48\\u5f02\\u5e38\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1752.353,\"y\":-1516.992},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"37\"},{\"statement\":{\"_text\":\"\\u4f46\\u53ea\\u8981\\u6211\\u610f\\u8bc6\\u5230\\u8fd9\\u79cd\\u7279\\u6b8a\\u533a\\u57df\\u7684\\u5b58\\u5728\\uff0c\\u6211\\u7684\\u542c\\u529b\\u5c31\\u597d\\u50cf\\u7075\\u654f\\u4e86\\u65e0\\u6570\\u500d\\u4e00\\u6837\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1745.214,\"y\":-1444.709},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"38\"},{\"statement\":{\"_text\":\"\\u8111\\u4e2d\\u51fa\\u73b0\\u4e86\\u5f88\\u591a\\u6211\\u7406\\u5e94\\u542c\\u4e0d\\u89c1\\u7684\\u58f0\\u97f3\\uff0c\\u975e\\u5e38\\u865a\\u5e7b\\u7684\\u611f\\u89c9\\uff0c\\u50cf\\u662f\\u6709\\u4e00\\u4e07\\u4e2a\\u4eba\\u5728\\u8111\\u5b50\\u91cc\\u8bf4\\u8bdd\\u3002\\r\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1752.315,\"y\":-1370.26},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"39\"},{\"statement\":{\"_text\":\"\\u6211\\u9700\\u8981\\u975e\\u5e38\\u4e13\\u6ce8\\u624d\\u80fd\\u542c\\u6e05\\u67d0\\u4e9b\\u4fe1\\u606f\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1832.221,\"y\":-1290.52},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"40\"},{\"statement\":{\"_text\":\"\\u4f60\\u8bf4\\uff0c\\u5148\\u662f\\u2018\\u610f\\u8bc6\\u5230\\u2019\\u624d\\u80fd\\u2018\\u542c\\u5230\\u2019\\uff0c\\r\\u90a3\\u4e48\\u4f1a\\u4e0d\\u4f1a\\u53ef\\u80fd\\u662f\\u4f60\\u81ea\\u5df1\\u4e3a\\u81ea\\u5df1\\u4e0b\\u7684\\u5fc3\\u7406\\u6697\\u793a\\u5462\\uff1f\\r\\n\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":1859.607,\"y\":-1217.912},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"41\"},{\"statement\":{\"_text\":\"\\u662f\\u4f60\\u2018\\u76f8\\u4fe1\\u2019\\u770b\\u5230\\u8fd9\\u4e9b\\u660f\\u6697\\u7684\\u5730\\u65b9\\u6240\\u4ee5\\u80fd\\u542c\\u89c1\\u58f0\\u97f3\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":1880.018,\"y\":-1135.768},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"42\"},{\"statement\":{\"_text\":\"......\\u662f\\u8fd9\\u6837\\u5417\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2027.629,\"y\":-1019.876},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"43\"},{\"statement\":{\"_text\":\"\\u6211\\u4e0d\\u77e5\\u9053\\u4e3a\\u4ec0\\u4e48\\u4f1a\\u51fa\\u73b0\\u8fd9\\u4e48\\u6050\\u6016\\u7684\\u5e7b\\u89c9\\uff0c\\u800c\\u4e14\\u90a3\\u4e2a\\u9762\\u5177\\u7684\\u624b\\u611f\\u5982\\u6b64\\u771f\\u5b9e\\u3002\\r\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2626.003,\"y\":-1555.361},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"44\"},{\"statement\":{\"_text\":\"\\u4f46\\u662f\\u5176\\u4ed6\\u4eba\\u5374\\u4e00\\u70b9\\u53cd\\u5e94\\u90fd\\u6ca1\\u6709\\uff0c\\u6211\\u751a\\u81f3\\u65e0\\u6cd5\\u5224\\u65ad\\u771f\\u5047\\uff0c\\u50cf\\u6d3b\\u5728\\u68a6\\u4e2d\\u4e00\\u6837\\u3002\\r\\n\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2648.035,\"y\":-1435.846},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"45\"},{\"statement\":{\"_text\":\"\\u4f60\\u662f\\u8bf4\\uff0c\\u4f60\\u80fd\\u5c06\\u5176\\u4ed6\\u4e16\\u754c\\u7684\\u7269\\u54c1\\u5e26\\u5230\\u522b\\u7684\\u4e16\\u754c\\u53bb\\uff1f\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2673.631,\"y\":-1323.688},\"_comment\":\"\\u7b2c\\u4e09\\u6b21\\u5bf9\\u8bdd\",\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"46\"},{\"statement\":{\"_text\":\"\\u53ef\\u80fd\\u662f......\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2754.833,\"y\":-1227.179},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"47\"},{\"statement\":{\"_text\":\"\\u90a3\\u4e2a......\\u4f60\\u7684\\u8868\\u60c5\\u597d\\u50cf\\u4e0d\\u592a\\u597d\\u3002\\u8fd9\\u4e2a\\u5f88\\u4e25\\u91cd\\u5417\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2650.383,\"y\":-1128.862},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"48\"},{\"statement\":{\"_text\":\"\\u6ca1\\u4ec0\\u4e48\\uff0c\\u4f60\\u7684\\u2018\\u5e7b\\u60f3\\u2019\\u786e\\u5b9e\\u633a\\u4e25\\u91cd\\u7684\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2654.265,\"y\":-1031.798},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"49\"},{\"statement\":{\"_text\":\"\\u53ef\\u662f\\u6211\\u611f\\u89c9\\uff0c\\u4e0d\\u592a\\u50cf\\u5355\\u7eaf\\u7684\\u5e7b\\u89c9\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2669.36,\"y\":-937.5012},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"50\"},{\"statement\":{\"_text\":\"\\u603b\\u662f\\u6709\\u4eba\\u5206\\u4e0d\\u6e05\\u5e7b\\u89c9\\u7684\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2751.152,\"y\":-854.3688},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"51\"},{\"statement\":{\"_text\":\"\\u65e2\\u7136\\u4f60\\u8bf4\\u522b\\u4eba\\u770b\\u4e0d\\u5230\\u4f60\\u6240\\u8c13\\u7684\\u2018\\u5f02\\u4e16\\u754c\\u2019\\uff0c\\u90a3\\u4e48\\u4ec5\\u4f60\\u4e00\\u4eba\\u80fd\\u770b\\u5230\\u7684\\uff0c\\r\\u5fc5\\u5b9a\\u662f\\u5e7b\\u89c9\\u4e86\\u5427\\u3002\\r\\n\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2690.971,\"y\":-765.9902},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"52\"},{\"statement\":{\"_text\":\"\\u6211\\u8be5\\u600e\\u4e48\\u505a\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2808.468,\"y\":-686.7064},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"53\"},{\"statement\":{\"_text\":\"\\u4e0b\\u6b21\\u770b\\u5230\\u90a3\\u4e9b\\u660e\\u663e\\u5f02\\u5e38\\u7684\\u4e1c\\u897f\\u65f6\\uff0c\\u53cd\\u590d\\u544a\\u8bc9\\u81ea\\u5df1\\uff1a\\r\\n\\u8fd9\\u4e9b\\u90fd\\u662f\\u5047\\u7684\\u3002\\r\\n\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2830.101,\"y\":-605.9562},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"54\"},{\"statement\":{\"_text\":\"\\u4f60\\u53ea\\u9700\\u8981\\u4e13\\u6ce8\\u4f60\\u81ea\\u5df1\\u7684\\u4e16\\u754c\\u5c31\\u597d\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2835.522,\"y\":-512.6428},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"55\"},{\"statement\":{\"_text\":\"\\u5982\\u679c\\u4f60\\u7684\\u5e7b\\u60f3\\u4e2d\\u51fa\\u73b0\\u4e86\\u5176\\u4ed6\\u4e16\\u754c\\u7684\\u4eba\\uff0c\\u90a3\\u4e48\\u5c31\\u628a\\u4ed6\\u4eec\\u5f53\\u4f5c\\u662f\\u2018\\u6211\\u2019\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2809.948,\"y\":-421.5921},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"56\"},{\"statement\":{\"_text\":\"\\u4f60\\u653e\\u5fc3\\uff0c\\u53ea\\u8981\\u4f60\\u4e0d\\u80e1\\u601d\\u4e71\\u60f3\\uff0c\\u6211\\u4eec\\uff0c\\u5443\\uff0c\\u6211\\u662f\\u8bf4\\u6211\\uff0c\\u4e00\\u5b9a\\u4f1a\\u5c3d\\u5feb\\u5c06\\u4f60\\u4fee\\u590d\\u7684\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2782.804,\"y\":-343.8891},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"57\"},{\"statement\":{\"_text\":\"\\u4fee\\u590d\\uff1f\\u597d\\u602a\\u7684\\u8bcd\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2909.061,\"y\":-255.1915},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"58\"},{\"statement\":{\"_text\":\"\\u7406\\u89e3\\u8fd9\\u4e2a\\u610f\\u601d\\u5c31\\u884c\\uff0c\\u6211\\u526f\\u4e1a\\u662f\\u4e2a\\u7a0b\\u5e8f\\u5458\\u5462\\uff0c\\u5076\\u5c14\\u4f1a\\u6df7\\u6dc6\\u7528\\u8bcd\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2785.48,\"y\":-166.3722},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"59\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"7\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"3\"},\"_targetNode\":{\"$ref\":\"4\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"8\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"12\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"8\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"9\"},\"_targetNode\":{\"$ref\":\"10\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"10\"},\"_targetNode\":{\"$ref\":\"11\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"11\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"12\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"12\"},\"_targetNode\":{\"$ref\":\"13\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"13\"},\"_targetNode\":{\"$ref\":\"14\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"14\"},\"_targetNode\":{\"$ref\":\"15\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"14\"},\"_targetNode\":{\"$ref\":\"16\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"17\"},\"_targetNode\":{\"$ref\":\"18\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"18\"},\"_targetNode\":{\"$ref\":\"19\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"19\"},\"_targetNode\":{\"$ref\":\"20\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"20\"},\"_targetNode\":{\"$ref\":\"21\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"21\"},\"_targetNode\":{\"$ref\":\"22\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"22\"},\"_targetNode\":{\"$ref\":\"23\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"23\"},\"_targetNode\":{\"$ref\":\"24\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"24\"},\"_targetNode\":{\"$ref\":\"25\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"25\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"26\"},\"_targetNode\":{\"$ref\":\"27\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"27\"},\"_targetNode\":{\"$ref\":\"28\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"28\"},\"_targetNode\":{\"$ref\":\"29\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"29\"},\"_targetNode\":{\"$ref\":\"30\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"30\"},\"_targetNode\":{\"$ref\":\"31\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"31\"},\"_targetNode\":{\"$ref\":\"32\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"32\"},\"_targetNode\":{\"$ref\":\"33\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"33\"},\"_targetNode\":{\"$ref\":\"34\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"34\"},\"_targetNode\":{\"$ref\":\"35\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"35\"},\"_targetNode\":{\"$ref\":\"36\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"36\"},\"_targetNode\":{\"$ref\":\"37\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"37\"},\"_targetNode\":{\"$ref\":\"38\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"38\"},\"_targetNode\":{\"$ref\":\"39\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"39\"},\"_targetNode\":{\"$ref\":\"40\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"40\"},\"_targetNode\":{\"$ref\":\"41\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"41\"},\"_targetNode\":{\"$ref\":\"42\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"42\"},\"_targetNode\":{\"$ref\":\"43\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"43\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"44\"},\"_targetNode\":{\"$ref\":\"45\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"45\"},\"_targetNode\":{\"$ref\":\"46\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"46\"},\"_targetNode\":{\"$ref\":\"47\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"47\"},\"_targetNode\":{\"$ref\":\"48\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"48\"},\"_targetNode\":{\"$ref\":\"49\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"49\"},\"_targetNode\":{\"$ref\":\"50\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"50\"},\"_targetNode\":{\"$ref\":\"51\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"51\"},\"_targetNode\":{\"$ref\":\"52\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"52\"},\"_targetNode\":{\"$ref\":\"53\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"53\"},\"_targetNode\":{\"$ref\":\"54\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"54\"},\"_targetNode\":{\"$ref\":\"55\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"55\"},\"_targetNode\":{\"$ref\":\"56\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"56\"},\"_targetNode\":{\"$ref\":\"57\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"57\"},\"_targetNode\":{\"$ref\":\"58\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"58\"},\"_targetNode\":{\"$ref\":\"59\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"59\"},\"_targetNode\":{\"$ref\":\"13\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
+  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1455.3,\"y\":-1166.867},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"0\"},{\"_condition\":{\"valueA\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e00\\u6b21\",\"_targetVariableID\":\"5522a177-2277-4eb2-ace1-8b75d6071172\"},\"valueB\":{\"_value\":true},\"$type\":\"NodeCanvas.Tasks.Conditions.CheckBoolean\"},\"_position\":{\"x\":1476.804,\"y\":-1068.682},\"$type\":\"NodeCanvas.DialogueTrees.ConditionNode\",\"$id\":\"1\"},{\"statement\":{\"_text\":\"\\u4ec0\\u4e48\\u65f6\\u5019\\u5f00\\u59cb\\u7684\\uff1f\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":715.0356,\"y\":-900.2349},\"_comment\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"2\"},{\"statement\":{\"_text\":\"\\u5927\\u6982\\u4e00\\u4e2a\\u6708\\u4e4b\\u524d\\u5427\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":723.3704,\"y\":-795.4547},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"3\"},{\"statement\":{\"_text\":\"\\u6709\\u6ca1\\u6709\\u5177\\u4f53\\u70b9\\u7684\\u65e5\\u671f\\uff1f\"},\"_actorName\":\"NPC\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":719.0295,\"y\":-700.6472},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"4\"},{\"statement\":{\"_text\":\"...\\u6211\\u4e0d\\u8bb0\\u5f97\\u4e86\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":722.0566,\"y\":-611.9111},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"5\"},{\"statement\":{\"_text\":\"...\\u597d\\u7684\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":720.4474,\"y\":-531.2551},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"6\"},{\"statement\":{\"_text\":\"\\u90a3\\u4e48\\uff0c\\u6709\\u54ea\\u4e9b\\u4f60\\u89c9\\u5f97\\u4e0d\\u592a\\u2018\\u65e5\\u5e38\\u2019\\u7684\\u60c5\\u51b5\\u5462\\uff1f\\u8bf7\\u5c3d\\u91cf\\u8bf4\\u5f97\\u5177\\u4f53\\u4e00\\u70b9\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":583.6205,\"y\":-443.9741},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"7\"},{\"statement\":{\"_text\":\"\\u5982\\u679c\\u6ca1\\u5934\\u7eea\\u7684\\u8bdd\\u4e5f\\u53ef\\u4ee5\\u6309\\u65f6\\u95f4\\u6765\\u8bf4\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":669.6434,\"y\":-362.7863},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"8\"},{\"statement\":{\"_text\":\"...\\u8d77\\u521d\\uff0c\\u6211\\u53ea\\u662f\\u80fd\\u770b\\u5230\\u4e00\\u4e9b\\u4e00\\u770b\\u5c31\\u4e0d\\u7b26\\u5408\\u6211\\u8ba4\\u77e5\\u7684\\u7269\\u4f53\\u4e0e\\u573a\\u666f\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":589.8705,\"y\":-281.3619},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"9\"},{\"statement\":{\"_text\":\"\\u5c31\\u50cf\\u662f\\u5403\\u4e86\\u6bd2\\u83cc\\u5b50\\u7684\\u5e7b\\u89c9\\u4e00\\u822c\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":674.1744,\"y\":-203.4818},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"10\"},{\"statement\":{\"_text\":\"\\u540e\\u6765\\u4e0d\\u4ec5\\u662f\\u80fd\\u770b\\u89c1\\uff0c\\u6211\\u80fd\\u4e0e\\u5176\\u4ed6\\u4e16\\u754c\\u7684\\u2018\\u4eba\\u2019\\u4ea4\\u6d41\\u4e86\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1196.728,\"y\":-24.55677},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"11\"},{\"_action\":{\"boolVariable\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e00\\u6b21\",\"_targetVariableID\":\"5522a177-2277-4eb2-ace1-8b75d6071172\"},\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetBoolean\"},\"_position\":{\"x\":1259.38,\"y\":182.0085},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"12\"},{\"_action\":{\"boolVariable\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e8c\\u6b21\",\"_targetVariableID\":\"fd858bdc-eace-428b-a844-b0f92ee135f0\"},\"$type\":\"NodeCanvas.Tasks.Actions.SetBoolean\"},\"_position\":{\"x\":1286.965,\"y\":392.7702},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"13\"},{\"_action\":{\"actions\":[{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":2},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":3},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1364.634,\"y\":518.2098},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"14\"},{\"_position\":{\"x\":1750.025,\"y\":543.5839},\"$type\":\"NodeCanvas.DialogueTrees.FinishNode\",\"$id\":\"15\"},{\"_condition\":{\"valueA\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e8c\\u6b21\",\"_targetVariableID\":\"fd858bdc-eace-428b-a844-b0f92ee135f0\"},\"valueB\":{},\"$type\":\"NodeCanvas.Tasks.Conditions.CheckBoolean\"},\"_position\":{\"x\":1619.535,\"y\":-813.171},\"$type\":\"NodeCanvas.DialogueTrees.ConditionNode\",\"$id\":\"16\"},{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":2343.819,\"y\":-1019.385},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"17\"},{\"statement\":{\"_text\":\"\\u6211\\u4e0d\\u77e5\\u9053\\u4e3a\\u4ec0\\u4e48\\u4f1a\\u51fa\\u73b0\\u8fd9\\u4e48\\u6050\\u6016\\u7684\\u5e7b\\u89c9\\uff0c\\u800c\\u4e14\\u90a3\\u4e2a\\u9762\\u5177\\u7684\\u624b\\u611f\\u5982\\u6b64\\u771f\\u5b9e\\u3002\\r\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2626.003,\"y\":-1555.361},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"18\"},{\"statement\":{\"_text\":\"\\u4f46\\u662f\\u5176\\u4ed6\\u4eba\\u5374\\u4e00\\u70b9\\u53cd\\u5e94\\u90fd\\u6ca1\\u6709\\uff0c\\u6211\\u751a\\u81f3\\u65e0\\u6cd5\\u5224\\u65ad\\u771f\\u5047\\uff0c\\u50cf\\u6d3b\\u5728\\u68a6\\u4e2d\\u4e00\\u6837\\u3002\\r\\n\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2648.035,\"y\":-1437.045},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"19\"},{\"statement\":{\"_text\":\"\\u4f60\\u662f\\u8bf4\\uff0c\\u4f60\\u80fd\\u5c06\\u5176\\u4ed6\\u4e16\\u754c\\u7684\\u7269\\u54c1\\u5e26\\u5230\\u522b\\u7684\\u4e16\\u754c\\u53bb\\uff1f\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2673.631,\"y\":-1323.688},\"_comment\":\"\\u7b2c\\u4e09\\u6b21\\u5bf9\\u8bdd\",\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"20\"},{\"statement\":{\"_text\":\"\\u53ef\\u80fd\\u662f...\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2754.833,\"y\":-1227.179},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"21\"},{\"statement\":{\"_text\":\"\\u90a3\\u4e2a......\\u4f60\\u7684\\u8868\\u60c5\\u597d\\u50cf\\u4e0d\\u592a\\u597d\\u3002\\u8fd9\\u4e2a\\u5f88\\u4e25\\u91cd\\u5417\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2650.383,\"y\":-1128.862},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"22\"},{\"statement\":{\"_text\":\"\\u6ca1\\u4ec0\\u4e48\\uff0c\\u4f60\\u7684\\u2018\\u5e7b\\u60f3\\u2019\\u786e\\u5b9e\\u633a\\u4e25\\u91cd\\u7684\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2654.265,\"y\":-1032.997},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"23\"},{\"statement\":{\"_text\":\"\\u53ef\\u662f\\u6211\\u611f\\u89c9\\uff0c\\u4e0d\\u592a\\u50cf\\u5355\\u7eaf\\u7684\\u5e7b\\u89c9\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2669.36,\"y\":-937.5012},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"24\"},{\"statement\":{\"_text\":\"\\u603b\\u662f\\u6709\\u4eba\\u5206\\u4e0d\\u6e05\\u5e7b\\u89c9\\u7684\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2751.152,\"y\":-854.3688},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"25\"},{\"statement\":{\"_text\":\"\\u65e2\\u7136\\u4f60\\u8bf4\\u522b\\u4eba\\u770b\\u4e0d\\u5230\\u4f60\\u6240\\u8c13\\u7684\\u2018\\u5f02\\u4e16\\u754c\\u2019\\uff0c\\u90a3\\u4e48\\u4ec5\\u4f60\\u4e00\\u4eba\\u80fd\\u770b\\u5230\\u7684\\uff0c\\r\\u5fc5\\u5b9a\\u662f\\u5e7b\\u89c9\\u4e86\\u5427\\u3002\\r\\n\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2690.971,\"y\":-765.9902},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"26\"},{\"statement\":{\"_text\":\"\\u6211\\u8be5\\u600e\\u4e48\\u505a\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2809.667,\"y\":-686.7064},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"27\"},{\"statement\":{\"_text\":\"\\u4e0b\\u6b21\\u770b\\u5230\\u90a3\\u4e9b\\u660e\\u663e\\u5f02\\u5e38\\u7684\\u4e1c\\u897f\\u65f6\\uff0c\\u53cd\\u590d\\u544a\\u8bc9\\u81ea\\u5df1\\uff1a\\r\\n\\u8fd9\\u4e9b\\u90fd\\u662f\\u5047\\u7684\\u3002\\r\\n\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2830.101,\"y\":-605.9562},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"28\"},{\"statement\":{\"_text\":\"\\u4f60\\u53ea\\u9700\\u8981\\u4e13\\u6ce8\\u4f60\\u81ea\\u5df1\\u7684\\u4e16\\u754c\\u5c31\\u597d\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2835.522,\"y\":-512.6428},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"29\"},{\"statement\":{\"_text\":\"\\u5982\\u679c\\u4f60\\u7684\\u5e7b\\u60f3\\u4e2d\\u51fa\\u73b0\\u4e86\\u5176\\u4ed6\\u4e16\\u754c\\u7684\\u4eba\\uff0c\\u90a3\\u4e48\\u5c31\\u628a\\u4ed6\\u4eec\\u5f53\\u4f5c\\u662f\\u2018\\u6211\\u2019\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2809.948,\"y\":-421.5921},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"30\"},{\"statement\":{\"_text\":\"\\u4f60\\u653e\\u5fc3\\uff0c\\u53ea\\u8981\\u4f60\\u4e0d\\u80e1\\u601d\\u4e71\\u60f3\\uff0c\\u6211\\u4eec\\uff0c\\u5443\\uff0c\\u6211\\u662f\\u8bf4\\u6211\\uff0c\\u4e00\\u5b9a\\u4f1a\\u5c3d\\u5feb\\u5c06\\u4f60\\u4fee\\u590d\\u7684\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2782.804,\"y\":-343.8891},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"31\"},{\"statement\":{\"_text\":\"\\u4fee\\u590d\\uff1f\\u597d\\u602a\\u7684\\u8bcd\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2909.061,\"y\":-255.1915},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"32\"},{\"statement\":{\"_text\":\"\\u7406\\u89e3\\u8fd9\\u4e2a\\u610f\\u601d\\u5c31\\u884c\\uff0c\\u6211\\u526f\\u4e1a\\u662f\\u4e2a\\u7a0b\\u5e8f\\u5458\\u5462\\uff0c\\u5076\\u5c14\\u4f1a\\u6df7\\u6dc6\\u7528\\u8bcd\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2785.48,\"y\":-166.3722},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"33\"},{\"statement\":{\"_text\":\"...\\u7a0d\\u7b49\\uff0c\\u6211\\u5148\\u5931\\u966a\\u4e00\\u4e0b\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2777.956,\"y\":3.740837},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"34\"},{\"availableChoices\":[{\"statement\":{\"_text\":\"\\u56de\\u5fc6\"}},{\"statement\":{\"_text\":\"\\u7b49\\u5f85\"}}],\"_position\":{\"x\":2125.561,\"y\":-7.075283},\"$type\":\"NodeCanvas.DialogueTrees.MultipleChoiceNode\",\"$id\":\"35\"},{\"statement\":{\"_text\":\"\\u6211\\u597d\\u50cf\\u8fd8\\u60f3\\u8d77\\u6765\\u4ec0\\u4e48......\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1979.931,\"y\":191.5045},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"36\"},{\"_action\":{\"actions\":[{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":5},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":6},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":7},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1939.992,\"y\":287.8066},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"37\"},{\"_action\":{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":8},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":2225.116,\"y\":295.869},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"38\"},{\"statement\":{\"_text\":\"\\u4ed6...\\u81ea\\u8bf4\\u81ea\\u8bdd\\u5c31\\u5f80\\u6211\\u624b\\u5fc3\\u585e\\u4e86\\u4e00\\u9897...\\u4e0d\\u77e5\\u9053\\u662f\\u7cd6\\u8fd8\\u662f\\u836f\\u7684\\u4e1c\\u897f\\uff0c\\u6211\\u4e00\\u76f4\\u4ee5\\u4e3a\\u90a3\\u662f\\u5e7b\\u89c9\\uff0c\\u4f46\\u4f38\\u624b\\u63a5\\u8fc7\\u65f6\\u662f\\u6709\\u5b9e\\u611f\\u7684\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2398.628,\"y\":105.5192},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"39\"},{\"statement\":{\"_text\":\"\\u4e00\\u5f00\\u59cb\\u6211\\u53ea\\u662f\\u4ee5\\u4e3a\\u90a3\\u662f\\u4e2a\\u4e00\\u76f4\\u529d\\u6211\\u53bb\\u533b\\u9662\\u7684\\u597d\\u5fc3\\u602a\\u4eba\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2368.563,\"y\":180.4095},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"40\"},{\"statement\":{\"_text\":\"\\u6211\\u5e76\\u4e0d\\u77e5\\u9053\\u90a3\\u662f\\u4ec0\\u4e48\\u4e1c\\u897f\\uff0c\\u4e5f\\u4e0d\\u6562\\u968f\\u610f\\u4e22\\u6389\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2394.707,\"y\":274.3505},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"41\"},{\"statement\":{\"_text\":\"\\u54c8\\uff0c\\u4e0d\\u4e71\\u4e22\\u4e1c\\u897f\\uff0c\\u597d\\u4e60\\u60ef\\u3002\\u62b1\\u6b49\\uff0c\\u4f60\\u7ee7\\u7eed\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2471.534,\"y\":350.2745},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"42\"},{\"statement\":{\"_text\":\"\\u6211\\u5012\\u4e5f\\u4e0d\\u4f1a\\u968f\\u4fbf\\u4e22\\u5728\\u5927\\u8857\\u4e0a\\u3002\\u5230\\u516c\\u53f8\\u540e\\uff0c\\u6211\\u7684\\u540c\\u4e8b\\u6ce8\\u610f\\u5230\\u4e86\\u6211\\u7684\\u624b\\u4e2d\\u4e00\\u76f4\\u6525\\u7740\\u7684\\u4e1c\\u897f\\uff0c\\u6211\\u7ed9\\u5979\\u770b\\u540e\\u5979\\u5374\\u8bf4\\uff1a\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2549.133,\"y\":450.2802},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"43\"},{\"statement\":{\"_text\":\"\\u8fd9\\u4e0d\\u662f\\u6211\\u4e00\\u76f4\\u5728\\u5403\\u7684\\u7ef4\\u751f\\u7d20\\u7247\\u4e48\\uff0c\\u8fd8\\u95ee\\u6211\\u4e3a\\u4ec0\\u4e48\\u4e00\\u76f4\\u62ff\\u7740\\u4e0d\\u5403\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2556.543,\"y\":535.817},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"44\"},{\"statement\":{\"_text\":\"\\u53ef\\u662f...\\u6211\\u5e76\\u6ca1\\u6709\\u5403\\u7ef4\\u751f\\u7d20\\u7684\\u4e60\\u60ef\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2634.944,\"y\":610.5302},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"45\"},{\"statement\":{\"_text\":\"\\u6216\\u8bb8\\u662f\\u4f60\\u4e4b\\u524d\\u5403\\u8fc7\\u4f46\\u662f\\u4e0d\\u8bb0\\u5f97\\u4e86\\u5462\\uff1f\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2617.201,\"y\":683.358},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"46\"},{\"statement\":{\"_text\":\"...\\u6211\\u4e0d\\u77e5\\u9053\\uff0c\\u90a3\\u5c31\\u5f53\\u662f\\u8fd9\\u6837\\u5427\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2636.195,\"y\":760.7689},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"47\"},{\"statement\":{\"_text\":\"\\u6211\\u5148\\u7ee7\\u7eed\\u8bf4\\u4e86\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2689.985,\"y\":847.9459},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"48\"},{\"statement\":{\"_text\":\"\\u6709\\u65f6\\u6211\\u4f1a\\u770b\\u5230\\u67d0\\u4e9b\\u5730\\u65b9\\u7a81\\u7136\\u53d8\\u5f97\\u5f88\\u6697\\uff0c\\u5c31\\u50cf\\u5149\\u7ebf\\u7167\\u5c04\\u4e0d\\u5230\\u4e00\\u6837\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2578.456,\"y\":910.1639},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"49\"},{\"statement\":{\"_text\":\"\\u5176\\u4ed6\\u4eba\\u8d70\\u8fc7\\u8fd9\\u79cd\\u5730\\u65b9\\u5e76\\u6ca1\\u6709\\u4ec0\\u4e48\\u5f02\\u5e38\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2613.377,\"y\":994.1031},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"50\"},{\"statement\":{\"_text\":\"\\u4f46\\u53ea\\u8981\\u6211\\u610f\\u8bc6\\u5230\\u8fd9\\u79cd\\u7279\\u6b8a\\u533a\\u57df\\u7684\\u5b58\\u5728\\uff0c\\u6211\\u7684\\u542c\\u529b\\u5c31\\u597d\\u50cf\\u7075\\u654f\\u4e86\\u65e0\\u6570\\u500d\\u4e00\\u6837\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2606.238,\"y\":1066.386},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"51\"},{\"statement\":{\"_text\":\"\\u8111\\u4e2d\\u51fa\\u73b0\\u4e86\\u5f88\\u591a\\u6211\\u7406\\u5e94\\u542c\\u4e0d\\u89c1\\u7684\\u58f0\\u97f3\\uff0c\\u975e\\u5e38\\u865a\\u5e7b\\u7684\\u611f\\u89c9\\uff0c\\u50cf\\u662f\\u6709\\u4e00\\u4e07\\u4e2a\\u4eba\\u5728\\u8111\\u5b50\\u91cc\\u8bf4\\u8bdd\\u3002\\r\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2613.339,\"y\":1140.835},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"52\"},{\"statement\":{\"_text\":\"\\u6211\\u9700\\u8981\\u975e\\u5e38\\u4e13\\u6ce8\\u624d\\u80fd\\u542c\\u6e05\\u67d0\\u4e9b\\u4fe1\\u606f\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2692.046,\"y\":1220.575},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"53\"},{\"statement\":{\"_text\":\"\\u4f60\\u8bf4\\uff0c\\u5148\\u662f\\u2018\\u610f\\u8bc6\\u5230\\u2019\\u624d\\u80fd\\u2018\\u542c\\u5230\\u2019\\uff0c\\r\\u90a3\\u4e48\\u4f1a\\u4e0d\\u4f1a\\u53ef\\u80fd\\u662f\\u4f60\\u81ea\\u5df1\\u4e3a\\u81ea\\u5df1\\u4e0b\\u7684\\u5fc3\\u7406\\u6697\\u793a\\u5462\\uff1f\\r\\n\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2720.631,\"y\":1293.183},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"54\"},{\"statement\":{\"_text\":\"\\u662f\\u4f60\\u2018\\u76f8\\u4fe1\\u2019\\u770b\\u5230\\u8fd9\\u4e9b\\u660f\\u6697\\u7684\\u5730\\u65b9\\u6240\\u4ee5\\u80fd\\u542c\\u89c1\\u58f0\\u97f3\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":2741.042,\"y\":1375.327},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"55\"},{\"statement\":{\"_text\":\"...\\u662f\\u8fd9\\u6837\\u5417\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2888.653,\"y\":1491.219},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"56\"},{\"statement\":{\"_text\":\"\\u5148\\u8bd5\\u7740\\u76f8\\u4fe1\\u6211\\u5427\\u3002\"},\"_actorName\":\"\\u533b\\u751f\",\"_actorParameterID\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_position\":{\"x\":1660.552,\"y\":-51.57761},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"57\"},{\"_action\":{\"actions\":[{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":9},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1638.976,\"y\":62.91953},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"58\"},{\"_action\":{\"boolVariable\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e8c\\u6b21\",\"_targetVariableID\":\"fd858bdc-eace-428b-a844-b0f92ee135f0\"},\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetBoolean\"},\"_position\":{\"x\":1655.226,\"y\":204.7227},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"59\"},{\"_action\":{\"boolVariable\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e00\\u6b21\",\"_targetVariableID\":\"5522a177-2277-4eb2-ace1-8b75d6071172\"},\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetBoolean\"},\"_position\":{\"x\":1671.928,\"y\":316.6522},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"60\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"16\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"3\"},\"_targetNode\":{\"$ref\":\"4\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"6\"},\"_targetNode\":{\"$ref\":\"7\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"8\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"8\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"9\"},\"_targetNode\":{\"$ref\":\"10\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"10\"},\"_targetNode\":{\"$ref\":\"11\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"11\"},\"_targetNode\":{\"$ref\":\"12\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"12\"},\"_targetNode\":{\"$ref\":\"13\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"13\"},\"_targetNode\":{\"$ref\":\"14\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"14\"},\"_targetNode\":{\"$ref\":\"15\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"16\"},\"_targetNode\":{\"$ref\":\"17\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"16\"},\"_targetNode\":{\"$ref\":\"39\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"17\"},\"_targetNode\":{\"$ref\":\"18\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"18\"},\"_targetNode\":{\"$ref\":\"19\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"19\"},\"_targetNode\":{\"$ref\":\"20\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"20\"},\"_targetNode\":{\"$ref\":\"21\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"21\"},\"_targetNode\":{\"$ref\":\"22\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"22\"},\"_targetNode\":{\"$ref\":\"23\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"23\"},\"_targetNode\":{\"$ref\":\"24\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"24\"},\"_targetNode\":{\"$ref\":\"25\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"25\"},\"_targetNode\":{\"$ref\":\"26\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"26\"},\"_targetNode\":{\"$ref\":\"27\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"27\"},\"_targetNode\":{\"$ref\":\"28\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"28\"},\"_targetNode\":{\"$ref\":\"29\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"29\"},\"_targetNode\":{\"$ref\":\"30\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"30\"},\"_targetNode\":{\"$ref\":\"31\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"31\"},\"_targetNode\":{\"$ref\":\"32\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"32\"},\"_targetNode\":{\"$ref\":\"33\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"33\"},\"_targetNode\":{\"$ref\":\"34\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"34\"},\"_targetNode\":{\"$ref\":\"35\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"35\"},\"_targetNode\":{\"$ref\":\"36\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"35\"},\"_targetNode\":{\"$ref\":\"38\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"36\"},\"_targetNode\":{\"$ref\":\"37\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"37\"},\"_targetNode\":{\"$ref\":\"15\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"38\"},\"_targetNode\":{\"$ref\":\"15\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"39\"},\"_targetNode\":{\"$ref\":\"40\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"40\"},\"_targetNode\":{\"$ref\":\"41\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"41\"},\"_targetNode\":{\"$ref\":\"42\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"42\"},\"_targetNode\":{\"$ref\":\"43\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"43\"},\"_targetNode\":{\"$ref\":\"44\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"44\"},\"_targetNode\":{\"$ref\":\"45\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"45\"},\"_targetNode\":{\"$ref\":\"46\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"46\"},\"_targetNode\":{\"$ref\":\"47\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"47\"},\"_targetNode\":{\"$ref\":\"48\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"48\"},\"_targetNode\":{\"$ref\":\"49\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"49\"},\"_targetNode\":{\"$ref\":\"50\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"50\"},\"_targetNode\":{\"$ref\":\"51\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"51\"},\"_targetNode\":{\"$ref\":\"52\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"52\"},\"_targetNode\":{\"$ref\":\"53\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"53\"},\"_targetNode\":{\"$ref\":\"54\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"54\"},\"_targetNode\":{\"$ref\":\"55\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"55\"},\"_targetNode\":{\"$ref\":\"56\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"56\"},\"_targetNode\":{\"$ref\":\"57\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"57\"},\"_targetNode\":{\"$ref\":\"58\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"58\"},\"_targetNode\":{\"$ref\":\"59\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"59\"},\"_targetNode\":{\"$ref\":\"60\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"60\"},\"_targetNode\":{\"$ref\":\"15\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"StrageHouse\":{\"_name\":\"StrageHouse\",\"_id\":\"985cf835-16ef-4610-ba47-442719ce6840\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"\u533B\u751F\u7B2C\u4E00\u6B21\":{\"_value\":true,\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e00\\u6b21\",\"_id\":\"5522a177-2277-4eb2-ace1-8b75d6071172\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"\u533B\u751F\u7B2C\u4E8C\u6B21\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e8c\\u6b21\",\"_id\":\"fd858bdc-eace-428b-a844-b0f92ee135f0\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"\u533B\u751F\u7B2C\u4E09\u6B21\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e09\\u6b21\",\"_id\":\"f7c69699-6241-4e06-949d-7e7c81ec995c\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"}}},\"derivedData\":{\"actorParameters\":[{\"_keyName\":\"\\u533b\\u751f\",\"_id\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_actorObject\":7},{\"_keyName\":\"\\u4e3b\\u89d2\",\"_id\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\"}],\"$type\":\"NodeCanvas.DialogueTrees.DialogueTree+DerivedSerializationData\"}}"
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"}}},\"derivedData\":{\"actorParameters\":[{\"_keyName\":\"\\u533b\\u751f\",\"_id\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_actorObject\":10},{\"_keyName\":\"\\u4e3b\\u89d2\",\"_id\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\"}],\"$type\":\"NodeCanvas.DialogueTrees.DialogueTree+DerivedSerializationData\"}}"
   _boundGraphObjectReferences:
   - {fileID: 0}
   - {fileID: 600721114}
   - {fileID: 161482744}
   - {fileID: 1151330650}
   - {fileID: 457255073}
+  - {fileID: 684801776}
   - {fileID: 894627457}
+  - {fileID: 37191374}
+  - {fileID: 1028242114}
   - {fileID: 1722446979}
   - {fileID: 453510411}
   _boundGraphSource:
     _version: 3.33
     _category: 
     _comments: 
-    _translation: {x: -1435, y: 670}
-    _zoomFactor: 1
+    _translation: {x: -1230, y: 1025}
+    _zoomFactor: 0.55605483
   _firstActivation: 1
   _enableAction: 1
   _disableAction: 2
@@ -3313,6 +3458,7 @@ MonoBehaviour:
   rayDistance: 200
   onlyAcceptItem: {fileID: 11400000, guid: d4d4092d964ce2b4d92449ba3ad83271, type: 2}
   consumeOnSuccess: 1
+  hideOrDestroyRootAfterSuccess: 0
   destroySelf: 0
 --- !u!114 &457255077
 MonoBehaviour:
@@ -3344,6 +3490,8 @@ MonoBehaviour:
   requireClickToShowGateDrivePair: 1
   latchGateDrivePairAfterClick: 1
   gateDrivePairStayActiveAfterFirstShow: 1
+  turnOffNineSampleGameViewCross: 1
+  nineSampleCrossBehaviour: {fileID: 1928873337}
   nineZoneViewports:
   - {x: 0.35, y: 0.18}
   - {x: 0.35, y: 0.45}
@@ -4002,6 +4150,7 @@ GameObject:
   - component: {fileID: 684801776}
   - component: {fileID: 684801778}
   - component: {fileID: 684801777}
+  - component: {fileID: 684801779}
   m_Layer: 3
   m_Name: NPC3
   m_TagString: Untagged
@@ -4121,6 +4270,53 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &684801779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684801775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e0acdfffd1cfb44a97aafd95bb6ba71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clicked: 0
+  anySampleVisible: 0
+  sample1Visible: 0
+  sample2Visible: 0
+  clickGateVisible: 0
+  useThreeRTForVisibility: 1
+  rtPicker: {fileID: 919132148186213059}
+  leftmostDebugPreviewIsFrontLayer: 1
+  sampleVp1: {x: 0.5, y: 0.18}
+  sampleVp2: {x: 0.5, y: 0.45}
+  requireBothSamples: 0
+  targetColor: {r: 0.5254902, g: 1, b: 0.6039216, a: 1}
+  colorTolerance: 0.05
+  blackRgbThreshold: 0.02
+  blackAlphaThreshold: 0.01
+  invertIsVisible: 0
+  debugLog: 0
+  showSampleCrossInGame: 0
+  sampleCrossColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  sampleCrossHalfSizePixels: 12
+  sampleCrossLineThickness: 2
+  sampleCrossDepth: 2
+  cubeDirectPickMode: 0
+  pickCamera: {fileID: 869748692}
+  cubePiecePickLayers:
+    serializedVersion: 2
+    m_Bits: 229888
+  directPickRequireBothSamples: 0
+  ignoreUIBlockingForDirectPick: 1
+  directPickUiBlockingOnlyOnUiLayer: 1
+  activate: {fileID: 809502468}
+  activate2: {fileID: 600721113}
+  onClicked:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &686037764
 GameObject:
   m_ObjectHideFlags: 0
@@ -4911,11 +5107,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializedExposedParameters: []
-  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"statement\":{\"_text\":\"\\u6211\\u5728\\u4f60\\u8eab\\u4e0a\\u95fb\\u5230\\u4e86\\u843d\\u62d3\\u67a3\\u7684\\u5473\\u9053\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1318.2,\"y\":-182.6229},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"0\"},{\"statement\":{\"_text\":\"\\u53d1\\u80b2\\u8fd9\\u4e48\\u6162\\uff0c\\u5e73\\u65f6\\u5403\\u5f97\\u592a\\u5c11\\u4e86\\u5427\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1278.679,\"y\":-100.9722},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"1\"},{\"statement\":{\"_text\":\"...\\u6211\\u4e0d\\u592a\\u80fd\\u7406\\u89e3\\u4f60\\u7684\\u610f\\u601d\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1308.475,\"y\":-22.97783},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"2\"},{\"statement\":{\"_text\":\"\\u6ca1\\u5173\\u7cfb\\uff0c\\u521a\\u597d\\u6211\\u8fd8\\u5269\\u6700\\u540e\\u4e00\\u9897\\u679c\\u5b50\\uff0c\\u7ed9\\u4f60\\u5427\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1290.289,\"y\":51.9061},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"3\"},{\"statement\":{\"_text\":\"\\u8fd9\\u6837\\u5c31\\u80fd\\u56de\\u5f52\\u2018\\u6bcd\\u4eb2\\u2019\\u4e86\\uff0c\\u771f\\u597d\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1326.391,\"y\":131.8554},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"4\"},{\"statement\":{\"_text\":\"......\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1382.181,\"y\":209.2959},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"5\"},{\"statement\":{\"_text\":\"\\u4e0d\\u8fc7\\u597d\\u53ef\\u60dc\\uff0c\\u6211\\u5403\\u4e0d\\u5230\\u4f60\\u7684\\u679c\\u5b50\\u4e86\\uff0c\\u843d\\u62d3\\u67a3\\u975e\\u5e38\\u5c11\\u89c1\\u5462\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1236.927,\"y\":294.7307},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"6\"},{\"statement\":{\"_text\":\"\\u6211\\u5728\\u2018\\u6bcd\\u4eb2\\u2019\\u90a3\\u7b49\\u4f60\\uff0c\\u518d\\u89c1\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1319.367,\"y\":376.3048},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"7\"},{\"statement\":{\"_text\":\"\\u5582\\uff0c\\u5582\\uff0c\\u4f60\\u8fd8\\u597d\\u5417\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1327.695,\"y\":451.8347},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"8\"},{\"statement\":{\"_text\":\"......\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1354.138,\"y\":518.9216},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"9\"},{\"statement\":{\"_text\":\"\\u6ca1\\u6709\\u58f0\\u97f3\\u4e86?\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1328.314,\"y\":606.5825},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"10\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"3\"},\"_targetNode\":{\"$ref\":\"4\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"6\"},\"_targetNode\":{\"$ref\":\"7\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"8\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"8\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"9\"},\"_targetNode\":{\"$ref\":\"10\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
+  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1331.719,\"y\":76.49302},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"0\"},{\"statement\":{\"_text\":\"\\u6211\\u5728\\u4f60\\u8eab\\u4e0a\\u95fb\\u5230\\u4e86\\u843d\\u62d3\\u67a3\\u7684\\u5473\\u9053\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1650.214,\"y\":-291.8218},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"1\"},{\"statement\":{\"_text\":\"\\u4f46\\u662f\\u597d\\u5947\\u602a\\uff0c\\u4f60\\u90fd\\u8fd9\\u4e48\\u5927\\u4e86\\uff0c\\u8fd8\\u6ca1\\u957f\\u51fa\\u6765\\u5417\\uff1f\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1592.881,\"y\":-184.8238},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"2\"},{\"statement\":{\"_text\":\"\\u53d1\\u80b2\\u8fd9\\u4e48\\u6162\\uff0c\\u5e73\\u65f6\\u5403\\u5f97\\u592a\\u5c11\\u4e86\\u5427\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1613.547,\"y\":-77.155},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"3\"},{\"statement\":{\"_text\":\"\\u6211\\u4e0d\\u592a\\u80fd\\u7406\\u89e3\\u4f60\\u7684\\u610f\\u601d\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1611.569,\"y\":4.038834},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"4\"},{\"statement\":{\"_text\":\"\\u6ca1\\u5173\\u7cfb\\uff0c\\u521a\\u597d\\u6211\\u8fd8\\u5269\\u6700\\u540e\\u4e00\\u9897\\u679c\\u5b50\\uff0c\\u7ed9\\u4f60\\u5427\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1568.235,\"y\":72.70532},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"5\"},{\"statement\":{\"_text\":\"\\u8fd9\\u6837\\u5c31\\u80fd\\u56de\\u5f52\\u2018\\u6bcd\\u4eb2\\u2019\\u4e86\\uff0c\\u771f\\u597d\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1595.946,\"y\":146.7053},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"6\"},{\"statement\":{\"_text\":\"...\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1587.569,\"y\":232.7052},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"7\"},{\"statement\":{\"_text\":\"\\u4e0d\\u8fc7\\u597d\\u53ef\\u60dc\\uff0c\\u6211\\u5403\\u4e0d\\u5230\\u4f60\\u7684\\u679c\\u5b50\\u4e86\\uff0c\\u843d\\u62d3\\u67a3\\u975e\\u5e38\\u5c11\\u89c1\\u5462\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1598.466,\"y\":302.5073},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"8\"},{\"statement\":{\"_text\":\"\\u6211\\u5728\\u2018\\u6bcd\\u4eb2\\u2019\\u90a3\\u7b49\\u4f60\\uff0c\\u518d\\u89c1\\u3002\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1662.708,\"y\":444.251},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"9\"},{\"statement\":{\"_text\":\"\\u5582\\uff0c\\u5582\\uff0c\\u4f60\\u8fd8\\u597d\\u5417\\uff1f\\u201d\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1903.433,\"y\":527.924},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"10\"},{\"statement\":{\"_text\":\"...\"},\"_actorName\":\"NPC3\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1876.811,\"y\":613.3873},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"11\"},{\"statement\":{\"_text\":\"\\uff1f\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1899.728,\"y\":706.4077},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"12\"},{\"statement\":{\"_text\":\"\\u6ca1\\u6709\\u58f0\\u97f3\\u4e86\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1641.017,\"y\":770.452},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"13\"},{\"_action\":{\"actions\":[{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":2},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1686.899,\"y\":866.9449},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"14\"},{\"_position\":{\"x\":1745.958,\"y\":1000.119},\"$type\":\"NodeCanvas.DialogueTrees.FinishNode\",\"$id\":\"15\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"3\"},\"_targetNode\":{\"$ref\":\"4\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"6\"},\"_targetNode\":{\"$ref\":\"7\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"8\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"8\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"9\"},\"_targetNode\":{\"$ref\":\"10\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"10\"},\"_targetNode\":{\"$ref\":\"11\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"11\"},\"_targetNode\":{\"$ref\":\"12\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"12\"},\"_targetNode\":{\"$ref\":\"13\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"13\"},\"_targetNode\":{\"$ref\":\"14\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"14\"},\"_targetNode\":{\"$ref\":\"15\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"StrageHouse\":{\"_name\":\"StrageHouse\",\"_id\":\"985cf835-16ef-4610-ba47-442719ce6840\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"}}},\"derivedData\":{\"actorParameters\":[{\"_keyName\":\"NPC\",\"_id\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_actorObject\":1},{\"_keyName\":\"\\u4e3b\\u89d2\",\"_id\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_actorObject\":2},{\"_keyName\":\"NPC3\",\"_id\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_actorObject\":3}],\"$type\":\"NodeCanvas.DialogueTrees.DialogueTree+DerivedSerializationData\"}}"
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"}}},\"derivedData\":{\"actorParameters\":[{\"_keyName\":\"NPC\",\"_id\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_actorObject\":3},{\"_keyName\":\"\\u4e3b\\u89d2\",\"_id\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_actorObject\":4},{\"_keyName\":\"NPC3\",\"_id\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_actorObject\":5}],\"$type\":\"NodeCanvas.DialogueTrees.DialogueTree+DerivedSerializationData\"}}"
   _boundGraphObjectReferences:
   - {fileID: 0}
+  - {fileID: 600721114}
+  - {fileID: 940559756}
   - {fileID: 453510411}
   - {fileID: 0}
   - {fileID: 809502473}
@@ -4923,8 +5121,8 @@ MonoBehaviour:
     _version: 3.33
     _category: 
     _comments: 
-    _translation: {x: -1056, y: 436}
-    _zoomFactor: 1
+    _translation: {x: -562, y: 365}
+    _zoomFactor: 0.4999881
   _firstActivation: 1
   _enableAction: 1
   _disableAction: 2
@@ -5127,7 +5325,7 @@ MonoBehaviour:
   controlColliderByVisibility: 1
   useThreeRTForVisibility: 1
   rtPicker: {fileID: 919132148186213059}
-  hideRTDebugPreview: 0
+  hideRTDebugPreview: 1
   blackRgbThreshold: 0.02
   blackAlphaThreshold: 0.01
   invertIsVisible: 0
@@ -6523,6 +6721,74 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1023411449}
   m_Mesh: {fileID: -8498892977365060043, guid: 0d3a5a56972a95a4699753bc878a4e59, type: 3}
+--- !u!1 &1028242113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1028242114}
+  - component: {fileID: 1028242116}
+  - component: {fileID: 1028242117}
+  m_Layer: 5
+  m_Name: "\u7ED3\u675F\u52A8\u753B"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1028242114
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028242113}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 960, y: 540}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1028242116
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028242113}
+  m_CullTransparentMesh: 1
+--- !u!114 &1028242117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028242113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa6df2c8244f594dab069cae3a49ce9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videoClip: {fileID: 32900000, guid: 552a9880039de2d40865520b63c9fd2d, type: 3}
+  videoUrl: 
+  videoPlayer: {fileID: 1300864663}
+  videoRootToActivate: {fileID: 1028242113}
+  disableWhilePlaying: []
+  autoHideOverlayCanvases: 1
+  nextSceneName: "\u7B2C\u4E09\u5173"
+  nextSceneBuildIndexIfNameEmpty: -1
+  stopVideoPlayerAfterFinish: 1
+  clearCameraPlaneAfterFinish: 1
+  deactivateRootAfterFinishIfNoLoad: 0
 --- !u!1 &1075118070
 GameObject:
   m_ObjectHideFlags: 0
@@ -7029,15 +7295,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializedExposedParameters: []
-  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1276.693,\"y\":-229.5242},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"0\"},{\"statement\":{\"_text\":\"\\u53ef\\u522b\\u8bf4\\u662f\\u6211\\u7ed9\\u7684\\uff0c\\u518d\\u89c1\\uff01\\u54c8\\u54c8\\u54c8\\uff01\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1246.0,\"y\":487.0},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"1\"},{\"_action\":{\"actions\":[{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":2},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":3},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":5},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":6},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1323.0,\"y\":594.3334},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"2\"},{\"_position\":{\"x\":1443.667,\"y\":928.3334},\"$type\":\"NodeCanvas.DialogueTrees.FinishNode\",\"$id\":\"3\"},{\"statement\":{\"_text\":\"\\u4f60\\u597d\\u5440\\u964c\\u751f\\u4eba\\u3002\\u54c8\\u54c8\\u3002\"},\"_actorName\":\"NPC1\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1276.312,\"y\":-119.5273},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"4\"},{\"statement\":{\"_text\":\"\\u770b\\u4f60\\u597d\\u50cf\\u4e0d\\u662f\\u5f88\\u6709\\u7cbe\\u795e\\u554a\\uff0c\\u6709\\u6ca1\\u6709\\u53bb\\u533b\\u9662\\u770b\\u8fc7\\uff1f\"},\"_actorName\":\"NPC1\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1218.979,\"y\":-10.86063},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"5\"},{\"statement\":{\"_text\":\"\\u8c22\\u8c22\\u5173\\u5fc3......\\u6211\\u53ea\\u662f\\u6709\\u4e9b\\u7d2f\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1239.645,\"y\":91.13943},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"6\"},{\"statement\":{\"_text\":\"\\u62b1\\u6b49\\uff0c\\u8981\\u662f\\u6ca1\\u4ec0\\u4e48\\u5176\\u4ed6\\u4e8b\\u7684\\u8bdd.....\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1237.667,\"y\":176.3333},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"7\"},{\"statement\":{\"_text\":\"\\u53ef\\u4f60\\u770b\\u4e0a\\u53bb\\u53ef\\u4e0d\\u53ea\\u662f\\u50cf\\u7d2f\\u4e86\\u554a\\uff0c\\u5f88\\u4e45\\u6ca1\\u53bb\\u533b\\u9662\\u4e86\\u5427\\uff1f\"},\"_actorName\":\"NPC1\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1194.333,\"y\":245.0},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"8\"},{\"statement\":{\"_text\":\"\\u5443\\uff0c\\u662f\\u5f88\\u4e45\\u6ca1\\u53bb\\u4f53\\u68c0\\u4e86\\uff0c\\u4f46\\u662f......\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1223.0,\"y\":319.0},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"9\"},{\"statement\":{\"_text\":\"\\u5300\\u4f60\\u4e00\\u9897\\u5e94\\u5e94\\u6025\\u5427\\uff0c\\u53ef\\u522b\\u574f\\u6389\\u4e86\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1213.667,\"y\":405.0},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"10\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"6\"},\"_targetNode\":{\"$ref\":\"7\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"8\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"8\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"9\"},\"_targetNode\":{\"$ref\":\"10\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"10\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
+  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1276.693,\"y\":-229.5242},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"0\"},{\"statement\":{\"_text\":\"\\u4f60\\u597d\\u5440\\u964c\\u751f\\u4eba\\u3002\\u54c8\\u54c8\\u3002\"},\"_actorName\":\"NPC1\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1276.312,\"y\":-119.5273},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"1\"},{\"statement\":{\"_text\":\"\\u770b\\u4f60\\u597d\\u50cf\\u4e0d\\u662f\\u5f88\\u6709\\u7cbe\\u795e\\u554a\\uff0c\\u6709\\u6ca1\\u6709\\u53bb\\u533b\\u9662\\u770b\\u8fc7\\uff1f\"},\"_actorName\":\"NPC1\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1218.979,\"y\":-10.86063},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"2\"},{\"statement\":{\"_text\":\"\\u8c22\\u8c22\\u5173\\u5fc3...\\u6211\\u53ea\\u662f\\u6709\\u4e9b\\u7d2f\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1239.645,\"y\":91.13943},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"3\"},{\"statement\":{\"_text\":\"\\u62b1\\u6b49\\uff0c\\u8981\\u662f\\u6ca1\\u4ec0\\u4e48\\u5176\\u4ed6\\u4e8b\\u7684\\u8bdd..\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1237.667,\"y\":175.2831},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"4\"},{\"statement\":{\"_text\":\"\\u53ef\\u4f60\\u770b\\u4e0a\\u53bb\\u53ef\\u4e0d\\u53ea\\u662f\\u50cf\\u7d2f\\u4e86\\u554a\\uff0c\\u5f88\\u4e45\\u6ca1\\u53bb\\u533b\\u9662\\u4e86\\u5427\\uff1f\"},\"_actorName\":\"NPC1\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1193.283,\"y\":246.0502},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"5\"},{\"statement\":{\"_text\":\"\\u5443\\uff0c\\u662f\\u5f88\\u4e45\\u6ca1\\u53bb\\u4f53\\u68c0\\u4e86\\uff0c\\u4f46\\u662f...\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1224.05,\"y\":319.0},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"6\"},{\"statement\":{\"_text\":\"\\u5300\\u4f60\\u4e00\\u9897\\u5e94\\u5e94\\u6025\\u5427\\uff0c\\u53ef\\u522b\\u574f\\u6389\\u4e86\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1213.667,\"y\":405.0},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"7\"},{\"statement\":{\"_text\":\"\\u53ef\\u522b\\u8bf4\\u662f\\u6211\\u7ed9\\u7684\\uff0c\\u518d\\u89c1\\uff01\\u54c8\\u54c8\\u54c8\\uff01\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1246.0,\"y\":487.0},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"8\"},{\"_action\":{\"actions\":[{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":2},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":3},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":5},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":1324.05,\"y\":594.3334},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"9\"},{\"_position\":{\"x\":1443.667,\"y\":928.3334},\"$type\":\"NodeCanvas.DialogueTrees.FinishNode\",\"$id\":\"10\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"3\"},\"_targetNode\":{\"$ref\":\"4\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"6\"},\"_targetNode\":{\"$ref\":\"7\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"8\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"8\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"9\"},\"_targetNode\":{\"$ref\":\"10\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"StrageHouse\":{\"_name\":\"StrageHouse\",\"_id\":\"985cf835-16ef-4610-ba47-442719ce6840\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"}}},\"derivedData\":{\"actorParameters\":[{\"_keyName\":\"NPC\",\"_id\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_actorObject\":7},{\"_keyName\":\"\\u4e3b\\u89d2\",\"_id\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_actorObject\":8},{\"_keyName\":\"NPC1\",\"_id\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_actorObject\":9}],\"$type\":\"NodeCanvas.DialogueTrees.DialogueTree+DerivedSerializationData\"}}"
+    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"}}},\"derivedData\":{\"actorParameters\":[{\"_keyName\":\"NPC\",\"_id\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_actorObject\":6},{\"_keyName\":\"\\u4e3b\\u89d2\",\"_id\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_actorObject\":7},{\"_keyName\":\"NPC1\",\"_id\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_actorObject\":8}],\"$type\":\"NodeCanvas.DialogueTrees.DialogueTree+DerivedSerializationData\"}}"
   _boundGraphObjectReferences:
   - {fileID: 0}
   - {fileID: 600721114}
   - {fileID: 453510407}
   - {fileID: 1151330650}
-  - {fileID: 1722446979}
   - {fileID: 7744041}
   - {fileID: 161482744}
   - {fileID: 453510411}
@@ -7047,8 +7312,8 @@ MonoBehaviour:
     _version: 3.33
     _category: 
     _comments: 
-    _translation: {x: -621, y: 154}
-    _zoomFactor: 0.6347456
+    _translation: {x: -472.45547, y: 200.99608}
+    _zoomFactor: 0.6347666
   _firstActivation: 1
   _enableAction: 1
   _disableAction: 2
@@ -7408,7 +7673,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1300864662
 Transform:
   m_ObjectHideFlags: 0
@@ -7785,7 +8050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _serializedExposedParameters: []
-  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":2222.4,\"y\":334.178},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"0\"},{\"statement\":{\"_text\":\"\\u6211\\u628a\\u9762\\u5177\\u7ed9\\u4f60......\\u968f\\u4fbf\\u4f60\\uff0c\\u6740\\u4e86\\u6211\\u4e5f\\u597d......\\u8ba9\\u6211\\u6655\\u8fc7\\u53bb\\u4e5f\\u597d......\\u968f\\u4fbf\\u4f60......\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":2159.374,\"y\":968.7021},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"1\"},{\"_action\":{\"actions\":[{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":2},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":3},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":2268.707,\"y\":1158.036},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"2\"},{\"_position\":{\"x\":2389.374,\"y\":1492.036},\"$type\":\"NodeCanvas.DialogueTrees.FinishNode\",\"$id\":\"3\"},{\"statement\":{\"_text\":\"......\\u8bf7......\\u6211......\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":2222.019,\"y\":444.1749},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"4\"},{\"statement\":{\"_text\":\"\\u4ec0\\u4e48\\uff1f\\u62b1\\u6b49\\u6211\\u6ca1\\u542c\\u6e05\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2164.686,\"y\":552.8415},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"5\"},{\"statement\":{\"_text\":\"\\u6211\\u60f3\\u7740\\u8fd9\\u5e94\\u8be5\\u53c8\\u662f\\u6211\\u7684\\u5e7b\\u89c9\\uff0c\\u4f46\\u6211\\u60f3\\u542c\\u542c\\u4ed6\\u8981\\u8bf4\\u4ec0\\u4e48\\uff0c\\u4e8e\\u662f\\u5411\\u4ed6\\u8d70\\u8fd1\\u4e86\\u4e00\\u4e9b\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2185.352,\"y\":654.8416},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"6\"},{\"statement\":{\"_text\":\"\\u6211......\\u8eab\\u4e0a\\u597d\\u75db......\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":2183.374,\"y\":740.0355},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"7\"},{\"statement\":{\"_text\":\"\\u7b49......\\u4e3a\\u4ec0\\u4e48\\u4f60......\\u4e0d\\u6234\\u9762\\u5177......\\uff1f\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":2140.04,\"y\":808.7021},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"8\"},{\"statement\":{\"_text\":\"\\u662f\\u4e0d\\u662f\\u5f04\\u4e22\\u4e86......\\u7b97\\u4e86\\uff0c\\u53cd\\u6b63\\u6211\\u4e5f\\u5feb......\\u4f60\\u5e2e\\u5e2e\\u6211\\u5427\\uff0c\\u6211......\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":2167.751,\"y\":882.702},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"9\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"6\"},\"_targetNode\":{\"$ref\":\"7\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"8\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"8\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"9\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
+  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":2222.4,\"y\":334.178},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"0\"},{\"statement\":{\"_text\":\"...\\u8bf7...\\u6211...\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":2222.019,\"y\":444.1749},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"1\"},{\"statement\":{\"_text\":\"\\u4ec0\\u4e48\\uff1f\\u62b1\\u6b49\\u6211\\u6ca1\\u542c\\u6e05\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2164.686,\"y\":552.8415},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"2\"},{\"statement\":{\"_text\":\"\\u6211\\u60f3\\u7740\\u8fd9\\u5e94\\u8be5\\u53c8\\u662f\\u6211\\u7684\\u5e7b\\u89c9\\uff0c\\u4f46\\u6211\\u60f3\\u542c\\u542c\\u4ed6\\u8981\\u8bf4\\u4ec0\\u4e48\\uff0c\\u4e8e\\u662f\\u5411\\u4ed6\\u8d70\\u8fd1\\u4e86\\u4e00\\u4e9b\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":1908.538,\"y\":651.6414},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"3\"},{\"statement\":{\"_text\":\"\\u6211......\\u8eab\\u4e0a\\u597d\\u75db......\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1960.963,\"y\":740.0355},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"4\"},{\"statement\":{\"_text\":\"\\u7b49...\\u4e3a\\u4ec0\\u4e48\\u4f60...\\u4e0d\\u6234\\u9762\\u5177\\uff1f\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1908.029,\"y\":807.102},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"5\"},{\"statement\":{\"_text\":\"\\u662f\\u4e0d\\u662f\\u5f04\\u4e22\\u4e86...\\u7b97\\u4e86\\uff0c\\u53cd\\u6b63\\u6211\\u4e5f\\u5feb...\\u4f60\\u5e2e\\u5e2e\\u6211\\u5427\\uff0c\\u6211...\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":1924.539,\"y\":873.1015},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"6\"},{\"statement\":{\"_text\":\"\\u6211\\u628a\\u9762\\u5177\\u7ed9\\u4f60...\\u968f\\u4fbf\\u4f60\\uff0c\\u6740\\u4e86\\u6211\\u4e5f\\u597d...\\u8ba9\\u6211\\u6655\\u8fc7\\u53bb\\u4e5f\\u597d...\\u968f\\u4fbf\\u4f60...\"},\"_actorName\":\"NPC2\",\"_actorParameterID\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_position\":{\"x\":2159.374,\"y\":968.7021},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"7\"},{\"_action\":{\"actions\":[{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":2},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":3},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.4509804,\"b\":0.003921569,\"a\":1.0},\"_position\":{\"x\":2268.707,\"y\":1158.036},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"8\"},{\"_position\":{\"x\":2389.374,\"y\":1492.036},\"$type\":\"NodeCanvas.DialogueTrees.FinishNode\",\"$id\":\"9\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"3\"},\"_targetNode\":{\"$ref\":\"4\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"6\"},\"_targetNode\":{\"$ref\":\"7\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"7\"},\"_targetNode\":{\"$ref\":\"8\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"8\"},\"_targetNode\":{\"$ref\":\"9\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"StrageHouse\":{\"_name\":\"StrageHouse\",\"_id\":\"985cf835-16ef-4610-ba47-442719ce6840\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
     mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"}}},\"derivedData\":{\"actorParameters\":[{\"_keyName\":\"NPC\",\"_id\":\"8025f35f-0048-42c8-b9f7-000c1ef108e3\",\"_actorObject\":5},{\"_keyName\":\"\\u4e3b\\u89d2\",\"_id\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_actorObject\":6},{\"_keyName\":\"NPC2\",\"_id\":\"7c5644a2-0f5e-40b3-b3af-c9d60b66e2e4\",\"_actorObject\":7}],\"$type\":\"NodeCanvas.DialogueTrees.DialogueTree+DerivedSerializationData\"}}"
   _boundGraphObjectReferences:
@@ -7801,8 +8066,8 @@ MonoBehaviour:
     _version: 3.33
     _category: 
     _comments: 
-    _translation: {x: -799.7981, y: 68.78067}
-    _zoomFactor: 0.43694323
+    _translation: {x: -114.57368, y: 153.3516}
+    _zoomFactor: 0.25009638
   _firstActivation: 1
   _enableAction: 1
   _disableAction: 2
@@ -8319,6 +8584,141 @@ Transform:
   - {fileID: 560814190}
   m_Father: {fileID: 543450652395155576}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1510303057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1510303058}
+  - component: {fileID: 1510303060}
+  - component: {fileID: 1510303059}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1510303058
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510303057}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 37191374}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1510303059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510303057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "\u6211\u4E0D\u60F3\u63A2\u7D22\u4E86"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: dd1526ff8565ec340bbed0709ed8a498, type: 2}
+  m_sharedMaterial: {fileID: 5608291962307108039, guid: dd1526ff8565ec340bbed0709ed8a498,
+    type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 24
+  m_fontSizeBase: 24
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1510303060
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510303057}
+  m_CullTransparentMesh: 1
 --- !u!1 &1513971210
 GameObject:
   m_ObjectHideFlags: 0
@@ -10570,7 +10970,7 @@ MonoBehaviour:
   allTargetsVisible: 0
   controlColliderByVisibility: 1
   objectToToggle: {fileID: 896263805}
-  showSampleCrossInGame: 1
+  showSampleCrossInGame: 0
   sampleCrossColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   sampleCrossHalfSizePixels: 12
   sampleCrossLineThickness: 2
@@ -14780,6 +15180,7 @@ SceneRoots:
   - {fileID: 708798545}
   - {fileID: 180703556}
   - {fileID: 1787906884}
+  - {fileID: 1028242114}
   - {fileID: 1300864662}
   - {fileID: 439196413}
   - {fileID: 2085868019}
