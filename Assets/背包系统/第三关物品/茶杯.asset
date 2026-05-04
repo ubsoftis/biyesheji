@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8a65db38fce19f4e989aeb7c0d48dc7, type: 3}
-  m_Name: "\u5404\u79CD\u9053\u51776"
+  m_Name: "\u8336\u676F"
   m_EditorClassIdentifier: 
-  itemName: "\u5A03\u5A03"
-  icon: {fileID: 21300000, guid: c242b27a086e06a4b8ccd3ac462f50e1, type: 3}
+  itemName: "\u8336\u676F"
+  icon: {fileID: 21300000, guid: 9ef9ad24db13e5142853c142827f0c55, type: 3}
   itemType: 0
   maxStack: 1
   description: "\u6761\u4EF62\uFF1A\u5C06\u6563\u843D\u5728\u201C\u4E3B\u4E16\u754C\u201D\u7684\u9053\u5177\u5168\u653E\u8FDB\u9053\u5177\u680F"
+  placedPrefab: {fileID: 5059765968742455498, guid: 69db13315d100304bb4fed06c54fbcb1,
+    type: 3}
+  consumeFromInventoryWhenPlaced: 0

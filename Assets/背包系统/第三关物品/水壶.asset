@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: "\u6C34\u58F6"
   m_EditorClassIdentifier: 
   itemName: "\u6C34\u58F6"
-  icon: {fileID: 21300000, guid: 123cec20150633f46b731c252c201993, type: 3}
+  icon: {fileID: 21300000, guid: 40f45192c312eda4b98e9ef7be7c826c, type: 3}
   itemType: 0
   maxStack: 1
   description: "\u7269\u54C1\u680F\u521D\u59CB\u62E5\u6709\u4E00\u4E2A\u53EF\u4EE5\u65E0\u9650\u4F7F\u7528\u7684\u6C34\u58F6"
+  placedPrefab: {fileID: 3561823987894739687, guid: c44cd50c75538204888a4bc7a84010cd,
+    type: 3}
+  consumeFromInventoryWhenPlaced: 0

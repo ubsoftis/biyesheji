@@ -3241,8 +3241,8 @@ MonoBehaviour:
     _version: 3.33
     _category: 
     _comments: 
-    _translation: {x: -1230, y: 1025}
-    _zoomFactor: 0.55605483
+    _translation: {x: -955, y: 260}
+    _zoomFactor: 0.6466604
   _firstActivation: 1
   _enableAction: 1
   _disableAction: 2
@@ -9983,7 +9983,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1787906884
 RectTransform:
   m_ObjectHideFlags: 0
