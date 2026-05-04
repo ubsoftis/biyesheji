@@ -5,36 +5,26 @@ using UnityEngine.Events;
 /// 两段式驱动（与 <see cref="StencilActivateTwoOnClick"/> 同套 RT + 颜色判定）：
 /// <b>第一段</b>：两个视口采样点门控成立后，须在门控成立时成功 <see cref="OnStencilClick"/> 一次，才允许显示第一段两物体。
 /// 默认 <see cref="gateDrivePairStayActiveAfterFirstShow"/>：仅在首次「该显示」时 Active 一次，本脚本之后不会再设为 Inactive。
-/// <b>第二段</b>：在「九区条件」（默认：<b>9 个点都不可见</b>，即可见数为 0）与「联动」都满足时，且（可选）门控仍成立 →
+/// <b>第二段</b>：在「九区条件」（固定：<b>9 个点都不可见</b>，即 <c>nineZoneVisibleCount == 0</c>）与「联动」都满足时，且（可选）门控仍成立 →
 /// 再将 <see cref="nineLinkDriveObject1"/>、<see cref="nineLinkDriveObject2"/> 设为 Active；否则关闭这一对。
 /// 联动背包消耗品：拖入挂在 <see cref="InventoryManager"/> 上的 <see cref="InventoryPrerequisiteTracker"/>；留空则不限制此项。
+/// 本组件 <see cref="DefaultExecutionOrder"/> 为 500：晚于默认 0 的魔方/动画，门控 RT 更贴近当前帧姿态；晚于 <see cref="InventoryPrerequisiteTracker"/>（-50）以便读到 <c>IsSatisfied</c>。
+/// 九区可见数在 <c>LateUpdate</c> 内强制刷新 RT 后每帧重算，与第二段判定一致。
 /// </summary>
-[DefaultExecutionOrder(50)]
+[DefaultExecutionOrder(500)]
 public class StencilTwoGateNineZonePairDriver : MonoBehaviour, IStencilClickable
 {
-    public enum NineZoneSatisfactionMode
-    {
-        [Tooltip("九个采样点全部判定为不可见（nineZoneVisibleCount == 0）。")]
-        AllNineInvisible = 0,
-        [Tooltip("九个里至少有一点判定为可见（nineZoneVisibleCount ≥ 1）。无可 Inspector 阈值。")]
-        AtLeastNVisible = 1,
-    }
-
     [Header("状态（只读）")]
     public bool clickGateVisible;
     public bool gateSample1Visible, gateSample2Visible;
+    [Tooltip("每帧 LateUpdate 在 RT 刷新后重算；运行中在 Inspector 可见当前可见采样点数。")]
     public int nineZoneVisibleCount;
+    [Tooltip("拖入 inventoryConsumablePrerequisiteTracker 时等于其 IsSatisfied；未拖入则为 true（只读）。")]
     public bool prerequisiteMet;
     [Tooltip("九区条件 + 联动 +（可选）门控 全部满足时为 true。")]
     public bool secondStageActive;
     [Tooltip("已在门控成立时收到过至少一次点击，第一段两物体才允许出现。")]
     public bool gateDrivePairUnlockedByClick;
-    [Tooltip("来自 InventoryPrerequisiteTracker 的镜像（只读）")]
-    public int prerequisiteConsumableCount;
-    [Tooltip("来自 InventoryPrerequisiteTracker 的镜像（只读）")]
-    public int prerequisiteConsumablePeakCount;
-    [Tooltip("来自 InventoryPrerequisiteTracker 的镜像（只读）")]
-    public bool prerequisiteConsumableHasUsedOnce;
 
     [Header("模板测试（三层 RT）")]
     public bool useThreeRTForVisibility = true;
@@ -59,8 +49,6 @@ public class StencilTwoGateNineZonePairDriver : MonoBehaviour, IStencilClickable
 
     [Header("第二段：9 采样点 + 联动 → 再激活 2 个物体")]
     public Vector2[] nineZoneViewports = new Vector2[9];
-    [Tooltip("九区如何算「条件满足」：全不可见，或至少一点可见（见枚举说明）。")]
-    public NineZoneSatisfactionMode nineZoneMode = NineZoneSatisfactionMode.AllNineInvisible;
     [Tooltip("为 true：第二段也要求第一段门控仍成立；为 false：仅看九区+联动。")]
     public bool secondStageAlsoRequiresGate = true;
     public GameObject nineLinkDriveObject1;
@@ -127,15 +115,8 @@ public class StencilTwoGateNineZonePairDriver : MonoBehaviour, IStencilClickable
             clickGateVisible = true;
         }
 
-        prerequisiteMet = CheckPrerequisiteMet();
-
         if (requireClickToShowGateDrivePair && !clickGateVisible && !latchGateDrivePairAfterClick)
             gateDrivePairUnlockedByClick = false;
-
-        if (useThreeRTForVisibility)
-            nineZoneVisibleCount = CountNineZoneVisible();
-        else
-            nineZoneVisibleCount = -1;
 
         bool showFirstPair;
         if (!requireClickToShowGateDrivePair)
@@ -147,17 +128,27 @@ public class StencilTwoGateNineZonePairDriver : MonoBehaviour, IStencilClickable
 
         ApplyGateDrivePairOnShowEdge(showFirstPair);
 
-        if (inventoryConsumablePrerequisiteTracker == null)
-            ApplySecondStagePairFromCurrentPrerequisite();
-
         if (disableColliderWhenGateClosed && gateCollider2D != null)
             gateCollider2D.enabled = clickGateVisible;
     }
 
     void LateUpdate()
     {
-        if (inventoryConsumablePrerequisiteTracker == null)
-            return;
+        if (useThreeRTForVisibility)
+        {
+            if (rtPicker == null)
+                rtPicker = FindObjectOfType<CubeLayerRTPicker>();
+            if (rtPicker != null)
+            {
+                // 与 Update 里门控那次 Render 可能早于其它物体位移；九区计数放在帧末并强制再渲一次，保证与画面同步。
+                rtPicker.InvalidateRTRenderFrameCache();
+                nineZoneVisibleCount = CountNineZoneVisible();
+            }
+            else
+                nineZoneVisibleCount = 0;
+        }
+        else
+            nineZoneVisibleCount = -1;
 
         prerequisiteMet = CheckPrerequisiteMet();
         ApplySecondStagePairFromCurrentPrerequisite();
@@ -240,31 +231,12 @@ public class StencilTwoGateNineZonePairDriver : MonoBehaviour, IStencilClickable
         _nineLinkPrevSecondStageActive = secondStageActiveNow;
     }
 
-    bool NineZoneConditionMet()
-    {
-        switch (nineZoneMode)
-        {
-            case NineZoneSatisfactionMode.AllNineInvisible:
-                return nineZoneVisibleCount == 0;
-            case NineZoneSatisfactionMode.AtLeastNVisible:
-            default:
-                return nineZoneVisibleCount >= 1;
-        }
-    }
+    bool NineZoneConditionMet() => nineZoneVisibleCount == 0;
 
     bool CheckPrerequisiteMet()
     {
         if (inventoryConsumablePrerequisiteTracker != null)
-        {
-            prerequisiteConsumableCount = inventoryConsumablePrerequisiteTracker.currentCount;
-            prerequisiteConsumablePeakCount = inventoryConsumablePrerequisiteTracker.peakCount;
-            prerequisiteConsumableHasUsedOnce = inventoryConsumablePrerequisiteTracker.hasUsedOnce;
             return inventoryConsumablePrerequisiteTracker.IsSatisfied;
-        }
-
-        prerequisiteConsumableCount = 0;
-        prerequisiteConsumablePeakCount = 0;
-        prerequisiteConsumableHasUsedOnce = false;
         return true;
     }
 

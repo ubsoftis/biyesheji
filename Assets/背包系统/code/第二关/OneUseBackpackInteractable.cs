@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// 一次性背包互动点：左键射线命中<strong>挂载本脚本的物体</strong>（可在子物体上放 Collider，会向上查找）时，
-/// 用当前背包选中物品在配置的父节点下实例化 <see cref="ItemSO.placedPrefab"/>，消耗物品后隐藏或销毁本根物体。
+/// 用当前背包选中物品在配置的父节点下实例化 <see cref="ItemSO.placedPrefab"/>，消耗物品后可隐藏/销毁本根物体，或由 <see cref="hideOrDestroyRootAfterSuccess"/> 仅关掉本脚本（根物体保留，如 NPC2）。
 /// </summary>
 /// <remarks>
 /// 若场景里仍有 <see cref="SceneInteractItemPlacer"/> 且 Tag 与这里相同，同一次点击可能<strong>重复放置</strong>。
@@ -28,7 +28,12 @@ public class OneUseBackpackInteractable : MonoBehaviour
     public bool consumeOnSuccess = true;
 
     [Header("用完后（本组件所在根物体）")]
-    [Tooltip("为 true：Destroy(gameObject)；为 false：SetActive(false)")]
+    [Tooltip(
+        "为 false：扣物并放置成功后不销毁、不隐藏根物体（例如挂在 NPC2 上时保持 NPC 显示）；本脚本会自行 enabled=false 防止重复点击。\n" +
+        "为 true：仍按下面 destroySelf 决定 Destroy 或 SetActive(false)。"
+    )]
+    public bool hideOrDestroyRootAfterSuccess = false;
+    [Tooltip("仅在 hideOrDestroyRootAfterSuccess 为 true 时生效。为 true：Destroy(gameObject)；为 false：SetActive(false)")]
     public bool destroySelf = true;
 
     void Awake()
@@ -92,6 +97,12 @@ public class OneUseBackpackInteractable : MonoBehaviour
 
         if (instance != null && instance.transform.IsChildOf(transform))
             instance.transform.SetParent(transform.parent, true);
+
+        if (!hideOrDestroyRootAfterSuccess)
+        {
+            enabled = false;
+            return;
+        }
 
         if (destroySelf)
             Destroy(gameObject);

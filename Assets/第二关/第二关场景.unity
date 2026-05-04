@@ -3333,9 +3333,6 @@ MonoBehaviour:
   prerequisiteMet: 0
   secondStageActive: 0
   gateDrivePairUnlockedByClick: 0
-  prerequisiteConsumableCount: 0
-  prerequisiteConsumablePeakCount: 0
-  prerequisiteConsumableHasUsedOnce: 0
   useThreeRTForVisibility: 1
   rtPicker: {fileID: 919132148186213059}
   leftmostDebugPreviewIsFrontLayer: 1
@@ -3357,7 +3354,6 @@ MonoBehaviour:
   - {x: 0.65, y: 0.18}
   - {x: 0.65, y: 0.18}
   - {x: 0.65, y: 0.7}
-  nineZoneMode: 0
   secondStageAlsoRequiresGate: 0
   nineLinkDriveObject1: {fileID: 453510406}
   nineLinkDriveObject2: {fileID: 600721113}

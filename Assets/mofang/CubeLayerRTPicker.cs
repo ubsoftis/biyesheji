@@ -552,6 +552,15 @@ public class CubeLayerRTPicker : MonoBehaviour
         _lastRTRenderFrame = Time.frameCount;
     }
 
+    /// <summary>
+    /// 清除「本帧已渲染」标记，使下一次 <see cref="EnsureRTRenderedForSampling"/> 必定再次 <see cref="RenderAllLayersToRT"/>。
+    /// 供帧末二次采样等与 <see cref="EnsureRTRenderedForSampling"/> 同帧但需更新 RT 的脚本使用。
+    /// </summary>
+    public void InvalidateRTRenderFrameCache()
+    {
+        _lastRTRenderFrame = -1;
+    }
+
     void ApplyCubeMaskLayersForCurrentDepthPartition(int layerBack, int layerMid, int layerFront)
     {
         if (viewCamera == null)

@@ -26,12 +26,21 @@ public class InventoryPrerequisiteTracker : MonoBehaviour
     bool _usedOnceLatched;
     int _prevFrameCount = int.MinValue;
 
-    /// <summary>trackedConsumable 未设置时视为不启用限制（恒 true）。</summary>
+    /// <summary>trackedConsumable 未设置时视为不启用限制（恒 true）。否则为闩锁已置位；闩锁成立当帧会立刻同步 <see cref="hasUsedOnce"/>。</summary>
     public bool IsSatisfied => trackedConsumable == null || _usedOnceLatched;
 
     void Awake()
     {
         _inventory = GetComponent<InventoryManager>();
+        if (!Application.isPlaying || trackedConsumable == null)
+            return;
+
+        // 只读字段可能被保存进场景；私有关锁进 Play 会丢失。只要场景里记着「已用过」，就恢复闩锁与峰值下限，避免 IsSatisfied 与 Inspector 不一致。
+        if (hasUsedOnce && !_usedOnceLatched)
+        {
+            _usedOnceLatched = true;
+            _peakPrivate = Mathf.Max(_peakPrivate, peakCount, 1);
+        }
     }
 
     void Update()
@@ -87,6 +96,7 @@ public class InventoryPrerequisiteTracker : MonoBehaviour
             if (belowPeak || droppedSinceLastProbe)
             {
                 _usedOnceLatched = true;
+                hasUsedOnce = true;
                 if (debugLog)
                     Debug.Log($"[InventoryPrerequisiteTracker] 闩锁：当前={n} 峰值={_peakPrivate} 上次={_prevFrameCount}");
             }
