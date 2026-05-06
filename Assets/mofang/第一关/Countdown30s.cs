@@ -54,6 +54,13 @@ public class Countdown30s : MonoBehaviour
         SetUiVisible(false);
     }
 
+    void OnDisable()
+    {
+        // 仅把组件关掉（例如 SuccessDisableOneScript / UnityEvent set_enabled）时，
+        // Unity 会停协程，但不会走 StopCountdownAndHideUi，倒计时 UI 会一直留在场上。
+        StopCountdownAndHideUi();
+    }
+
     void Update()
     {
         if (!enableCountdown)

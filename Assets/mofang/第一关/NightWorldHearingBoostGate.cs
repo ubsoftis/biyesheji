@@ -13,9 +13,17 @@ public class NightWorldHearingBoostGate : MonoBehaviour
         ApplyButtonState(false);
     }
 
+    void OnDisable()
+    {
+        // 仅关掉组件时 Update 不再跑，按钮可能一直留在「显示」状态。
+        ApplyButtonState(false);
+    }
+
     void Update()
     {
-        bool shouldShow = stenciCube1 != null && stenciCube1.anyOf9Visible;
+        bool shouldShow = stenciCube1 != null
+            && stenciCube1.isActiveAndEnabled
+            && stenciCube1.anyOf9Visible;
         ApplyButtonState(shouldShow);
     }
 

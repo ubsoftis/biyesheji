@@ -17,9 +17,19 @@ public class NightWorldHearingBoostGate_Only9 : MonoBehaviour
         ApplyButtonState(false);
     }
 
+    void OnDisable()
+    {
+        // 仅关掉组件时 Update 不再跑，按钮可能一直留在「显示」状态。
+        ApplyButtonState(false);
+    }
+
     void Update()
     {
-        bool shouldShow = stenciCube1Only9 != null && stenciCube1Only9.anyOf9Visible;
+        // StenciCube 被别的逻辑 Disable 后，anyOf9Visible 会停在最后一帧，常为 true；
+        // 若不检查 isActiveAndEnabled，门控仍会一直把听力增强按钮打开。
+        bool shouldShow = stenciCube1Only9 != null
+            && stenciCube1Only9.isActiveAndEnabled
+            && stenciCube1Only9.anyOf9Visible;
         ApplyButtonState(shouldShow);
     }
 

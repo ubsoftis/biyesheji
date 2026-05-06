@@ -90,6 +90,12 @@ public class StencilSingleSampleItemSpriteReplace : MonoBehaviour, IStencilClick
     [Tooltip("为 true：在换图与 onSuccess 之后，将本脚本所在的 GameObject SetActive(false)。")]
     public bool deactivateSelfOnSuccess = true;
 
+    [Header("与 SuccessDestroyScriptAndUi 联动")]
+    [Tooltip(
+        "为 true：在 onSuccess 之后、隐藏本物体之前，自动调用同物体上 SuccessDestroyScriptAndUi.DestroyScriptAndUi()。\n" +
+        "可避免「忘记在 onSuccess 里接线」导致整颗物体先被关掉、收尾逻辑从未执行」的问题。")]
+    public bool autoRunSuccessDestroyOnSameObject = true;
+
     [Header("可选")]
     public UnityEvent onSuccess;
 
@@ -242,6 +248,15 @@ public class StencilSingleSampleItemSpriteReplace : MonoBehaviour, IStencilClick
             Debug.LogWarning("[StencilSingleSampleItemSpriteReplace] spriteAfterSuccess 未设置，跳过换图");
 
         onSuccess?.Invoke();
+
+        if (autoRunSuccessDestroyOnSameObject)
+        {
+            var finish = GetComponent<SuccessDestroyScriptAndUi>();
+            if (finish != null)
+            {
+                finish.DestroyScriptAndUi();
+            }
+        }
 
         if (debugLog)
             Debug.Log($"[StencilSingleSampleItemSpriteReplace] 成功 {name}");
