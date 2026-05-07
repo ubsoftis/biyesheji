@@ -1673,6 +1673,7 @@ MonoBehaviour:
   slotPrefab: {fileID: 482752821273516804, guid: 61468a577d7035245a5017b785460b45,
     type: 3}
   gridParent: {fileID: 204729613}
+  selectedSlotIndex: -1
 --- !u!1 &227669559
 GameObject:
   m_ObjectHideFlags: 0
@@ -6032,6 +6033,10 @@ MonoBehaviour:
   Coller_front: {fileID: 1532406106}
   Coller_back: {fileID: 542348804}
   CubeRoot: {fileID: 104925691}
+  layerRTPicker: {fileID: 0}
+  cubeColliderMask:
+    serializedVersion: 2
+    m_Bits: 0
   duration: 0.2
   List_History: []
   List_Str: []
@@ -12429,6 +12434,14 @@ MonoBehaviour:
   retractedRotation: 6.714
   expandedAlpha: 0.882
   retractedAlpha: 0.8
+  showJudgeAreaGizmo: 1
+  retractedAreaColor: {r: 1, g: 0.7, b: 0, a: 0.9}
+  expandedAreaColor: {r: 0, g: 1, b: 1, a: 0.9}
+  showJudgeAreaInGame: 1
+  gameAreaFillAlpha: 0.2
+  retractedJudgeAreaSize: {x: 0, y: 0}
+  expandedJudgeAreaSize: {x: 0, y: 0}
+  clickNoteToToggle: 1
   toggleButton: {fileID: 1026676450}
 --- !u!114 &1993654745
 MonoBehaviour:
