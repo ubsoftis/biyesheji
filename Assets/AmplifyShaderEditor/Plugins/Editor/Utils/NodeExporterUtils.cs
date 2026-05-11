@@ -74,8 +74,10 @@ namespace AmplifyShaderEditor
 				System.IO.Directory.CreateDirectory( m_pathname );
 			}
 
-			m_screenshotRT = new RenderTexture( (int)m_window.position.width, (int)m_window.position.height, 0 );
-			m_screenshotTex2D = new Texture2D( (int)m_window.position.width, (int)m_window.position.height, TextureFormat.RGB24, false );
+			int rw = Mathf.Max( 1, (int)m_window.position.width );
+			int rh = Mathf.Max( 1, (int)m_window.position.height );
+			m_screenshotRT = new RenderTexture( rw, rh, 0 );
+			m_screenshotTex2D = new Texture2D( rw, rh, TextureFormat.RGB24, false );
 
 			RenderTexture.active = m_screenshotRT;
 			m_window.CurrentPaletteWindow.FillList( ref m_screenshotList, true );

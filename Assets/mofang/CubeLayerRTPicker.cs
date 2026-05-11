@@ -87,12 +87,19 @@ public class CubeLayerRTPicker : MonoBehaviour
         return i;
     }
 
+    void OnValidate()
+    {
+        rtWidth = Mathf.Max(1, rtWidth);
+        rtHeight = Mathf.Max(1, rtHeight);
+    }
+
     void Awake()
     {
         if (cubeRoot == null)
             cubeRoot = transform;
         if (viewCamera == null)
             viewCamera = Camera.main;
+        OnValidate();
     }
 
     void Start()
@@ -396,6 +403,15 @@ public class CubeLayerRTPicker : MonoBehaviour
     {
         if (viewCamera == null) return;
 
+        int w = Mathf.Max(1, rtWidth);
+        int h = Mathf.Max(1, rtHeight);
+        if (w != rtWidth || h != rtHeight)
+        {
+            Debug.LogWarning($"[CubeLayerRTPicker] RT 宽/高不能为 0，已从 ({rtWidth},{rtHeight}) 修正为 ({w},{h})。");
+            rtWidth = w;
+            rtHeight = h;
+        }
+
         SafeDestroyRT(ref _rtBack);
         SafeDestroyRT(ref _rtMid);
         SafeDestroyRT(ref _rtFront);
@@ -420,7 +436,9 @@ public class CubeLayerRTPicker : MonoBehaviour
 
     RenderTexture NewRT()
     {
-        var rt = new RenderTexture(rtWidth, rtHeight, 24, RenderTextureFormat.ARGB32);
+        int w = Mathf.Max(1, rtWidth);
+        int h = Mathf.Max(1, rtHeight);
+        var rt = new RenderTexture(w, h, 24, RenderTextureFormat.ARGB32);
         rt.name = "CubeLayerRT";
         rt.Create();
         return rt;

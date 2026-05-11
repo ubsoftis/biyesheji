@@ -56,6 +56,12 @@ public class StencilCubeRaycaster2D : MonoBehaviour
             if (_cubeLayer < 0)
                 Debug.LogWarning("[StencilCubeRaycaster2D] 未找到 'Cube' 层，请在 Project Settings > Tags and Layers 中添加。");
         }
+
+        // 与背包放置（SceneInteractItemPlacer）等一致：可互动物体多在 Layer「可互动」上。
+        // 若 raycastLayer 里只有 Raycastable/Cube 等层，会永远点不中鱼缸等目标。
+        int hudongLayer = LayerMask.NameToLayer("\u53EF\u4E92\u52A8");
+        if (hudongLayer >= 0)
+            raycastLayer |= (1 << hudongLayer);
     }
 
     void Update()

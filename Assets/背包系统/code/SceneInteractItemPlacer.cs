@@ -20,6 +20,17 @@ public class SceneInteractItemPlacer : MonoBehaviour
 
     private void Awake()
     {
+        EnsureCamera();
+    }
+
+    private void Start()
+    {
+        // 比 Awake 更晚，避免与别处的相机切换/主相机分配竞态
+        EnsureCamera();
+    }
+
+    private void EnsureCamera()
+    {
         if (targetCamera == null)
             targetCamera = Camera.main;
     }
@@ -41,6 +52,7 @@ public class SceneInteractItemPlacer : MonoBehaviour
         ItemSO selectedItem = inv.GetSelectedItem();
         if (selectedItem == null) return;
 
+        EnsureCamera();
         if (targetCamera == null) return;
 
         GameObject target = RaycastTarget(Input.mousePosition);
@@ -84,10 +96,22 @@ public class SceneInteractItemPlacer : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit3D, rayDistance, interactLayerMask))
             return hit3D.collider.gameObject;
 
-        Vector3 worldPos = targetCamera.ScreenToWorldPoint(screenPosition);
-        RaycastHit2D hit2D = Physics2D.Raycast(worldPos, Vector2.zero, 0f, interactLayerMask);
+        // 2D：不要用 ScreenToWorldPoint(mouse)（z 常为 0）+ 零长度 Raycast，会几乎永远点不中。
+        // 使用与相机射线一致的 GetRayIntersection，可命中任意深度平面上的 BoxCollider2D / PolygonCollider2D。
+        RaycastHit2D hit2D = Physics2D.GetRayIntersection(ray, rayDistance, interactLayerMask);
         if (hit2D.collider != null)
             return hit2D.collider.gameObject;
+
+        // 备用：正交相机下用 OverlapPoint（部分情况下 GetRayIntersection 与 Collider 深度组合仍可能漏检）
+        Vector3 sp = screenPosition;
+        if (targetCamera.orthographic)
+            sp.z = Mathf.Abs(Vector3.Dot(targetCamera.transform.forward, targetCamera.transform.position));
+        else
+            sp.z = targetCamera.nearClipPlane;
+        Vector3 world = targetCamera.ScreenToWorldPoint(sp);
+        Collider2D overlap = Physics2D.OverlapPoint(world, interactLayerMask);
+        if (overlap != null)
+            return overlap.gameObject;
 
         return null;
     }
