@@ -74,6 +74,7 @@
     <Compile Include="Assets\背包系统\code\第二关\OneUseBackpackInteractable.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\mofang\IStencilClickable.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\动态墨迹效果脚本.cs" />
     <Compile Include="Assets\mofang\第一关\StenciCube2.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\mofang\开幕\start.cs" />
@@ -83,7 +84,9 @@
     <Compile Include="Assets\mofang\第三关\StencilSingleSampleItemSpriteReplace.cs" />
     <Compile Include="Assets\mofang\第三关\SuccessDisableOneScript.cs" />
     <Compile Include="Assets\mofang\第一关\Level1IntroVideo.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\BirdFloat.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\列表代码.cs" />
     <Compile Include="Assets\mofang\第三关\SuccessDestroyScriptAndUi.cs" />
     <Compile Include="Assets\Lowpoly Style\Shared Scripts\UVOffset.cs" />
     <Compile Include="Assets\mofang\自动删除.cs" />
@@ -96,6 +99,7 @@
     <Compile Include="Assets\mofang\第三关\ClickThreeTimesSpriteFadeLoadScene.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\魔方转圈改编版.cs" />
     <Compile Include="Assets\mofang\StencilCubeRaycaster2D.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\SharedAssets\Scripts\FirstPersonController.cs" />
@@ -107,6 +111,7 @@
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DistortTunnel\DistortTunnelPass_CopyColor.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\SharedAssets\Scripts\AutoLoadPipelineAsset.cs" />
     <Compile Include="Assets\mofang\开幕\HouseClick.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\入场动画通用脚本.cs" />
     <Compile Include="Assets\mofang\第一关\NightWorldHearingBoostGate.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DepthBlit\DepthBlitEdgePass.cs" />
     <Compile Include="Assets\mofang\第二关\StencilTwoGateNineZonePairDriver.cs" />
@@ -119,6 +124,7 @@
     <Compile Include="Assets\G\StartDialogue.cs" />
     <Compile Include="Assets\mofang\第一关\activePaper1.2.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\LensFlares\Scripts\ScreenSpacePlacement.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\SettingsUI511.cs" />
     <Compile Include="Assets\mofang\第一关\activePaper1.4.cs" />
     <Compile Include="Assets\mofang\第二关\NightWorldHearingBoostGate_Only9.cs" />
     <Compile Include="Assets\Scenes\Standard Assets\Character Controllers\Sources\Scripts\FirstPersonController.cs" />
@@ -140,11 +146,14 @@
     <Compile Include="Assets\mofang\第二关\StencilActivateTwoOnClick.cs" />
     <Compile Include="Assets\mofang\开幕\ActiveHitandGone.cs" />
     <Compile Include="Assets\mofang\第一关\Countdown30s.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\章节选择专用入场动画.cs" />
     <Compile Include="Assets\mofang\第一关\死亡结局\QuitGameButton.cs" />
     <Compile Include="Assets\Scenes\SampleScenes\Menu\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\mofang\第一关\LevelOutroVideo.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\点击退出游戏.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\ControlSwitcher.cs" />
     <Compile Include="Assets\Sprites\camera.cs" />
     <Compile Include="Assets\Scenes\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
@@ -154,9 +163,11 @@
     <Compile Include="Assets\mofang\第一关\StenciCube1.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\复刻退出效果.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\mofang\第三关\ButtonAndInventoryFiveItemsGate.cs" />
     <Compile Include="Assets\Scenes\SampleScenes\Scripts\PlaceTargetWithMouse.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\小装饰脚本不用挂入场动画.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\mofang\mofang.cs" />
@@ -171,16 +182,20 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\3D路牌进入UI.cs" />
     <Compile Include="Assets\背包系统\code\InventorySlotUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\背包系统\code\InventoryRequiredFiveItems.cs" />
     <Compile Include="Assets\Scenes\SampleScenes\Scripts\CameraSwitch.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\EyeButtonEffect.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\开始游戏跳转场景.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\BlitToRTHandle\BlitToRTHandleRendererFeature.cs" />
     <Compile Include="Assets\mofang\摄像机控制器.cs" />
     <Compile Include="Assets\背包系统\code\SceneInteractItemPlacer.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\KeepFrame\KeepFrameFeature.cs" />
     <Compile Include="Assets\mofang\第二关\InventoryStencilGateActivate.cs" />
     <Compile Include="Assets\G\KeyController.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\锁定全局.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\mofang\第一关\GameOverController.cs" />
   </ItemGroup>
@@ -226,6 +241,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Material\Shader\STCore.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\开始UI\UI脚本\水墨流动.shader" />
     <None Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\SharedAssets\Shaders\3DText.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Material\ASE\mian5.shader" />
