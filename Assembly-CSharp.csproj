@@ -88,6 +88,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\开始UI\UI脚本\列表代码.cs" />
     <Compile Include="Assets\mofang\第三关\SuccessDestroyScriptAndUi.cs" />
+    <Compile Include="Assets\开始UI\结尾动画（我要用开始的素材所以我在这里）\结尾动画.cs" />
     <Compile Include="Assets\Lowpoly Style\Shared Scripts\UVOffset.cs" />
     <Compile Include="Assets\mofang\自动删除.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
@@ -175,11 +176,13 @@
     <Compile Include="Assets\G\模型旋转.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\BlitToRTHandle\BlitToRTHandlePass.cs" />
     <Compile Include="Assets\mofang\第一关\CountdownToGameOver.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\我是开头黑屏.cs" />
     <Compile Include="Assets\背包系统\PickupItem.cs" />
     <Compile Include="Assets\mofang\魔方.cs" />
     <Compile Include="Assets\mofang\第一关\死亡结局\ReloadCurrentLevelButton.cs" />
     <Compile Include="Assets\Scenes\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\按Tab切换摄像机.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\开始UI\UI脚本\3D路牌进入UI.cs" />
