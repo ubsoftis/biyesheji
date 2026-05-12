@@ -42,6 +42,8 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private Text tooltipTextComponent;
     private bool warnedHighlightBinding;
     private Button cachedButton;
+    private Vector2 iconBaseSizeDelta;
+    private bool iconBaseSizeCaptured;
 
     private void Awake()
     {
@@ -124,17 +126,29 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         if (itemIcon != null)
         {
+            RectTransform iconRt = itemIcon.rectTransform;
+            if (!iconBaseSizeCaptured)
+            {
+                iconBaseSizeDelta = iconRt.sizeDelta;
+                iconBaseSizeCaptured = true;
+            }
+
             if (slot.item != null)
             {
                 if (!itemIcon.gameObject.activeSelf)
                     itemIcon.gameObject.SetActive(true);
                 itemIcon.sprite = slot.item.icon;
                 itemIcon.enabled = true;
+                Vector2 d = slot.item.iconSlotSizeDelta;
+                iconRt.sizeDelta = new Vector2(
+                    d.x > 0.001f ? d.x : iconBaseSizeDelta.x,
+                    d.y > 0.001f ? d.y : iconBaseSizeDelta.y);
             }
             else
             {
                 itemIcon.sprite = null;
                 itemIcon.enabled = false;
+                iconRt.sizeDelta = iconBaseSizeDelta;
             }
         }
 

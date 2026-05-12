@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -43,21 +44,20 @@ public class SceneInteractItemPlacer : MonoBehaviour
 
     public void TryPlaceSelectedItemByMouse()
     {
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            return;
-
         InventoryManager inv = InventoryManager.Instance;
         if (inv == null) return;
 
         ItemSO selectedItem = inv.GetSelectedItem();
         if (selectedItem == null) return;
 
+        if (IsPointerOverBlockingUiWhenPlacing(inv))
+            return;
+
         EnsureCamera();
         if (targetCamera == null) return;
 
         GameObject target = RaycastTarget(Input.mousePosition);
         if (target == null) return;
-        if (!target.CompareTag(interactableTag)) return;
 
         // Collider 可在子物体上，用 InParent 找 ScenePlacementTarget
         var targetConfig = target.GetComponentInParent<ScenePlacementTarget>();
@@ -89,18 +89,70 @@ public class SceneInteractItemPlacer : MonoBehaviour
         inv.RefreshAllSlots();
     }
 
+    /// <summary>
+    /// 仅在「已选中物品、即将做场景放置」时调用。
+    /// 只拦截点在 <see cref="InventoryManager.gridParent"/>（格子容器）上的点击，避免其它 Canvas UI 挡住鱼缸放置。
+    /// </summary>
+    private bool IsPointerOverBlockingUiWhenPlacing(InventoryManager inv)
+    {
+        if (EventSystem.current == null)
+            return false;
+
+        if (inv.gridParent == null)
+            return EventSystem.current.IsPointerOverGameObject();
+
+        var ped = new PointerEventData(EventSystem.current) { position = Input.mousePosition };
+        var results = new List<RaycastResult>(8);
+        EventSystem.current.RaycastAll(ped, results);
+        if (results.Count == 0)
+            return false;
+
+        Transform t = results[0].gameObject.transform;
+        return t == inv.gridParent || t.IsChildOf(inv.gridParent);
+    }
+
+    /// <summary>
+    /// 命中物体或其父级上存在 <see cref="ScenePlacementTarget"/>，且该组件所在物体带 <see cref="interactableTag"/>。
+    /// 用于跳过鱼缸内已放置鱼等同层碰撞体（常为 Untagged）。
+    /// </summary>
+    private bool IsValidPlacementHit(GameObject hitGo)
+    {
+        if (hitGo == null)
+            return false;
+        ScenePlacementTarget st = hitGo.GetComponentInParent<ScenePlacementTarget>();
+        if (st == null)
+            return false;
+        return st.gameObject.CompareTag(interactableTag);
+    }
+
     private GameObject RaycastTarget(Vector3 screenPosition)
     {
         Ray ray = targetCamera.ScreenPointToRay(screenPosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit3D, rayDistance, interactLayerMask))
-            return hit3D.collider.gameObject;
+        var candidates = new List<(float dist, GameObject go)>(12);
 
-        // 2D：不要用 ScreenToWorldPoint(mouse)（z 常为 0）+ 零长度 Raycast，会几乎永远点不中。
-        // 使用与相机射线一致的 GetRayIntersection，可命中任意深度平面上的 BoxCollider2D / PolygonCollider2D。
-        RaycastHit2D hit2D = Physics2D.GetRayIntersection(ray, rayDistance, interactLayerMask);
-        if (hit2D.collider != null)
-            return hit2D.collider.gameObject;
+        foreach (RaycastHit h in Physics.RaycastAll(ray, rayDistance, interactLayerMask))
+        {
+            if (h.collider != null)
+                candidates.Add((h.distance, h.collider.gameObject));
+        }
+
+        foreach (RaycastHit2D h in Physics2D.GetRayIntersectionAll(ray, rayDistance, interactLayerMask))
+        {
+            if (h.collider != null)
+                candidates.Add((h.distance, h.collider.gameObject));
+        }
+
+        if (candidates.Count > 0)
+        {
+            candidates.Sort((a, b) => a.dist.CompareTo(b.dist));
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                GameObject go = candidates[i].go;
+                if (IsValidPlacementHit(go))
+                    return go;
+            }
+        }
 
         // 备用：正交相机下用 OverlapPoint（部分情况下 GetRayIntersection 与 Collider 深度组合仍可能漏检）
         Vector3 sp = screenPosition;
@@ -110,7 +162,7 @@ public class SceneInteractItemPlacer : MonoBehaviour
             sp.z = targetCamera.nearClipPlane;
         Vector3 world = targetCamera.ScreenToWorldPoint(sp);
         Collider2D overlap = Physics2D.OverlapPoint(world, interactLayerMask);
-        if (overlap != null)
+        if (overlap != null && IsValidPlacementHit(overlap.gameObject))
             return overlap.gameObject;
 
         return null;

@@ -1,4 +1,5 @@
 using System.Collections;
+using NodeCanvas.DialogueTrees.UI.Examples;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -25,6 +26,8 @@ public class Countdown30s : MonoBehaviour
     public Image bottomSpriteImage;
 
     [Header("倒计时结束时")]
+    [Tooltip("进死亡结局前先关闭的对话 UI 根物体（例如 @DialogueUGUI）。留空则自动查找当前已加载场景里所有 DialogueUGUI。")]
+    public GameObject[] dialogueUguiRootsToDisable;
     [Tooltip("倒计时结束后要激活的死亡结局对象。")]
     public GameObject deathEndingObject;
     [Tooltip("倒计时结束后要禁用的玩家控制脚本。")]
@@ -156,6 +159,8 @@ public class Countdown30s : MonoBehaviour
 
     void ApplyFailureOutcome()
     {
+        DisableDialogueUgui();
+
         if (deathEndingObject != null)
         {
             deathEndingObject.SetActive(true);
@@ -188,6 +193,27 @@ public class Countdown30s : MonoBehaviour
                 if (extraInputScriptsToDisable[i] != null)
                     extraInputScriptsToDisable[i].enabled = false;
             }
+        }
+    }
+
+    void DisableDialogueUgui()
+    {
+        if (dialogueUguiRootsToDisable != null && dialogueUguiRootsToDisable.Length > 0)
+        {
+            for (int i = 0; i < dialogueUguiRootsToDisable.Length; i++)
+            {
+                if (dialogueUguiRootsToDisable[i] != null)
+                    dialogueUguiRootsToDisable[i].SetActive(false);
+            }
+
+            return;
+        }
+
+        DialogueUGUI[] all = Object.FindObjectsOfType<DialogueUGUI>(true);
+        for (int i = 0; i < all.Length; i++)
+        {
+            if (all[i] != null)
+                all[i].gameObject.SetActive(false);
         }
     }
 }

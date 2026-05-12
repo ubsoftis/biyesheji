@@ -18,6 +18,9 @@ public class ItemSO : UnityEngine.ScriptableObject
 {
     public string itemName = "New Item";  // 物品名称
     public Sprite icon = null;            // 物品图标
+    [Header("背包格子内图标")]
+    [Tooltip("背包格子内图标 RectTransform 的宽高（sizeDelta，单位与 UI 一致）。\n(0,0)：宽高都用格子预制体默认；\n某一轴填 ≤0：该轴沿用预制体默认，另一轴用你填的像素，便于单独拉长或压扁以匹配图标长宽比。")]
+    public Vector2 iconSlotSizeDelta;
     public ItemType itemType;             // 物品类型
     public int maxStack = 1;              // 最大堆叠数（如药水可叠99，装备只能叠1）
     public bool isStackable => maxStack > 1; // 是否可堆叠

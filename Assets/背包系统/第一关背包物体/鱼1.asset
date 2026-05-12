@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: "\u9C7C1"
   icon: {fileID: 21300000, guid: ec035d4bdc3c4de468b8fe8f3f563399, type: 3}
+  iconSlotSizeDelta: {x: 80, y: 40}
   itemType: 0
   maxStack: 1
   description: "\u6761\u4EF61:\u5C06\u9C7C\u7F38\u5185\u751F\u7269\u79FB\u9664\u81F3\u539F\u672C\u4E00\u534A\u53CA\u4EE5\u4E0B\u4E00-\u653E\u5165\u80CC\u5305"
   placedPrefab: {fileID: 249725644597803198, guid: 52e7998d083c3724791dbd7627c26ce5,
     type: 3}
-  consumeFromInventoryWhenPlaced: 0
+  consumeFromInventoryWhenPlaced: 1
