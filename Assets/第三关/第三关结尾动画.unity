@@ -12796,6 +12796,10 @@ MonoBehaviour:
   enableOpeningFade: 1
   openingFadeTime: 2
   delayAfterOpeningFade: 1
+  pos3SoundClip: {fileID: 8300000, guid: ae9dac2ae25a70c4b83d4e1ce5e278ba, type: 3}
+  pos3SoundVolume: 0.74
+  pos3SoundDelay: 9
+  pos3SoundLoop: 0
   glitchOverlay: {fileID: 1329889443}
   glitchStripContainer: {fileID: 1017714402}
   glitchBlurOverlay: {fileID: 1090408159}
@@ -15492,6 +15496,7 @@ MonoBehaviour:
   restartIfTriggeredAgain: 1
   uiText: {fileID: 1898580933}
   bottomSpriteImage: {fileID: 880377025}
+  dialogueUguiRootsToDisable: []
   deathEndingObject: {fileID: 1689955147}
   playerControlScriptsToDisable: []
   playerRootToDisable: {fileID: 0}

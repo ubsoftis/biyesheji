@@ -75,6 +75,7 @@
     <Compile Include="Assets\HDMFrame\Editor\FrameInfo.cs" />
     <Compile Include="Assets\HDMFrame\Editor\FrameCheck.cs" />
     <Compile Include="Assets\Editor\ImageEffects\ColorCorrectionLookupEditor.cs" />
+    <Compile Include="Assets\背包系统\Editor\ItemSOEditor.cs" />
     <Compile Include="Assets\Editor\ImageEffects\SunShaftsEditor.cs" />
     <Compile Include="Assets\Editor\ImageEffects\DepthOfFieldEditor.cs" />
     <Compile Include="Assets\Editor\ImageEffects\BloomAndFlaresEditor.cs" />

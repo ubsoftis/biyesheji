@@ -48,12 +48,23 @@ public class CubeAnimationController : MonoBehaviour
     [Tooltip("黑屏结束后等多少秒再开始动画")]
     public float delayAfterOpeningFade = 0.5f;
 
+    [Header("==== 音效设置 ====")]
+    [Tooltip("正方体在position3时触发的音效（拖入MP3/WAV等）")]
+    public AudioClip pos3SoundClip;
+    [Tooltip("音效音量（0~1）")]
+    [Range(0f, 1f)]
+    public float pos3SoundVolume = 1f;
+    [Tooltip("音效延迟播放（秒，0=立刻播放）")]
+    public float pos3SoundDelay = 0f;
+    [Tooltip("是否循环播放")]
+    public bool pos3SoundLoop = false;
+
     [Header("==== 故障效果设置 ====")]
     [Tooltip("故障覆盖层Image（全屏，初始alpha=0）")]
     public Image glitchOverlay;
     [Tooltip("故障条纹覆盖层容器（空RectTransform，初始关闭）")]
     public RectTransform glitchStripContainer;
-    [Tooltip("模糊覆盖层Image（全屏，半透明灰白，初始alpha=0）")]
+    [Tooltip("模糊覆盖层Image（全屏，半透明灰白,初始alpha=0）")]
     public Image glitchBlurOverlay;
     [Tooltip("模糊强度（0~1，越大画面越朦胧）")]
     [Range(0f, 1f)]
@@ -88,11 +99,13 @@ public class CubeAnimationController : MonoBehaviour
     public bool playOnStart = true;
 
     private float accumulatedZ = 0f;
+    private AudioSource pos3AudioSource; // 自动创建的AudioSource
 
     void Start()
     {
         SetupCameras();
         InitOverlays();
+        InitAudio();
 
         if (cube != null && pos3 != null)
         {
@@ -135,9 +148,36 @@ public class CubeAnimationController : MonoBehaviour
         if (blackOverlay != null)
         {
             Color c = blackOverlay.color;
-            c.a = enableOpeningFade ? 1f : 0f;  // 启用开场则一开始全黑
+            c.a = enableOpeningFade ? 1f : 0f;
             blackOverlay.color = c;
         }
+    }
+
+    void InitAudio()
+    {
+        // 自动添加AudioSource组件（如果没有）
+        pos3AudioSource = GetComponent<AudioSource>();
+        if (pos3AudioSource == null)
+            pos3AudioSource = gameObject.AddComponent<AudioSource>();
+
+        pos3AudioSource.playOnAwake = false;
+    }
+
+    /// <summary>
+    /// 播放position3音效
+    /// </summary>
+    void PlayPos3Sound()
+    {
+        if (pos3SoundClip == null || pos3AudioSource == null) return;
+
+        pos3AudioSource.clip = pos3SoundClip;
+        pos3AudioSource.volume = pos3SoundVolume;
+        pos3AudioSource.loop = pos3SoundLoop;
+
+        if (pos3SoundDelay > 0)
+            pos3AudioSource.PlayDelayed(pos3SoundDelay);
+        else
+            pos3AudioSource.Play();
     }
 
     public void PlayAnimation()
@@ -154,6 +194,9 @@ public class CubeAnimationController : MonoBehaviour
             yield return StartCoroutine(FadeFromBlack());
             yield return new WaitForSeconds(delayAfterOpeningFade);
         }
+
+        // === 🔊 正方体在position3，触发音效 ===
+        PlayPos3Sound();
 
         // === UI 消散（与移动同时）===
         StartCoroutine(FadeAndScatterUI());
@@ -184,12 +227,9 @@ public class CubeAnimationController : MonoBehaviour
         yield return new WaitForSeconds(pauseAt1);
 
         // === 故障效果 + 黑屏（同时进行）===
-        // 启动黑屏（带延迟）但不等待，与故障并行
         StartCoroutine(FadeToBlackDelayed(blackFadeStartDelay));
         yield return StartCoroutine(GlitchEffect());
 
-        // 确保黑屏完成（如果故障比黑屏短）
-        // 计算黑屏总用时（延迟 + 淡入）
         float blackTotalTime = blackFadeStartDelay + blackFadeTime;
         float remainTime = blackTotalTime - glitchDuration;
         if (remainTime > 0)
@@ -280,7 +320,6 @@ public class CubeAnimationController : MonoBehaviour
             yield return null;
         }
 
-        // 清理（注意：黑屏不清理，因为可能还在淡入或者已经达到目标）
         if (glitchStripContainer != null)
             glitchStripContainer.gameObject.SetActive(false);
         if (glitchOverlay != null)
