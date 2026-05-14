@@ -20,8 +20,15 @@ public class OpeningFadeIn : MonoBehaviour
     [Header("==== 自动播放 ====")]
     public bool playOnStart = true;
 
+    void Awake()
+    {
+        BringToFront();
+    }
+
     void Start()
     {
+        BringToFront();
+
         // 初始化：一开始全黑
         if (blackOverlay != null)
         {
@@ -33,6 +40,13 @@ public class OpeningFadeIn : MonoBehaviour
 
         if (playOnStart)
             PlayFadeIn();
+    }
+
+    /// <summary>置于父 Canvas 子节点最末，避免被后添加的 UI 盖住。</summary>
+    void BringToFront()
+    {
+        if (transform.parent != null)
+            transform.SetAsLastSibling();
     }
 
     /// <summary>
