@@ -11,7 +11,11 @@ public class StartDialogue : MonoBehaviour
     public void Talk()
     {
         if (dialogueTree == null)
-            dialogueTree = GetComponent<DialogueTreeController>();
+        {
+            dialogueTree = GetComponent<DialogueTreeController>()
+                ?? GetComponentInParent<DialogueTreeController>()
+                ?? GetComponentInChildren<DialogueTreeController>(true);
+        }
         if (dialogueTree != null)
             dialogueTree.StartDialogue();
         else

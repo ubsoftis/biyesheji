@@ -10,6 +10,8 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
 
     public class DialogueUGUI : MonoBehaviour, IPointerClickHandler
     {
+        /// <summary>由主工程脚本订阅（NodeCanvas 程序集无法引用 Assembly-CSharp 里的 AudioManager）。</summary>
+        public static System.Action<AudioClip, float> TypingSoundPlayHandler;
 
         public Locales language;
 
@@ -49,6 +51,8 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
         private AudioSource _localSource;
         private AudioSource localSource => _localSource != null ? _localSource : _localSource = gameObject.AddComponent<AudioSource>();
 
+        /// <summary>头像与 portraitAnimSource 的逐帧同步；新字幕开始前必须停掉旧的，否则会串到上一位演员的 Sprite。</summary>
+        Coroutine _portraitSyncRoutine;
 
         private bool anyKeyDown;
         public void OnPointerClick(PointerEventData eventData) => anyKeyDown = true;
@@ -91,6 +95,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
             subtitlesGroup.gameObject.SetActive(false);
             optionsGroup.gameObject.SetActive(false);
             StopAllCoroutines();
+            _portraitSyncRoutine = null;
             playSource?.Stop();
         }
 
@@ -106,6 +111,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
                 cachedButtons = null;
             }
             StopAllCoroutines();
+            _portraitSyncRoutine = null;
             playSource?.Stop();
         }
 
@@ -148,25 +154,19 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
                 if (animSourceAnim != null) animSourceAnim.Play(0, -1, 0f);
             }
 
-            // 每帧同步动画帧（单独写方法，不阻塞字幕代码）
-            StartCoroutine(SyncAnimToUI(animSourceRender));
+            // 必须停掉上一条字幕的同步协程，否则会沿用上一演员的 SpriteRenderer，出现「同事说话播主角动画」
+            if ( _portraitSyncRoutine != null ) {
+                StopCoroutine(_portraitSyncRoutine);
+                _portraitSyncRoutine = null;
+            }
+            if ( animSourceRender != null )
+                _portraitSyncRoutine = StartCoroutine(RunPortraitSpriteSync(animSourceRender));
 
             // 无动画/非主角：恢复原版静态头像逻辑
             if (animSourceRender == null && curActor != null)
             {
                 actorPortrait.sprite = curActor.portraitSprite;
                 actorPortrait.gameObject.SetActive(curActor.portraitSprite != null);
-            }
-
-            // 动画同步协程：单独执行，和字幕代码并行
-            IEnumerator SyncAnimToUI(SpriteRenderer sourceRender)
-            {
-                // 对话框打开时，持续每帧同步
-                while (subtitlesGroup.gameObject.activeSelf && sourceRender != null)
-                {
-                    actorPortrait.sprite = sourceRender.sprite;
-                    yield return null; // 等待一帧，不阻塞主线程
-                }
             }
 
             //上面是我黏贴的
@@ -204,6 +204,10 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
                     }
 
                     if ( subtitlesGroup.gameObject.activeSelf == false ) {
+                        if ( _portraitSyncRoutine != null ) {
+                            StopCoroutine(_portraitSyncRoutine);
+                            _portraitSyncRoutine = null;
+                        }
                         yield break;
                     }
 
@@ -237,15 +241,34 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
             }
 
             yield return null;
+            if ( _portraitSyncRoutine != null ) {
+                StopCoroutine(_portraitSyncRoutine);
+                _portraitSyncRoutine = null;
+            }
             subtitlesGroup.gameObject.SetActive(false);
             info.Continue();
+        }
+
+        IEnumerator RunPortraitSpriteSync(SpriteRenderer sourceRender) {
+            try {
+                while ( subtitlesGroup.gameObject.activeSelf && sourceRender != null ) {
+                    actorPortrait.sprite = sourceRender.sprite;
+                    yield return null;
+                }
+            } finally {
+                _portraitSyncRoutine = null;
+            }
         }
 
         void PlayTypeSound() {
             if ( typingSounds.Count > 0 ) {
                 var sound = typingSounds[Random.Range(0, typingSounds.Count)];
                 if ( sound != null ) {
-                    localSource.PlayOneShot(sound, Random.Range(0.6f, 1f));
+                    float vol = Random.Range(0.6f, 1f);
+                    if ( TypingSoundPlayHandler != null )
+                        TypingSoundPlayHandler(sound, vol);
+                    else
+                        localSource.PlayOneShot(sound, vol);
                 }
             }
         }
