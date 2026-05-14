@@ -87,11 +87,25 @@ public class AudioManager : MonoBehaviour
     {
         if (_sfxOneShotSource != null)
             return;
-        _sfxOneShotSource = GetComponent<AudioSource>();
+
+        // 必须与 BackgroundMusicPlayer 等使用的 BGM AudioSource 分开：同一物体上若共用一个
+        // AudioSource，长循环 BGM 与 PlayOneShot 叠在一起容易听不到或表现异常。
+        const string childName = "SfxOneShotPlayer";
+        Transform child = transform.Find(childName);
+        if (child == null)
+        {
+            var go = new GameObject(childName);
+            go.transform.SetParent(transform, false);
+            child = go.transform;
+        }
+
+        _sfxOneShotSource = child.GetComponent<AudioSource>();
         if (_sfxOneShotSource == null)
-            _sfxOneShotSource = gameObject.AddComponent<AudioSource>();
+            _sfxOneShotSource = child.gameObject.AddComponent<AudioSource>();
+
         _sfxOneShotSource.playOnAwake = false;
         _sfxOneShotSource.loop = false;
+        _sfxOneShotSource.spatialBlend = 0f;
         _sfxOneShotSource.volume = 1f;
         if (sfxOneShotOutputMixerGroup != null)
             _sfxOneShotSource.outputAudioMixerGroup = sfxOneShotOutputMixerGroup;
@@ -149,6 +163,8 @@ public class AudioManager : MonoBehaviour
         if (clip == null)
             return;
         EnsureSfxOneShotSource();
+        if (sfxOneShotOutputMixerGroup != null)
+            _sfxOneShotSource.outputAudioMixerGroup = sfxOneShotOutputMixerGroup;
         float v = Mathf.Clamp01(volumeScale * GetEffectiveSfxVolume(sfxTag));
         _sfxOneShotSource.PlayOneShot(clip, v);
     }
@@ -182,6 +198,7 @@ public class AudioManager : MonoBehaviour
         }
 
         ApplyOneToMixer(ch, linear01);
+        VolumesReapplied?.Invoke();
     }
 
     void PushAllToMixerFromCache()

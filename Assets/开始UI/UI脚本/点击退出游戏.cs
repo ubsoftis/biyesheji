@@ -7,23 +7,31 @@ public class ClickSignFadeQuit : MonoBehaviour
     public Image blackMask;
     public float fadeSpeed = 1f;
 
-    private bool isFading = false;
+    [Header("音效（可选，走 AudioManager 总 Sfx）")]
+    [Tooltip("点开始淡出时播一次；不拖则不播")]
+    public AudioClip clickSfx;
+    [Range(0f, 2f)]
+    public float sfxVolumeScale = 1f;
+
+    bool isFading = false;
 
     void Update()
     {
-        // 修正：使用正确的变量名
         if (UILockSignManager.uiIsOpen)
             return;
 
         if (!isFading && Input.GetMouseButtonDown(0))
         {
+            if (Camera.main == null)
+                return;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                if (hit.collider.gameObject == gameObject)
+                Transform hitT = hit.collider.transform;
+                if (hitT == transform || hitT.IsChildOf(transform))
                 {
                     isFading = true;
+                    PlayClickSfx();
                 }
             }
         }
@@ -36,10 +44,15 @@ public class ClickSignFadeQuit : MonoBehaviour
             blackMask.color = col;
 
             if (col.a >= 1f)
-            {
                 QuitGame();
-            }
         }
+    }
+
+    void PlayClickSfx()
+    {
+        if (clickSfx == null || AudioManager.Instance == null)
+            return;
+        AudioManager.Instance.PlaySfx2D(clickSfx, null, sfxVolumeScale);
     }
 
     void QuitGame()

@@ -10,6 +10,11 @@ public class ChapterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [Header("场景跳转")]
     public int sceneIndex = 0;
 
+    [Header("音效（可选）")]
+    public AudioClip clickSfx;
+    [Tooltip("Sfx 子标签，留空仅用总 Sfx")]
+    public string sfxTag = "";
+
     [Header("文件夹图片组 - 关闭状态")]
     public List<Image> closedImages = new List<Image>();
 
@@ -225,6 +230,7 @@ public class ChapterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if ((!entranceComplete && enableEntrance) || isTransitioning) return;
 
+        PlaySfxIfConfigured(clickSfx);
         StartCoroutine(LoadSceneWithFade());
     }
 
@@ -443,6 +449,14 @@ public class ChapterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         // ===== 加载场景 =====
         SceneManager.LoadScene(sceneIndex);
+    }
+
+    void PlaySfxIfConfigured(AudioClip clip)
+    {
+        if (clip == null || AudioManager.Instance == null)
+            return;
+        string tag = string.IsNullOrWhiteSpace(sfxTag) ? null : sfxTag.Trim();
+        AudioManager.Instance.PlaySfx2D(clip, tag);
     }
 
     #endregion

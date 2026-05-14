@@ -468,6 +468,8 @@ MonoBehaviour:
   panelCanvasGroup: {fileID: 98387914}
   fadeDuration: 0.3
   closeButton: {fileID: 1692734694}
+  clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
+  sfxTag: 
 --- !u!1 &110195459
 GameObject:
   m_ObjectHideFlags: 0
@@ -3045,6 +3047,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   showDebugInfo: 1
+  clickSfx: {fileID: 8300000, guid: 56b48e8981eb6154b8b850aec723e453, type: 3}
+  volumeScale: 1
 --- !u!1 &488993486
 GameObject:
   m_ObjectHideFlags: 0
@@ -3934,6 +3938,8 @@ MonoBehaviour:
   hoverScale: 2.28
   scaleSpeed: 9.81
   hoverText: {fileID: 468031293}
+  clickSfx: {fileID: 8300000, guid: 93ff269c19f5706409d6b103590d8049, type: 3}
+  sfxTag: 
 --- !u!114 &589193577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5061,6 +5067,8 @@ MonoBehaviour:
   blackMask: {fileID: 1740517902}
   targetSceneIndex: 0
   fadeSpeed: 1.2
+  clickSfx: {fileID: 8300000, guid: eb721e7d4ec6ae54395ace74692431bf, type: 3}
+  sfxVolumeScale: 1
 --- !u!1 &854292070
 GameObject:
   m_ObjectHideFlags: 0
@@ -5163,33 +5171,6 @@ MonoBehaviour:
   startScale: {x: 0, y: 0, z: 0}
   endScale: {x: 1, y: 1, z: 1}
   curveType: 1
---- !u!1 &899060070 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 968110291956441189, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1076165464}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &899060074
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 899060070}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.052854538, y: 0.5265503, z: 0.999756}
-  m_Center: {x: -0.0009870529, y: 0.0011595488, z: 0.00012207033}
 --- !u!1 &901072116
 GameObject:
   m_ObjectHideFlags: 0
@@ -5513,6 +5494,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneIndex: 3
+  clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
+  sfxTag: 
   closedImages:
   - {fileID: 736492258}
   - {fileID: 1032482269}
@@ -5819,6 +5802,8 @@ MonoBehaviour:
   breathSpeed: 0.4
   hoverScale: 1.1
   scaleSpeed: 8
+  clickSfx: {fileID: 8300000, guid: 93ff269c19f5706409d6b103590d8049, type: 3}
+  sfxTag: 
 --- !u!114 &982881356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6673,11 +6658,15 @@ PrefabInstance:
       value: button3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 968110291956441189, guid: 7de6ce81d7d07be47aea2e5894c5bec1, type: 3}
+    - {fileID: 8101979955058508080, guid: 7de6ce81d7d07be47aea2e5894c5bec1, type: 3}
+    - {fileID: 8659401558856586910, guid: 7de6ce81d7d07be47aea2e5894c5bec1, type: 3}
+    - {fileID: 150957421909095595, guid: 7de6ce81d7d07be47aea2e5894c5bec1, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2039184618735476701, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
         type: 3}
-      insertIndex: 0
+      insertIndex: -1
       addedObject: {fileID: 906646205}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1659421671353435495, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
@@ -6687,27 +6676,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1659421671353435495, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1720711304}
-    - targetCorrespondingSourceObject: {fileID: 1659421671353435495, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1720711308}
-    - targetCorrespondingSourceObject: {fileID: 8101979955058508080, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1366145758}
-    - targetCorrespondingSourceObject: {fileID: 968110291956441189, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 899060074}
-    - targetCorrespondingSourceObject: {fileID: 8659401558856586910, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1376738888}
-    - targetCorrespondingSourceObject: {fileID: 150957421909095595, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1614478832}
   m_SourcePrefab: {fileID: 100100000, guid: 7de6ce81d7d07be47aea2e5894c5bec1, type: 3}
 --- !u!1 &1095445595
 GameObject:
@@ -7653,6 +7622,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   channel: 0
   sfxTag: 
+  sliderTickSfx: {fileID: 8300000, guid: 5d3613a99f5e0ac43a2acdfd87d61a4e, type: 3}
+  sliderReleaseSfx: {fileID: 0}
+  sliderTickSfxTag: 
 --- !u!1 &1274285063
 GameObject:
   m_ObjectHideFlags: 0
@@ -8299,6 +8271,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneIndex: 0
+  clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
+  sfxTag: 
   closedImages:
   - {fileID: 284846391}
   - {fileID: 823903006}
@@ -8400,33 +8374,6 @@ Transform:
   - {fileID: 1425878613}
   m_Father: {fileID: 1320202755}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1366145754 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8101979955058508080, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1076165464}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1366145758
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366145754}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.05285455, y: 0.5265503, z: 0.999756}
-  m_Center: {x: -0.0009851458, y: 0.0011594296, z: 0.00012207033}
 --- !u!1 &1367905591
 GameObject:
   m_ObjectHideFlags: 0
@@ -8501,6 +8448,9 @@ MonoBehaviour:
   blackScreenDuration: 0.17
   panelCanvasGroup: {fileID: 1367905596}
   fadeDuration: 0.26
+  tabSwitchSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
+  closePanelSfx: {fileID: 0}
+  sfxTag: 
 --- !u!114 &1367905594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8577,33 +8527,6 @@ MonoBehaviour:
   startScale: {x: 0, y: 0, z: 0}
   endScale: {x: 1, y: 1, z: 1}
   curveType: 1
---- !u!1 &1376738884 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8659401558856586910, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1076165464}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1376738888
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1376738884}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.05285455, y: 0.5265503, z: 0.999756}
-  m_Center: {x: -0.0009870532, y: 0.0011594296, z: 0.00012207033}
 --- !u!1 &1387307568
 GameObject:
   m_ObjectHideFlags: 0
@@ -8896,6 +8819,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   channel: 3
   sfxTag: 
+  sliderTickSfx: {fileID: 8300000, guid: 5d3613a99f5e0ac43a2acdfd87d61a4e, type: 3}
+  sliderReleaseSfx: {fileID: 0}
+  sliderTickSfxTag: 
 --- !u!1 &1417544936
 GameObject:
   m_ObjectHideFlags: 0
@@ -9453,37 +9379,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1455495463}
   m_CullTransparentMesh: 1
---- !u!1 &1487981153
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1487981154}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1487981154
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1487981153}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 872.822, y: 465.4137, z: 1.2746985}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1492556559
 GameObject:
   m_ObjectHideFlags: 0
@@ -10258,6 +10153,8 @@ MonoBehaviour:
   targetUI: {fileID: 98387912}
   startHidden: 1
   closeOtherUI: 1
+  toggleClickSfx: {fileID: 8300000, guid: eb721e7d4ec6ae54395ace74692431bf, type: 3}
+  sfxVolumeScale: 1
 --- !u!65 &1586763792
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10560,33 +10457,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1614478828 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 150957421909095595, guid: 7de6ce81d7d07be47aea2e5894c5bec1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1076165464}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1614478832
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1614478828}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.052854538, y: 0.5265503, z: 0.999756}
-  m_Center: {x: -0.0009870529, y: 0.001159668, z: 0.00012207033}
 --- !u!1 &1645257025
 GameObject:
   m_ObjectHideFlags: 0
@@ -10891,6 +10761,8 @@ MonoBehaviour:
   hoverScale: 2.28
   scaleSpeed: 9.81
   hoverText: {fileID: 1819390121}
+  clickSfx: {fileID: 0}
+  sfxTag: 
 --- !u!114 &1692734694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11282,21 +11154,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1076165464}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1720711304
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1720711302}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5353383862599c74b834a2feec7fe64a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allowX: 0
-  allowY: 0
-  rotationSpeed: 20
 --- !u!65 &1720711305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11441,6 +11298,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   channel: 2
   sfxTag: 
+  sliderTickSfx: {fileID: 8300000, guid: 5d3613a99f5e0ac43a2acdfd87d61a4e, type: 3}
+  sliderReleaseSfx: {fileID: 0}
+  sliderTickSfxTag: 
 --- !u!1 &1737883156
 GameObject:
   m_ObjectHideFlags: 0
@@ -12777,6 +12637,9 @@ MonoBehaviour:
   options:
   - {fileID: 1744604369}
   - {fileID: 49899114}
+  listToggleSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
+  optionSelectSfx: {fileID: 8300000, guid: 93ff269c19f5706409d6b103590d8049, type: 3}
+  sfxTag: 
 --- !u!1 &1895946227
 GameObject:
   m_ObjectHideFlags: 0
@@ -12882,6 +12745,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   channel: 1
   sfxTag: 
+  sliderTickSfx: {fileID: 8300000, guid: 5d3613a99f5e0ac43a2acdfd87d61a4e, type: 3}
+  sliderReleaseSfx: {fileID: 0}
+  sliderTickSfxTag: 
 --- !u!1 &1907257149
 GameObject:
   m_ObjectHideFlags: 0
@@ -13656,6 +13522,8 @@ MonoBehaviour:
   targetUI: {fileID: 1367905591}
   startHidden: 1
   closeOtherUI: 1
+  toggleClickSfx: {fileID: 8300000, guid: eb721e7d4ec6ae54395ace74692431bf, type: 3}
+  sfxVolumeScale: 1
 --- !u!65 &2047568767
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13881,6 +13749,9 @@ MonoBehaviour:
   options:
   - {fileID: 1847265490}
   - {fileID: 1262257821}
+  listToggleSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
+  optionSelectSfx: {fileID: 8300000, guid: 93ff269c19f5706409d6b103590d8049, type: 3}
+  sfxTag: 
 --- !u!1 &2057972816
 GameObject:
   m_ObjectHideFlags: 0
@@ -13976,6 +13847,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blackMask: {fileID: 1740517902}
   fadeSpeed: 1.2
+  clickSfx: {fileID: 8300000, guid: eb721e7d4ec6ae54395ace74692431bf, type: 3}
+  sfxVolumeScale: 1
 --- !u!65 &2070247943
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14420,6 +14293,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneIndex: 1
+  clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
+  sfxTag: 
   closedImages:
   - {fileID: 922814940}
   - {fileID: 1304764054}
@@ -14544,6 +14419,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneIndex: 2
+  clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
+  sfxTag: 
   closedImages:
   - {fileID: 327453585}
   - {fileID: 1199302147}
@@ -14922,4 +14799,3 @@ SceneRoots:
   - {fileID: 462867530}
   - {fileID: 1513846373}
   - {fileID: 315404780}
-  - {fileID: 1487981154}

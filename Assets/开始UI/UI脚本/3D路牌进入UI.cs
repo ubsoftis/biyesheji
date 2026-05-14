@@ -9,7 +9,13 @@ public class Click3DToToggleUI : MonoBehaviour
     public bool startHidden = true;
     public bool closeOtherUI = true;
 
-    private bool isUIVisible = false;
+    [Header("音效（可选，走 AudioManager 总 Sfx）")]
+    [Tooltip("成功点开/关 UI 时播放；不拖则不播")]
+    public AudioClip toggleClickSfx;
+    [Range(0f, 2f)]
+    public float sfxVolumeScale = 1f;
+
+    bool isUIVisible = false;
 
     void Start()
     {
@@ -28,14 +34,15 @@ public class Click3DToToggleUI : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            if (Camera.main == null)
+                return;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                if (hit.collider.gameObject == gameObject)
-                {
+                // 允许 Collider 挂在子物体上（脚本在父级路牌上时常用）
+                Transform hitT = hit.collider.transform;
+                if (hitT == transform || hitT.IsChildOf(transform))
                     ToggleUI();
-                }
             }
         }
     }
@@ -49,6 +56,9 @@ public class Click3DToToggleUI : MonoBehaviour
 
         isUIVisible = !isUIVisible;
         targetUI.SetActive(isUIVisible);
+
+        if (toggleClickSfx != null && AudioManager.Instance != null)
+            AudioManager.Instance.PlaySfx2D(toggleClickSfx, null, sfxVolumeScale);
     }
 
     void CloseAllMenuUI()

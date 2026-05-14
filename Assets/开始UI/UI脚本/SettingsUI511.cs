@@ -34,6 +34,13 @@ public class SettingsUI : MonoBehaviour
     public CanvasGroup panelCanvasGroup;
     public float fadeDuration = 0.3f;
 
+    [Header("音效（可选）")]
+    public AudioClip tabSwitchSfx;
+    [Tooltip("关闭按钮音效；不填则用 tabSwitchSfx")]
+    public AudioClip closePanelSfx;
+    [Tooltip("Sfx 子标签，留空仅用总 Sfx")]
+    public string sfxTag = "";
+
     private int currentSelected = 0;
     private Image[] buttonImages;
     private Color[] targetColors;
@@ -148,6 +155,9 @@ public class SettingsUI : MonoBehaviour
 
     public void SwitchPanel(int index)
     {
+        if (index != currentSelected)
+            PlaySfxIfConfigured(tabSwitchSfx);
+
         currentSelected = index;
 
         // 隐藏所有面板
@@ -175,6 +185,7 @@ public class SettingsUI : MonoBehaviour
 
     public void Close()
     {
+        PlaySfxIfConfigured(closePanelSfx != null ? closePanelSfx : tabSwitchSfx);
         StartCoroutine(CloseWithEffect());
     }
 
@@ -228,5 +239,13 @@ public class SettingsUI : MonoBehaviour
         {
             blackScreen.color = new Color(0, 0, 0, 0);
         }
+    }
+
+    void PlaySfxIfConfigured(AudioClip clip)
+    {
+        if (clip == null || AudioManager.Instance == null)
+            return;
+        string tag = string.IsNullOrWhiteSpace(sfxTag) ? null : sfxTag.Trim();
+        AudioManager.Instance.PlaySfx2D(clip, tag);
     }
 }

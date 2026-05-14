@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public enum VolumeChannel
 {
@@ -16,12 +17,20 @@ public enum VolumeChannel
 /// 与常驻 <see cref="AudioManager"/> 同步；切关后管理器会触发 <see cref="AudioManager.VolumesReapplied"/> 刷新滑条。
 /// </summary>
 [RequireComponent(typeof(Slider))]
-public class VolumeChannelSlider : MonoBehaviour
+public class VolumeChannelSlider : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public VolumeChannel channel = VolumeChannel.Master;
 
     [Tooltip("仅当 channel 为 Sfx 时生效：填写子标签名（如 UI、战斗）；留空表示控制总 Sfx 音量")]
     public string sfxTag = "";
+
+    [Header("滑条音效（仅按下与松开各播一次）")]
+    [Tooltip("按下滑条时播放")]
+    public AudioClip sliderTickSfx;
+    [Tooltip("松开时播放；不填则与按下使用同一段")]
+    public AudioClip sliderReleaseSfx;
+    [Tooltip("仅控制「滑条音效」播放时的 Sfx 子标签；留空只用总 Sfx。与上方控制音量的 sfxTag 无关")]
+    public string sliderTickSfxTag = "";
 
     Slider _slider;
     bool _internal;
@@ -74,5 +83,28 @@ public class VolumeChannelSlider : MonoBehaviour
             AudioManager.Instance.SetSfxTagLinear(sfxTag, value, savePrefs: true);
         else
             AudioManager.Instance.SetChannelLinear(channel, value, savePrefs: true);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (_internal || _slider == null)
+            return;
+        PlaySliderTickIfConfigured(sliderTickSfx);
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (_internal || _slider == null)
+            return;
+        AudioClip clip = sliderReleaseSfx != null ? sliderReleaseSfx : sliderTickSfx;
+        PlaySliderTickIfConfigured(clip);
+    }
+
+    void PlaySliderTickIfConfigured(AudioClip clip)
+    {
+        if (clip == null || AudioManager.Instance == null)
+            return;
+        string tag = string.IsNullOrWhiteSpace(sliderTickSfxTag) ? null : sliderTickSfxTag.Trim();
+        AudioManager.Instance.PlaySfx2D(clip, tag);
     }
 }

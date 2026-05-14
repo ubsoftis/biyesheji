@@ -23,6 +23,13 @@ public class raycastButton : MonoBehaviour
 
     Camera mainCamera;
 
+    void Awake()
+    {
+        // 场景里若从未保存过该字段，Unity 可能把 float 反序列化成 0，导致完全静音
+        if (volumeScale <= 0f)
+            volumeScale = 1f;
+    }
+
     void Start()
     {
         mainCamera = Camera.main;

@@ -20,6 +20,11 @@ public class CloseButton : MonoBehaviour
     [Header("退出按钮")]
     public Button closeButton;
 
+    [Header("音效（可选）")]
+    public AudioClip clickSfx;
+    [Tooltip("Sfx 子标签，留空仅用总 Sfx")]
+    public string sfxTag = "";
+
     void Start()
     {
         if (closeButton != null)
@@ -36,6 +41,7 @@ public class CloseButton : MonoBehaviour
 
     public void Close()
     {
+        PlaySfxIfConfigured(clickSfx);
         StartCoroutine(CloseWithEffect());
     }
 
@@ -96,5 +102,13 @@ public class CloseButton : MonoBehaviour
         {
             blackScreen.color = new Color(0, 0, 0, 0);
         }
+    }
+
+    void PlaySfxIfConfigured(AudioClip clip)
+    {
+        if (clip == null || AudioManager.Instance == null)
+            return;
+        string tag = string.IsNullOrWhiteSpace(sfxTag) ? null : sfxTag.Trim();
+        AudioManager.Instance.PlaySfx2D(clip, tag);
     }
 }

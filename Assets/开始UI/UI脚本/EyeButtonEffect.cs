@@ -35,6 +35,11 @@ public class EyeButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [Header("悬停提示文本")]
     public GameObject hoverText;          // 悬停显示的文本
 
+    [Header("音效（可选）")]
+    public AudioClip clickSfx;
+    [Tooltip("Sfx 子标签，留空仅用总 Sfx")]
+    public string sfxTag = "";
+
     private Vector2 eyeStartPos;          // 眼白初始位置
     private Vector2 pupilStartPos;        // 瞳孔初始位置
     private bool isHovering = false;      // 鼠标是否悬停
@@ -61,6 +66,23 @@ public class EyeButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         // 初始化随机速度
         RandomizeSpeeds();
+
+        var btn = GetComponent<Button>() ?? GetComponentInParent<Button>();
+        if (btn != null)
+            btn.onClick.AddListener(OnEyeButtonClicked);
+    }
+
+    void OnEyeButtonClicked()
+    {
+        PlaySfxIfConfigured(clickSfx);
+    }
+
+    void PlaySfxIfConfigured(AudioClip clip)
+    {
+        if (clip == null || AudioManager.Instance == null)
+            return;
+        string tag = string.IsNullOrWhiteSpace(sfxTag) ? null : sfxTag.Trim();
+        AudioManager.Instance.PlaySfx2D(clip, tag);
     }
 
     void Update()

@@ -21,6 +21,11 @@ public class ControlSwitcher : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public float hoverScale = 1.2f;           // 悬停时放大倍数
     public float scaleSpeed = 8f;             // 放大/缩小速度
 
+    [Header("音效（可选）")]
+    public AudioClip clickSfx;
+    [Tooltip("Sfx 子标签，留空仅用总 Sfx")]
+    public string sfxTag = "";
+
     private bool isShowingKeyboard = true;
     private Image buttonImage;
     private RectTransform buttonRect;
@@ -67,6 +72,7 @@ public class ControlSwitcher : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void Switch()
     {
+        PlaySfxIfConfigured(clickSfx);
         if (isShowingKeyboard)
         {
             ShowGamepad();
@@ -95,5 +101,13 @@ public class ControlSwitcher : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         if (buttonText != null)
             buttonText.text = "切换到键盘";
+    }
+
+    void PlaySfxIfConfigured(AudioClip clip)
+    {
+        if (clip == null || AudioManager.Instance == null)
+            return;
+        string tag = string.IsNullOrWhiteSpace(sfxTag) ? null : sfxTag.Trim();
+        AudioManager.Instance.PlaySfx2D(clip, tag);
     }
 }
