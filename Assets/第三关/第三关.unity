@@ -379,6 +379,10 @@ MonoBehaviour:
     type: 3}
   gridParent: {fileID: 742092332}
   selectedSlotIndex: -1
+  defaultPickupSound: {fileID: 0}
+  defaultSelectSound: {fileID: 0}
+  defaultPlaceSound: {fileID: 0}
+  sfxSource: {fileID: 0}
 --- !u!114 &54738035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,8 +773,8 @@ Transform:
   m_GameObject: {fileID: 82062678}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.2709149, z: 117.548965}
-  m_LocalScale: {x: 0.35, y: 0.35, z: 0.35}
+  m_LocalPosition: {x: -13.80569, y: 0.18069, z: 117.548965}
+  m_LocalScale: {x: 0.31955394, y: 0.3198369, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1060882228}
@@ -2518,8 +2522,8 @@ Transform:
   m_GameObject: {fileID: 362100716}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.09, z: 133.09897}
-  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
+  m_LocalPosition: {x: -13.80569, y: 0.18069, z: 117.548965}
+  m_LocalScale: {x: 0.31955394, y: 0.3198369, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1060882228}
@@ -2570,6 +2574,8 @@ MonoBehaviour:
   retractedJudgeAreaSize: {x: 0, y: 0}
   expandedJudgeAreaSize: {x: 171, y: 0}
   clickNoteToToggle: 1
+  toggleSfx: {fileID: 0}
+  sfxTag: 
   toggleButton: {fileID: 318709023}
 --- !u!114 &371996630
 MonoBehaviour:
@@ -4900,8 +4906,8 @@ Transform:
   m_GameObject: {fileID: 836324338}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.09, z: 132.81897}
-  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
+  m_LocalPosition: {x: -13.80569, y: 0.18069, z: 117.548965}
+  m_LocalScale: {x: 0.31955394, y: 0.3198369, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1060882228}
@@ -9699,8 +9705,8 @@ Transform:
   m_GameObject: {fileID: 1742350033}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.17091492, z: 44.148975}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalPosition: {x: -13.80569, y: 0.18069, z: 117.548965}
+  m_LocalScale: {x: 0.31955394, y: 0.3198369, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1060882228}
@@ -11544,8 +11550,8 @@ Transform:
   m_GameObject: {fileID: 1915999321}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.19091493, z: 123.8}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: -13.80569, y: 0.18069, z: 117.548965}
+  m_LocalScale: {x: 0.31955394, y: 0.3198369, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1060882228}
@@ -11630,8 +11636,8 @@ Transform:
   m_GameObject: {fileID: 1928873333}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.09, z: 130.09897}
-  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
+  m_LocalPosition: {x: -13.80569, y: 0.18069, z: 117.548965}
+  m_LocalScale: {x: 0.31955394, y: 0.3198369, z: 0.35}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1060882228}
@@ -12163,6 +12169,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 229888
   duration: 0.2
+  rotateSound: {fileID: 0}
+  rotateAudioSource: {fileID: 0}
   List_History: []
   List_Str: []
   dir_R: 1

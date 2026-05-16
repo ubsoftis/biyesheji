@@ -865,8 +865,8 @@ Transform:
   m_GameObject: {fileID: 82062678}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.2709149, z: 133.09897}
-  m_LocalScale: {x: 0.40999997, y: 0.40999997, z: 0.40999997}
+  m_LocalPosition: {x: -13.8013, y: 0.1914, z: 133.09897}
+  m_LocalScale: {x: 0.4057398, y: 0.40523666, z: 0.40999997}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1693504068}
@@ -2517,8 +2517,8 @@ Transform:
   m_GameObject: {fileID: 362100716}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.09, z: 133.09897}
-  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
+  m_LocalPosition: {x: -13.80453, y: 0.18746, z: 133.09897}
+  m_LocalScale: {x: 0.3195129, y: 0.3191597, z: 0.32}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1693504068}
@@ -2569,6 +2569,8 @@ MonoBehaviour:
   retractedJudgeAreaSize: {x: 0, y: 0}
   expandedJudgeAreaSize: {x: 171, y: 0}
   clickNoteToToggle: 1
+  toggleSfx: {fileID: 0}
+  sfxTag: 
   toggleButton: {fileID: 318709023}
 --- !u!114 &371996630
 MonoBehaviour:
@@ -2822,6 +2824,10 @@ MonoBehaviour:
     type: 3}
   gridParent: {fileID: 5216796}
   selectedSlotIndex: -1
+  defaultPickupSound: {fileID: 0}
+  defaultSelectSound: {fileID: 0}
+  defaultPlaceSound: {fileID: 0}
+  sfxSource: {fileID: 0}
 --- !u!114 &396378511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5406,8 +5412,8 @@ Transform:
   m_GameObject: {fileID: 836324338}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.09, z: 133.09897}
-  m_LocalScale: {x: 0.32, y: 0.32, z: 0.32}
+  m_LocalPosition: {x: -13.8244, y: 0.1811, z: 133.09897}
+  m_LocalScale: {x: 0.32086453, y: 0.3196765, z: 0.32}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1693504068}
@@ -5431,6 +5437,7 @@ MonoBehaviour:
   restartIfTriggeredAgain: 1
   uiText: {fileID: 154635660}
   bottomSpriteImage: {fileID: 2114520812}
+  dialogueUguiRootsToDisable: []
   deathEndingObject: {fileID: 2138751224}
   playerControlScriptsToDisable: []
   playerRootToDisable: {fileID: 0}
@@ -7016,6 +7023,7 @@ MonoBehaviour:
   videoRootToActivate: {fileID: 1028242113}
   disableWhilePlaying: []
   autoHideOverlayCanvases: 1
+  cutsceneAudio: {fileID: 0}
   nextSceneName: "\u7B2C\u4E09\u5173"
   nextSceneBuildIndexIfNameEmpty: -1
   stopVideoPlayerAfterFinish: 1
@@ -10721,8 +10729,8 @@ Transform:
   m_GameObject: {fileID: 1742350033}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.17091492, z: 132.59897}
-  m_LocalScale: {x: 0.41, y: 0.41, z: 0.41}
+  m_LocalPosition: {x: -13.803, y: 0.172, z: 132.59897}
+  m_LocalScale: {x: 0.40617386, y: 0.40566388, z: 0.41}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1693504068}
@@ -10973,6 +10981,7 @@ MonoBehaviour:
   videoRootToActivate: {fileID: 1787906883}
   disableWhilePlaying: []
   autoHideOverlayCanvases: 1
+  cutsceneAudio: {fileID: 0}
   playOnStart: 1
   deactivateRootAfter: 1
   stopVideoPlayerAfterFinish: 1
@@ -12523,8 +12532,8 @@ Transform:
   m_GameObject: {fileID: 1915999321}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.19091493, z: 123.8}
-  m_LocalScale: {x: 0.40999997, y: 0.40999997, z: 0.40999997}
+  m_LocalPosition: {x: -13.8051, y: 0.1704, z: 123.8}
+  m_LocalScale: {x: 0.40692496, y: 0.40790898, z: 0.40999997}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1693504068}
@@ -12609,8 +12618,8 @@ Transform:
   m_GameObject: {fileID: 1928873333}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.835303, y: 0.09, z: 133.09897}
-  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_LocalPosition: {x: -13.80453, y: 0.18746, z: 133.09897}
+  m_LocalScale: {x: 0.3195129, y: 0.3191597, z: 0.32}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1693504068}
@@ -13021,6 +13030,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 229888
   duration: 0.2
+  rotateSound: {fileID: 0}
+  rotateAudioSource: {fileID: 0}
   List_History: []
   List_Str: []
   dir_R: 1

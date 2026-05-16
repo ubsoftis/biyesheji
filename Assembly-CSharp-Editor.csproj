@@ -66,7 +66,7 @@
     <Compile Include="Assets\Editor\MoveSceneViewCamera.cs" />
     <Compile Include="Assets\Editor\ImageEffects\BloomEditor.cs" />
     <Compile Include="Assets\Editor\ImageEffects\TonemappingEditor.cs" />
-    <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
+    <Compile Include="Assets\开幕素材\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\Editor\ImageEffects\EdgeDetectionEditor.cs" />
     <Compile Include="Assets\Editor\ImageEffects\VignetteAndChromaticAberrationEditor.cs" />
     <Compile Include="Assets\Editor\ImageEffects\AntialiasingEditor.cs" />
