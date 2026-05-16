@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
-/// 每句必须是单独的 TextMeshProUGUI（各自写好一句文案），按顺序冒出 → 停留 → 渐隐。
+/// 每句必须是单独的 TextMeshProUGUI 或旧版 Text（各自写好一句文案），按顺序冒出 → 停留 → 渐隐。
 /// 浮动作用在 <see cref="target"/>（默认本物体 RectTransform）上，子句会一起浮动。
 /// </summary>
 [DisallowMultipleComponent]
@@ -15,7 +16,11 @@ public class TextFloatBob : MonoBehaviour
 
     [Header("逐句 TMP — 每句拖一个 TextMeshProUGUI，顺序即播放顺序")]
     [SerializeField] TextMeshProUGUI[] sentenceTexts;
-    [Tooltip("上面数组为空时，自动收集本物体下所有子级 TMP（不含自己身上的）")]
+
+    [Header("逐句旧版 UI Text — 与 TMP 二选一或混用（手动数组时先 TMP 后 Text）")]
+    [SerializeField] Text[] sentenceLegacyTexts;
+
+    [Tooltip("上面数组都为空时，自动收集本物体下所有子级 TMP / Text（不含自己身上的）")]
     [SerializeField] bool autoCollectChildTmps = true;
 
     [Header("逐句浮现 / 渐隐")]
@@ -28,7 +33,7 @@ public class TextFloatBob : MonoBehaviour
     [SerializeField] float popFromScale = 0.35f;
 
     [Header("上飘（旧句让位，避免与新句重叠）")]
-    [Tooltip("所有句子都在同一位置冒出；留空则用第一句 TMP 的位置")]
+    [Tooltip("所有句子都在同一位置冒出；留空则用第一句文本的位置")]
     [SerializeField] RectTransform displayAnchor;
     [SerializeField] float floatUpStepPixels = 58f;
     [SerializeField] float floatUpDuration = 0.45f;
@@ -127,7 +132,7 @@ public class TextFloatBob : MonoBehaviour
         var lines = CollectSentenceLines();
         if (lines.Count == 0)
         {
-            Debug.LogWarning("[TextFloatBob] 没有可用的句子 TMP。请把每句单独的 TextMeshProUGUI 拖进 Sentence Texts，或放在子物体里并勾选 Auto Collect Child Tmps。", this);
+            Debug.LogWarning("[TextFloatBob] 没有可用的句子文本。请拖入 TextMeshProUGUI 或旧版 Text，或放在子物体里并勾选 Auto Collect Child Tmps。", this);
             return;
         }
 
@@ -140,46 +145,85 @@ public class TextFloatBob : MonoBehaviour
     {
         var result = new List<SentenceLine>();
 
-        if (sentenceTexts != null && sentenceTexts.Length > 0)
+        if (HasAssignedSentences())
         {
-            for (int i = 0; i < sentenceTexts.Length; i++)
+            if (sentenceTexts != null)
             {
-                var tmp = sentenceTexts[i];
-                if (tmp == null)
-                    continue;
-                result.Add(WrapSentence(tmp));
+                for (int i = 0; i < sentenceTexts.Length; i++)
+                {
+                    var tmp = sentenceTexts[i];
+                    if (tmp == null)
+                        continue;
+                    result.Add(WrapSentence(tmp.rectTransform));
+                }
             }
+
+            if (sentenceLegacyTexts != null)
+            {
+                for (int i = 0; i < sentenceLegacyTexts.Length; i++)
+                {
+                    var text = sentenceLegacyTexts[i];
+                    if (text == null)
+                        continue;
+                    result.Add(WrapSentence(text.rectTransform));
+                }
+            }
+
             return result;
         }
 
         if (!autoCollectChildTmps)
             return result;
 
-        var found = new List<TextMeshProUGUI>();
+        var found = new List<(int siblingIndex, RectTransform rect)>();
+        var selfGo = gameObject;
+
         var selfTmp = GetComponent<TextMeshProUGUI>();
         foreach (var tmp in GetComponentsInChildren<TextMeshProUGUI>(true))
         {
             if (tmp == selfTmp)
                 continue;
-            found.Add(tmp);
+            found.Add((tmp.transform.GetSiblingIndex(), tmp.rectTransform));
         }
 
-        found.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
+        var selfText = GetComponent<Text>();
+        foreach (var text in GetComponentsInChildren<Text>(true))
+        {
+            if (text == selfText)
+                continue;
+            found.Add((text.transform.GetSiblingIndex(), text.rectTransform));
+        }
+
+        found.Sort((a, b) => a.siblingIndex.CompareTo(b.siblingIndex));
         for (int i = 0; i < found.Count; i++)
-            result.Add(WrapSentence(found[i]));
+            result.Add(WrapSentence(found[i].rect));
 
         return result;
     }
 
-    SentenceLine WrapSentence(TextMeshProUGUI tmp)
+    static bool HasAnyAssigned<T>(T[] array) where T : Object
     {
-        var rt = tmp.rectTransform;
-        var group = tmp.GetComponent<CanvasGroup>();
+        if (array == null || array.Length == 0)
+            return false;
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (array[i] != null)
+                return true;
+        }
+        return false;
+    }
+
+    bool HasAssignedSentences() =>
+        HasAnyAssigned(sentenceTexts) || HasAnyAssigned(sentenceLegacyTexts);
+
+    SentenceLine WrapSentence(RectTransform rt)
+    {
+        var group = rt.GetComponent<CanvasGroup>();
         if (group == null)
-            group = tmp.gameObject.AddComponent<CanvasGroup>();
+            group = rt.gameObject.AddComponent<CanvasGroup>();
         group.blocksRaycasts = false;
         group.interactable = false;
-        return new SentenceLine(rt, tmp, group);
+        return new SentenceLine(rt, group);
     }
 
     void CaptureBasePosition()
@@ -203,7 +247,7 @@ public class TextFloatBob : MonoBehaviour
         line.Rect.anchoredPosition = line.BaseAnchoredPosition;
         line.Rect.localScale = Vector3.one;
         line.Group.alpha = 0f;
-        line.Tmp.gameObject.SetActive(true);
+        line.Root.SetActive(true);
     }
 
     void HideAllSentences(List<SentenceLine> lines)
@@ -216,7 +260,7 @@ public class TextFloatBob : MonoBehaviour
             line.SpawnPosition = spawn;
             line.Rect.localScale = Vector3.one * popFromScale;
             line.Group.alpha = 0f;
-            line.Tmp.gameObject.SetActive(true);
+            line.Root.SetActive(true);
         }
     }
 
@@ -256,7 +300,7 @@ public class TextFloatBob : MonoBehaviour
         for (int j = 0; j < beforeIndex; j++)
         {
             var prev = lines[j];
-            if (!prev.Tmp.gameObject.activeSelf || prev.Group.alpha <= 0.01f)
+            if (!prev.Root.activeSelf || prev.Group.alpha <= 0.01f)
                 continue;
             StartFloatUp(prev, floatUpStepPixels, floatUpDuration);
         }
@@ -305,7 +349,7 @@ public class TextFloatBob : MonoBehaviour
         }
 
         line.Group.alpha = 0f;
-        line.Tmp.gameObject.SetActive(false);
+        line.Root.SetActive(false);
     }
 
     void StartFloatUp(SentenceLine line, float deltaY, float duration)
@@ -376,17 +420,17 @@ public class TextFloatBob : MonoBehaviour
     sealed class SentenceLine
     {
         public readonly RectTransform Rect;
-        public readonly TextMeshProUGUI Tmp;
+        public readonly GameObject Root;
         public readonly CanvasGroup Group;
         public Vector2 BaseAnchoredPosition;
         public Vector2 SpawnPosition;
         public Vector2 EndAnchoredPosition;
         public Coroutine MotionRoutine;
 
-        public SentenceLine(RectTransform rect, TextMeshProUGUI tmp, CanvasGroup group)
+        public SentenceLine(RectTransform rect, CanvasGroup group)
         {
             Rect = rect;
-            Tmp = tmp;
+            Root = rect.gameObject;
             Group = group;
         }
     }

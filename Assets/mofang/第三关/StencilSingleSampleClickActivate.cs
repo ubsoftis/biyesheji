@@ -43,8 +43,12 @@ public class StencilSingleSampleClickActivate : MonoBehaviour, IStencilClickable
     [Tooltip("留空则不播放")]
     public AudioClip clickSfx;
 
-    [Tooltip("Sfx 子标签，留空则仅用总 Sfx 音量")]
+    [Tooltip("Sfx 子标签；与总 Sfx 相乘，可用 VolumeChannelSlider 单独调此标签。留空则仅用总 Sfx")]
     public string sfxTag = "";
+
+    [Tooltip("仅此点击音效的音量（0~1），不影响其它 Sfx")]
+    [Range(0f, 1f)]
+    public float clickSfxVolume = 1f;
 
     [Tooltip("成功后 SetActive(true) 的物体")]
     public GameObject activateTarget;
@@ -146,7 +150,7 @@ public class StencilSingleSampleClickActivate : MonoBehaviour, IStencilClickable
             return;
 
         string tag = string.IsNullOrWhiteSpace(sfxTag) ? null : sfxTag.Trim();
-        AudioManager.Instance.PlaySfx2D(clickSfx, tag);
+        AudioManager.Instance.PlaySfx2D(clickSfx, tag, clickSfxVolume);
     }
 
     void ComputeVisibilityStateByThreeRT()
