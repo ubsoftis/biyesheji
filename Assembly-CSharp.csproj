@@ -69,7 +69,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Lowpoly Style\Shared Scripts\FlickerLight.cs" />
     <Compile Include="Assets\背包系统\code\InventoryPrerequisiteTracker.cs" />
-    <Compile Include="Assets\mofang\第一关\StencilSamplePointHintUI.cs" />
     <Compile Include="Assets\G\heipingruchang.cs" />
     <Compile Include="Assets\背包系统\ItemSO.cs" />
     <Compile Include="Assets\mofang\第一关\StenciCube1MultiObjectGate.cs" />
@@ -93,6 +92,7 @@
     <Compile Include="Assets\mofang\第三关\SuccessDestroyScriptAndUi.cs" />
     <Compile Include="Assets\开始UI\结尾动画（我要用开始的素材所以我在这里）\结尾动画.cs" />
     <Compile Include="Assets\Lowpoly Style\Shared Scripts\UVOffset.cs" />
+    <Compile Include="Assets\mofang\ButtonActivateFadeOut.cs" />
     <Compile Include="Assets\mofang\自动删除.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DistortTunnel\DistortTunnelPass_Tunnel.cs" />
