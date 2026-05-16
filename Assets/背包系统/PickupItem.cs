@@ -71,6 +71,7 @@ public class PickupItem : MonoBehaviour, IPointerClickHandler
         if (isAdded)
         {
             if (debugLog) Debug.Log("[PickupItem] 拾取成功: " + item.itemName);
+            managerRef.PlayPickupSound(item);
             RefreshInventoryUI();
             Destroy(gameObject);
         }

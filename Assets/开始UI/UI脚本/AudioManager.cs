@@ -219,6 +219,48 @@ public class AudioManager : MonoBehaviour
             AudioListener.volume = linear01;
     }
 
+    /// <summary>仅推送到 Mixer，不修改内存缓存与 PlayerPrefs（过场压低 BGM 用）。</summary>
+    public void ApplyMusicToMixerWithoutSaving(float linear01)
+    {
+        ApplyOneToMixer(VolumeChannel.Music, Mathf.Clamp01(linear01));
+        VolumesReapplied?.Invoke();
+    }
+
+    /// <summary>过场结束后按玩家设置恢复 Music 推子。</summary>
+    public void RestoreSavedMusicToMixer()
+    {
+        ApplyOneToMixer(VolumeChannel.Music, _music);
+        VolumesReapplied?.Invoke();
+    }
+
+    /// <summary>仅推 Ambient 到 Mixer，不改内存与 PlayerPrefs（过场临时静音环境声用）。</summary>
+    public void ApplyAmbientToMixerWithoutSaving(float linear01)
+    {
+        ApplyOneToMixer(VolumeChannel.Ambient, Mathf.Clamp01(linear01));
+        VolumesReapplied?.Invoke();
+    }
+
+    /// <summary>按玩家设置恢复 Ambient 推子。</summary>
+    public void RestoreSavedAmbientToMixer()
+    {
+        ApplyOneToMixer(VolumeChannel.Ambient, _ambient);
+        VolumesReapplied?.Invoke();
+    }
+
+    /// <summary>仅推 Sfx 到 Mixer，不改内存与 PlayerPrefs（过场临时静音音效总线用）。</summary>
+    public void ApplySfxToMixerWithoutSaving(float linear01)
+    {
+        ApplyOneToMixer(VolumeChannel.Sfx, Mathf.Clamp01(linear01));
+        VolumesReapplied?.Invoke();
+    }
+
+    /// <summary>按玩家设置恢复 Sfx 推子。</summary>
+    public void RestoreSavedSfxToMixer()
+    {
+        ApplyOneToMixer(VolumeChannel.Sfx, _sfx);
+        VolumesReapplied?.Invoke();
+    }
+
     static string PrefKey(VolumeChannel ch)
     {
         switch (ch)

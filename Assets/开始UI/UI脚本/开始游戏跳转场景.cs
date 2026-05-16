@@ -17,9 +17,15 @@ public class ClickSignLoadScene : MonoBehaviour
 
     bool isFading = false;
 
+    void OnEnable()
+    {
+        isFading = false;
+        ResetBlackMaskForIdle();
+    }
+
     void Update()
     {
-        if (UILockSignManager.uiIsOpen)
+        if (UILockSignManager.ExistsInActiveScene() && UILockSignManager.uiIsOpen)
             return;
 
         if (!isFading && Input.GetMouseButtonDown(0))
@@ -33,6 +39,8 @@ public class ClickSignLoadScene : MonoBehaviour
                 if (hitT == transform || hitT.IsChildOf(transform))
                 {
                     isFading = true;
+                    if (blackMask != null)
+                        blackMask.raycastTarget = true;
                     PlayClickSfx();
                 }
             }
@@ -55,5 +63,16 @@ public class ClickSignLoadScene : MonoBehaviour
         if (clickSfx == null || AudioManager.Instance == null)
             return;
         AudioManager.Instance.PlaySfx2D(clickSfx, null, sfxVolumeScale);
+    }
+
+    void ResetBlackMaskForIdle()
+    {
+        if (blackMask == null)
+            return;
+
+        Color col = blackMask.color;
+        col.a = 0f;
+        blackMask.color = col;
+        blackMask.raycastTarget = false;
     }
 }

@@ -32,4 +32,9 @@ public class ItemSO : UnityEngine.ScriptableObject
     public GameObject placedPrefab;
     [Tooltip("通过 SceneInteractItemPlacer 点到带 ScenePlacementTarget 的物体时，是否从背包扣除该物品（关闭则只生成预制体不扣数）")]
     public bool consumeFromInventoryWhenPlaced = true;
+
+    [Header("音效（可选，不填则用 InventoryManager 上的默认音效）")]
+    public AudioClip pickupSound;
+    public AudioClip selectSound;
+    public AudioClip placeSound;
 }

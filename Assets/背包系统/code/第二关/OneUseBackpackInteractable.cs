@@ -85,6 +85,7 @@ public class OneUseBackpackInteractable : MonoBehaviour
 
         Transform parent = ResolvePlaceParent();
         GameObject instance = Object.Instantiate(prefab, parent, false);
+        inv.PlayPlaceSound(selected);
 
         bool consumeOk = !consumeOnSuccess || inv.TryConsumeSelectedItem(1);
         if (consumeOnSuccess && !consumeOk)

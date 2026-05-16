@@ -13,14 +13,14 @@ EditorBuildSettings:
     guid: e8d53c66412d3e2418563be95787ea0b
   - enabled: 1
     path: "Assets/\u7B2C\u4E00\u5173/\u7B2C\u4E00\u5173\u7B2C\u4E00\u5E55.unity"
-    guid: 2ff55b0ef7cbcf140a3fe455f5256609
+    guid: 3760e4cf32f36c849b1035019a00808e
   - enabled: 1
     path: "Assets/\u7B2C\u4E8C\u5173/\u7B2C\u4E8C\u5173\u573A\u666F.unity"
     guid: 80ef896771d8baf45a77b8bd60f3cd37
   - enabled: 1
     path: "Assets/\u7B2C\u4E09\u5173/\u7B2C\u4E09\u5173.unity"
     guid: 8ef20d9641427694a9fc9cbe847fe904
-  - enabled: 1
+  - enabled: 0
     path: "Assets/\u5F00\u59CBUI/stateRotate.unity"
     guid: 1afca2f57181a7343985eb39c62092c5
   - enabled: 1

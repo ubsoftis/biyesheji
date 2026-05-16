@@ -30,6 +30,9 @@ public class BackgroundMusicPlayer : MonoBehaviour
 
     AudioSource _musicSource;
     Coroutine _fadeRoutine;
+    Coroutine _cutsceneDuckRoutine;
+    float _duckRestoreSourceVolume;
+    float _duckRestoreMusicLinear = 1f;
 
     void Awake()
     {
@@ -117,6 +120,120 @@ public class BackgroundMusicPlayer : MonoBehaviour
             return;
         }
         _fadeRoutine = StartCoroutine(FadeOutAndStop());
+    }
+
+    /// <summary>过场开始：压低 BGM（不 Stop，便于过场结束后渐恢复）。</summary>
+    public IEnumerator DuckForCutscene(float duration)
+    {
+        if (_fadeRoutine != null)
+        {
+            StopCoroutine(_fadeRoutine);
+            _fadeRoutine = null;
+        }
+        if (_cutsceneDuckRoutine != null)
+        {
+            StopCoroutine(_cutsceneDuckRoutine);
+            _cutsceneDuckRoutine = null;
+        }
+
+        _duckRestoreSourceVolume = _musicSource.volume;
+        _duckRestoreMusicLinear = AudioManager.Instance != null
+            ? AudioManager.Instance.GetChannelLinear(VolumeChannel.Music)
+            : _duckRestoreSourceVolume;
+
+        if (duration <= 0.001f)
+        {
+            ApplyDuckEndVolume(0f);
+            yield break;
+        }
+
+        float startSource = _musicSource.volume;
+        float startMusic = _duckRestoreMusicLinear;
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.unscaledDeltaTime;
+            float k = Mathf.Clamp01(t / duration);
+            ApplyDuckVolume(Mathf.Lerp(startSource, 0f, k), Mathf.Lerp(startMusic, 0f, k));
+            yield return null;
+        }
+        ApplyDuckEndVolume(0f);
+    }
+
+    /// <summary>过场期间在音量已压低后再 Pause，可避免 Mixer 仍漏极少 BGM；结束前请先 <see cref="UnpauseForCutscene"/>。</summary>
+    public void PauseForCutscene()
+    {
+        if (_musicSource != null && _musicSource.isPlaying)
+            _musicSource.Pause();
+    }
+
+    /// <summary>与 <see cref="PauseForCutscene"/> 配对，在渐回 BGM 之前调用。</summary>
+    public void UnpauseForCutscene()
+    {
+        if (_musicSource != null)
+            _musicSource.UnPause();
+    }
+
+    /// <summary>过场结束：恢复 BGM 音量。</summary>
+    public IEnumerator UnduckAfterCutscene(float duration)
+    {
+        if (_cutsceneDuckRoutine != null)
+        {
+            StopCoroutine(_cutsceneDuckRoutine);
+            _cutsceneDuckRoutine = null;
+        }
+
+        float targetSource = AudioManager.Instance != null
+            ? AudioManager.Instance.GetChannelLinear(VolumeChannel.Music)
+            : _duckRestoreMusicLinear;
+        float targetMusic = _duckRestoreMusicLinear;
+
+        if (duration <= 0.001f)
+        {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.RestoreSavedMusicToMixer();
+            ApplyMusicLinearVolumeToSource();
+            yield break;
+        }
+
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.unscaledDeltaTime;
+            float k = Mathf.Clamp01(t / duration);
+            ApplyDuckVolume(Mathf.Lerp(0f, targetSource, k), Mathf.Lerp(0f, targetMusic, k));
+            yield return null;
+        }
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.RestoreSavedMusicToMixer();
+        ApplyMusicLinearVolumeToSource();
+    }
+
+    void ApplyDuckVolume(float sourceVolume, float musicLinear)
+    {
+        if (musicOutputMixerGroup != null && AudioManager.Instance != null)
+        {
+            _musicSource.volume = 1f;
+            AudioManager.Instance.ApplyMusicToMixerWithoutSaving(musicLinear);
+        }
+        else
+        {
+            _musicSource.volume = sourceVolume;
+        }
+    }
+
+    void ApplyDuckEndVolume(float musicLinear)
+    {
+        if (musicOutputMixerGroup != null && AudioManager.Instance != null)
+        {
+            _musicSource.volume = 1f;
+            AudioManager.Instance.ApplyMusicToMixerWithoutSaving(musicLinear);
+        }
+        else
+        {
+            _musicSource.volume = 0f;
+        }
     }
 
     void StartClip(bool useFadeIn)

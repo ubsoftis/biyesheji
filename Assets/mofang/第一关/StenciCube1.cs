@@ -73,6 +73,11 @@ public class StenciCube1 : MonoBehaviour
     [Header("自动控制一个物体的显隐")]
     [Tooltip("当三个目标同时出现时将其 SetActive(true)，否则 SetActive(false)。如果不需要自动控制就留空。")]
     public GameObject objectToToggle;
+    public GameObject objectToToggle2;
+    public GameObject objectToToggle3;
+    public GameObject objectToToggle4;
+    public GameObject objectToDeactivateToggle5;
+    public GameObject objectToDeactivateToggle6;
 
     [Header("联动判断：1号(3点) + 2号(2点)")]
     [Tooltip("拖入 StenciCube2 脚本，用于读取它的 allTargetsVisible。")]
@@ -164,7 +169,16 @@ public class StenciCube1 : MonoBehaviour
 
         if (objectToToggle != null)
             objectToToggle.SetActive(isVisible);
-
+    if (objectToToggle2 != null)
+                objectToToggle2.SetActive(isVisible);   
+        if (objectToToggle3 != null)
+            objectToToggle3.SetActive(isVisible);
+        if (objectToToggle4 != null)
+            objectToToggle4.SetActive(isVisible);
+        if (objectToDeactivateToggle5 != null)
+            objectToDeactivateToggle5.SetActive(false);
+        if (objectToDeactivateToggle6 != null)
+            objectToDeactivateToggle6.SetActive(false);
         bool bothVisible = isVisible && linkedCube2 != null && linkedCube2.allTargetsVisible;
         if (objectToActivateWhenBothVisible != null)
         {

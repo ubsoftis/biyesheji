@@ -22,6 +22,13 @@ public class mofanKeyRotation : MonoBehaviour
     public LayerMask cubeColliderMask;
 
     public float duration = 0.1f; // 旋转持续时间
+
+    [Header("音效")]
+    [Tooltip("魔方每次成功开始转动时播放；留空则不播放")]
+    public AudioClip rotateSound;
+    [Tooltip("留空则自动在本物体上查找或添加 AudioSource")]
+    public AudioSource rotateAudioSource;
+
     private GameObject BoxColler;
 
     private Dictionary<string, GameObject> Dic_ObjMap = new Dictionary<string, GameObject>();
@@ -391,9 +398,23 @@ public class mofanKeyRotation : MonoBehaviour
         return "";
     }
 
+    void PlayRotateSound()
+    {
+        if (rotateSound == null) return;
+        if (rotateAudioSource == null)
+        {
+            rotateAudioSource = GetComponent<AudioSource>();
+            if (rotateAudioSource == null)
+                rotateAudioSource = gameObject.AddComponent<AudioSource>();
+            rotateAudioSource.playOnAwake = false;
+        }
+        rotateAudioSource.PlayOneShot(rotateSound);
+    }
+
     IEnumerator SmoothRotate (string str)
     { 
         isComplete = false;
+        PlayRotateSound();
         float targetAngle = 90f;
         Quaternion startRotation = BoxColler.transform.rotation;
         targetAngle = str.Contains("'") ? -targetAngle : targetAngle;

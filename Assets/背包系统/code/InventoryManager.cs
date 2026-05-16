@@ -26,6 +26,16 @@ public class InventoryManager : MonoBehaviour
     [Tooltip("当前选中的格子索引，-1 表示未选中")]
     public int selectedSlotIndex = -1;
 
+    [Header("音效（可选）")]
+    [Tooltip("拾取成功时播放；可被 ItemSO.pickupSound 覆盖")]
+    public AudioClip defaultPickupSound;
+    [Tooltip("在背包里选中物品时播放；可被 ItemSO.selectSound 覆盖")]
+    public AudioClip defaultSelectSound;
+    [Tooltip("场景放置成功时播放；可被 ItemSO.placeSound 覆盖")]
+    public AudioClip defaultPlaceSound;
+    [Tooltip("留空则自动在本物体上添加 AudioSource（2D）")]
+    public AudioSource sfxSource;
+
     public event Action<int> OnSelectionChanged;
 
     private void Awake()
@@ -95,6 +105,7 @@ public class InventoryManager : MonoBehaviour
 
         if (selectedSlotIndex == slotIndex) return true;
         selectedSlotIndex = slotIndex;
+        PlaySelectSound(slot.item);
         OnSelectionChanged?.Invoke(selectedSlotIndex);
         return true;
     }
@@ -222,5 +233,71 @@ public class InventoryManager : MonoBehaviour
     {
         foreach (var slotUI in FindObjectsOfType<InventorySlotUI>(true))
             slotUI.UpdateSlotUI();
+    }
+
+    void EnsureSfxSource()
+    {
+        if (sfxSource != null)
+        {
+            sfxSource.playOnAwake = false;
+            sfxSource.spatialBlend = 0f;
+            return;
+        }
+
+        sfxSource = GetComponent<AudioSource>();
+        if (sfxSource == null)
+        {
+            sfxSource = gameObject.AddComponent<AudioSource>();
+            sfxSource.playOnAwake = false;
+            sfxSource.spatialBlend = 0f;
+        }
+        else
+        {
+            sfxSource.playOnAwake = false;
+            sfxSource.spatialBlend = 0f;
+        }
+    }
+
+    static AudioClip ResolveClip(ItemSO item, AudioClip itemClip, AudioClip fallback)
+    {
+        if (item != null && itemClip != null)
+            return itemClip;
+        return fallback;
+    }
+
+    /// <summary> 拾取进背包成功后由 PickupItem 等调用。 </summary>
+    public void PlayPickupSound(ItemSO item)
+    {
+        AudioClip clip = ResolveClip(item, item != null ? item.pickupSound : null, defaultPickupSound);
+        if (clip == null)
+            return;
+        EnsureSfxSource();
+        if (sfxSource == null)
+            return;
+        sfxSource.PlayOneShot(clip);
+    }
+
+    /// <summary> 在背包中选中物品时调用（由 SelectSlot 内部触发）。 </summary>
+    public void PlaySelectSound(ItemSO item)
+    {
+        AudioClip clip = ResolveClip(item, item != null ? item.selectSound : null, defaultSelectSound);
+        if (clip == null)
+            return;
+        EnsureSfxSource();
+        if (sfxSource == null)
+            return;
+        sfxSource.PlayOneShot(clip);
+    }
+
+    /// <summary> 场景放置成功时由 SceneInteractItemPlacer 等调用。 </summary>
+    public void PlayPlaceSound(ItemSO item)
+    {
+        AudioClip clip = ResolveClip(item, item != null ? item.placeSound : null, defaultPlaceSound);
+        if (clip == null)
+            return;
+        EnsureSfxSource();
+        if (sfxSource == null)
+            return;
+        sfxSource.PlayOneShot(clip);
     }
 }

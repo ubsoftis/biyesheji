@@ -19,6 +19,11 @@ public class SceneInteractItemPlacer : MonoBehaviour
     [Tooltip("是否在成功放置后消耗背包中 1 个该物品")]
     public bool consumeOnSuccess = true;
 
+    [Header("射线检测")]
+    [Tooltip(
+        "为 true：本脚本做 2D 射线检测时临时开启 Physics2D.queriesHitTriggers，避免鱼缸等「仅 Trigger」碰撞体在项目设置里关闭「射线命中触发器」时完全点不到。")]
+    public bool force2DRaycastHitTriggers = true;
+
     private void Awake()
     {
         EnsureCamera();
@@ -87,6 +92,15 @@ public class SceneInteractItemPlacer : MonoBehaviour
             Debug.LogWarning("[SceneInteractItemPlacer] 放置成功，但消耗背包物品失败（请确认已先点击格子选中物品）。");
 
         inv.RefreshAllSlots();
+
+        try
+        {
+            inv.PlayPlaceSound(selectedItem);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning("[SceneInteractItemPlacer] 放置音效播放失败（已忽略）: " + e.Message);
+        }
     }
 
     /// <summary>
@@ -126,6 +140,30 @@ public class SceneInteractItemPlacer : MonoBehaviour
     }
 
     private GameObject RaycastTarget(Vector3 screenPosition)
+    {
+        bool saved2DQueriesHitTriggers = Physics2D.queriesHitTriggers;
+        bool saved3DQueriesHitTriggers = Physics.queriesHitTriggers;
+        if (force2DRaycastHitTriggers)
+        {
+            Physics2D.queriesHitTriggers = true;
+            Physics.queriesHitTriggers = true;
+        }
+
+        try
+        {
+            return RaycastTargetCore(screenPosition);
+        }
+        finally
+        {
+            if (force2DRaycastHitTriggers)
+            {
+                Physics2D.queriesHitTriggers = saved2DQueriesHitTriggers;
+                Physics.queriesHitTriggers = saved3DQueriesHitTriggers;
+            }
+        }
+    }
+
+    private GameObject RaycastTargetCore(Vector3 screenPosition)
     {
         Ray ray = targetCamera.ScreenPointToRay(screenPosition);
 

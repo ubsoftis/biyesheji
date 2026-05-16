@@ -46,6 +46,12 @@ public class 纸条收放UI代码 : MonoBehaviour, IPointerClickHandler
     [Tooltip("是否允许点击纸条本体切换展开/收回")]
     public bool clickNoteToToggle = true;
 
+    [Header("音效（可选）")]
+    [Tooltip("展开/收起时播放同一音效；走 AudioManager 的 Sfx 总线")]
+    public AudioClip toggleSfx;
+    [Tooltip("Sfx 子标签，留空则仅用总 Sfx 音量")]
+    public string sfxTag = "";
+
     [Header("组件引用")]
     [Tooltip("控制展开/收回的按钮")]
     public Button toggleButton;
@@ -153,12 +159,22 @@ public class 纸条收放UI代码 : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void ToggleNoteState()
     {
+        PlayToggleSfxIfConfigured();
+
         isExpanded = !isExpanded;
         // 更新目标位置、透明度、旋转角度
         targetPosition = isExpanded ? expandedPosition : retractedPosition;
         targetAlpha = isExpanded ? expandedAlpha : retractedAlpha;
         targetRotation = isExpanded ? expandedRotation : retractedRotation; // 更新目标旋转角度
         currentMoveTime = 0f; // 重置动画进度
+    }
+
+    void PlayToggleSfxIfConfigured()
+    {
+        if (toggleSfx == null || AudioManager.Instance == null)
+            return;
+        string tag = string.IsNullOrWhiteSpace(sfxTag) ? null : sfxTag.Trim();
+        AudioManager.Instance.PlaySfx2D(toggleSfx, tag);
     }
 
     public void OnPointerClick(PointerEventData eventData)

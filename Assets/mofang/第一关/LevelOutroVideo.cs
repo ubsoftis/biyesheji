@@ -30,6 +30,10 @@ public class LevelOutroVideo : MonoBehaviour
     [Tooltip("播放期间自动隐藏所有 Screen Space - Overlay 的 Canvas，避免挡住视频。")]
     public bool autoHideOverlayCanvases = true;
 
+    [Header("过场音效")]
+    [Tooltip("不填则尝试从本物体 GetComponent<CutsceneAudioController>()")]
+    public CutsceneAudioController cutsceneAudio;
+
     [Header("播完后")]
     [Tooltip("留空则使用 nextSceneBuildIndexIfNameEmpty（>=0 时）。")]
     public string nextSceneName;
@@ -59,93 +63,111 @@ public class LevelOutroVideo : MonoBehaviour
         {
             StopCoroutine(_co);
             _co = null;
+            CutscenePlaybackGate.Exit();
         }
     }
 
     IEnumerator PlayRoutine()
     {
-        var root = videoRootToActivate != null ? videoRootToActivate : gameObject;
-        if (root != null && !root.activeSelf)
-            root.SetActive(true);
-
-        if (disableWhilePlaying != null)
+        CutscenePlaybackGate.Enter();
+        try
         {
-            for (int i = 0; i < disableWhilePlaying.Length; i++)
+            var root = videoRootToActivate != null ? videoRootToActivate : gameObject;
+            if (root != null && !root.activeSelf)
+                root.SetActive(true);
+
+            if (disableWhilePlaying != null)
             {
-                var go = disableWhilePlaying[i];
-                if (go != null)
-                    go.SetActive(false);
+                for (int i = 0; i < disableWhilePlaying.Length; i++)
+                {
+                    var go = disableWhilePlaying[i];
+                    if (go != null)
+                        go.SetActive(false);
+                }
             }
-        }
 
-        AutoHideOverlayCanvases(root);
+            AutoHideOverlayCanvases(root);
 
-        if (videoPlayer == null)
-            videoPlayer = gameObject.GetComponent<VideoPlayer>();
-        if (videoPlayer == null)
-            videoPlayer = gameObject.AddComponent<VideoPlayer>();
+            var audio = ResolveCutsceneAudio();
+            if (audio != null && audio.HasClip)
+                yield return audio.BeginCutsceneAudio();
 
-        videoPlayer.playOnAwake = false;
-        videoPlayer.isLooping = false;
+            if (videoPlayer == null)
+                videoPlayer = gameObject.GetComponent<VideoPlayer>();
+            if (videoPlayer == null)
+                videoPlayer = gameObject.AddComponent<VideoPlayer>();
 
-        if (videoPlayer.renderMode == VideoRenderMode.CameraNearPlane || videoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
-        {
-            // 已是 Camera 模式则保留
-        }
-        else
-        {
-            videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
-        }
+            videoPlayer.playOnAwake = false;
+            videoPlayer.isLooping = false;
 
-        if (videoPlayer.targetCamera == null)
-            videoPlayer.targetCamera = Camera.main;
+            if (videoPlayer.renderMode == VideoRenderMode.CameraNearPlane || videoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
+            {
+                // 已是 Camera 模式则保留
+            }
+            else
+            {
+                videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
+            }
 
-        if (videoPlayer.renderMode == VideoRenderMode.CameraNearPlane || videoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
-            videoPlayer.targetCameraAlpha = 1f;
+            if (videoPlayer.targetCamera == null)
+                videoPlayer.targetCamera = Camera.main;
 
-        if (videoClip != null)
-        {
-            videoPlayer.source = VideoSource.VideoClip;
-            videoPlayer.clip = videoClip;
-        }
-        else if (!string.IsNullOrEmpty(videoUrl))
-        {
-            videoPlayer.source = VideoSource.Url;
-            videoPlayer.url = NormalizeUrl(videoUrl);
-        }
-        else if (videoPlayer.clip == null && string.IsNullOrEmpty(videoPlayer.url))
-        {
-            RestoreAfter(root, loadScene: false, deactivateRoot: deactivateRootAfterFinishIfNoLoad);
+            if (videoPlayer.renderMode == VideoRenderMode.CameraNearPlane || videoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
+                videoPlayer.targetCameraAlpha = 1f;
+
+            if (videoClip != null)
+            {
+                videoPlayer.source = VideoSource.VideoClip;
+                videoPlayer.clip = videoClip;
+            }
+            else if (!string.IsNullOrEmpty(videoUrl))
+            {
+                videoPlayer.source = VideoSource.Url;
+                videoPlayer.url = NormalizeUrl(videoUrl);
+            }
+            else if (videoPlayer.clip == null && string.IsNullOrEmpty(videoPlayer.url))
+            {
+                if (audio != null && audio.HasClip)
+                    yield return audio.EndCutsceneAudio();
+                RestoreAfter(root, loadScene: false, deactivateRoot: deactivateRootAfterFinishIfNoLoad);
+                _co = null;
+                yield break;
+            }
+
+            bool finished = false;
+            void OnLoopPointReached(VideoPlayer _) => finished = true;
+            videoPlayer.loopPointReached += OnLoopPointReached;
+
+            videoPlayer.Prepare();
+            float prepareDeadline = Time.realtimeSinceStartup + 5f;
+            while (!videoPlayer.isPrepared && Time.realtimeSinceStartup < prepareDeadline)
+                yield return null;
+
+            videoPlayer.Play();
+            while (!finished && (videoPlayer.isPlaying || videoPlayer.frame < (long)videoPlayer.frameCount - 1))
+                yield return null;
+
+            videoPlayer.loopPointReached -= OnLoopPointReached;
+
+            if (audio != null && audio.HasClip)
+                yield return audio.EndCutsceneAudio();
+
+            bool willLoad = !string.IsNullOrEmpty(nextSceneName) || nextSceneBuildIndexIfNameEmpty >= 0;
+            RestoreAfter(root, loadScene: willLoad, deactivateRoot: deactivateRootAfterFinishIfNoLoad && !willLoad);
+
+            if (!string.IsNullOrEmpty(nextSceneName))
+                SceneManager.LoadScene(nextSceneName);
+            else if (nextSceneBuildIndexIfNameEmpty >= 0)
+                SceneManager.LoadScene(nextSceneBuildIndexIfNameEmpty);
+            else
+                Debug.LogWarning("[LevelOutroVideo] 未配置 nextSceneName 或 nextSceneBuildIndexIfNameEmpty，播完后不会切场景。");
+
             _co = null;
-            yield break;
         }
-
-        bool finished = false;
-        void OnLoopPointReached(VideoPlayer _) => finished = true;
-        videoPlayer.loopPointReached += OnLoopPointReached;
-
-        videoPlayer.Prepare();
-        float prepareDeadline = Time.realtimeSinceStartup + 5f;
-        while (!videoPlayer.isPrepared && Time.realtimeSinceStartup < prepareDeadline)
-            yield return null;
-
-        videoPlayer.Play();
-        while (!finished && (videoPlayer.isPlaying || videoPlayer.frame < (long)videoPlayer.frameCount - 1))
-            yield return null;
-
-        videoPlayer.loopPointReached -= OnLoopPointReached;
-
-        bool willLoad = !string.IsNullOrEmpty(nextSceneName) || nextSceneBuildIndexIfNameEmpty >= 0;
-        RestoreAfter(root, loadScene: willLoad, deactivateRoot: deactivateRootAfterFinishIfNoLoad && !willLoad);
-
-        if (!string.IsNullOrEmpty(nextSceneName))
-            SceneManager.LoadScene(nextSceneName);
-        else if (nextSceneBuildIndexIfNameEmpty >= 0)
-            SceneManager.LoadScene(nextSceneBuildIndexIfNameEmpty);
-        else
-            Debug.LogWarning("[LevelOutroVideo] 未配置 nextSceneName 或 nextSceneBuildIndexIfNameEmpty，播完后不会切场景。");
-
-        _co = null;
+        finally
+        {
+            CutscenePlaybackGate.Exit();
+        }
     }
 
     void RestoreAfter(GameObject root, bool loadScene, bool deactivateRoot)
@@ -218,6 +240,13 @@ public class LevelOutroVideo : MonoBehaviour
 
         _autoHiddenCanvases.Clear();
         _autoHiddenPrevStates.Clear();
+    }
+
+    CutsceneAudioController ResolveCutsceneAudio()
+    {
+        if (cutsceneAudio != null)
+            return cutsceneAudio;
+        return GetComponent<CutsceneAudioController>();
     }
 
     static string NormalizeUrl(string urlOrFileName)
