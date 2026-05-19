@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Point4
-  m_Shader: {fileID: 4800000, guid: 88b6c70d39fff5c4abe3674b7d8c097f, type: 3}
+  m_Shader: {fileID: 4800000, guid: 2a92f91c97936c54a8af1ed15fc11ddc, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -30,7 +30,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Count: 3
-    - _Speed: 1.06
+    - _Speed: 0
     - _Strength: 0.38
     - _Width: 0.05
     m_Colors:

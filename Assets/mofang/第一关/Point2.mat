@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Point5
-  m_Shader: {fileID: 4800000, guid: 2a92f91c97936c54a8af1ed15fc11ddc, type: 3}
+  m_Name: Point2
+  m_Shader: {fileID: 4800000, guid: 4a1630d8e0e4614478c8620733c0a521, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -29,10 +29,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Count: 3
+    - _Count: 6
     - _Speed: 1.06
-    - _Strength: 0.38
-    - _Width: 0.05
+    - _Strength: 1.2
+    - _Width: 0.08
     m_Colors:
-    - _Color: {r: 0.61645466, g: 0.56216127, b: 0.8553459, a: 1}
+    - _Color: {r: 0.836478, g: 0.60817397, b: 0.18676074, a: 1}
   m_BuildTextureStacks: []
