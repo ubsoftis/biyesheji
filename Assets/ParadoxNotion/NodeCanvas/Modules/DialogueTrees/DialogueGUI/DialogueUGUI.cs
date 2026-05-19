@@ -122,6 +122,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
         }
 
         IEnumerator Internal_OnSubtitlesRequestInfo(SubtitlesRequestInfo info) {
+            DialogueTree dialogueTree = DialogueTree.currentDialogue;
 
             var text = info.statement.GetLocalizedText(language);
             var audio = info.statement.GetLocalizedAudio(language);
@@ -246,7 +247,9 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
                 _portraitSyncRoutine = null;
             }
             subtitlesGroup.gameObject.SetActive(false);
-            info.Continue();
+            if ( dialogueTree != null && dialogueTree.isRunning && !dialogueTree.isPaused ) {
+                info.Continue();
+            }
         }
 
         IEnumerator RunPortraitSpriteSync(SpriteRenderer sourceRender) {
@@ -346,7 +349,10 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
             foreach ( var tempBtn in cachedButtons.Keys ) {
                 Destroy(tempBtn.gameObject);
             }
-            info.SelectOption(index);
+            DialogueTree dialogueTree = DialogueTree.currentDialogue;
+            if ( dialogueTree != null && dialogueTree.isRunning && !dialogueTree.isPaused ) {
+                info.SelectOption(index);
+            }
         }
 
         void SetMassAlpha(RectTransform root, float alpha) {

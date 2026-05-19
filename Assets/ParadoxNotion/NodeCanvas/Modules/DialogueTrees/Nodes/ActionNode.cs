@@ -59,6 +59,9 @@ namespace NodeCanvas.DialogueTrees
         }
 
         void OnActionEnd(bool success) {
+            if ( !DLGTree.isRunning ) {
+                return;
+            }
 
             if ( success ) {
                 status = Status.Success;

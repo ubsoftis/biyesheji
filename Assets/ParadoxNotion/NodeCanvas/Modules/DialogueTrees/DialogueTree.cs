@@ -199,6 +199,10 @@ namespace NodeCanvas.DialogueTrees
 
         ///<summary>Continues the DialogueTree at provided child connection index of currentNode</summary>
         public void Continue(int index = 0) {
+            // 已 Stop / Pause 或 currentNode 已清空时，拒绝继续（避免中断后字幕回调把后续节点跑完）
+            if ( !isRunning || isPaused || currentNode == null ) {
+                return;
+            }
             if ( index < 0 || index > currentNode.outConnections.Count - 1 ) {
                 Stop(true);
                 return;

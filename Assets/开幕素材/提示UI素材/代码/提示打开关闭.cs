@@ -1,3 +1,4 @@
+using NodeCanvas.DialogueTrees;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,16 @@ public class CanvasPanelManager : MonoBehaviour
     [Header("拖入需要显示在 Panel 之上的元素")]
     [SerializeField] private RectTransform elementToPlaceAbovePanel;
 
+    [Header("对话中断（打开面板时）")]
+    [Tooltip("指定要中断的对话控制器；不拖则中断当前正在播放的那条对话树。")]
+    [SerializeField] private DialogueTreeController[] dialogueControllersToInterrupt;
+
+    [Tooltip("立绘回归位置。拖 Hierarchy 里的「对话角色背景框」（与对话树 MoveTowards 终点相同）。不填则自动按名字查找。")]
+    [SerializeField] private Transform dialoguePortraitHomeAnchor;
+
+    [Tooltip("打开提示面板、中断对话时额外 SetActive(true) 的对象。不填则仅自动激活「对话角色背景框」与立绘 UI。")]
+    [SerializeField] private GameObject objectToActivateOnInterrupt;
+
     // 内部变量：用来保存按钮最干净的母体备份
     private GameObject buttonPrefabBackup;
     private Transform buttonParent;
@@ -27,35 +38,57 @@ public class CanvasPanelManager : MonoBehaviour
 
     private void Awake()
     {
-        if (targetPanel == null || closeButton == null)
-        {
-            Debug.LogError($"[{gameObject.name}] 基础组件未拖拽完整！", gameObject);
+        if (!EnsurePanelComponents())
             return;
+
+        EnsureCloseButtonBackup();
+
+        if (closeButton != null)
+            closeButton.onClick.AddListener(HideTopPanel);
+
+        targetPanel.SetActive(false);
+    }
+
+    /// <summary>确保 Panel 上的 Canvas / GraphicRaycaster 已就绪（Awake 未跑完时也可补救）。</summary>
+    private bool EnsurePanelComponents()
+    {
+        if (targetPanel == null)
+        {
+            Debug.LogError($"[{gameObject.name}] targetPanel 未赋值！", gameObject);
+            return false;
         }
 
-        // 动态检查或添加置顶组件
-        panelCanvas = targetPanel.GetComponent<Canvas>();
-        if (panelCanvas == null) panelCanvas = targetPanel.AddComponent<Canvas>();
+        if (panelCanvas == null)
+        {
+            panelCanvas = targetPanel.GetComponent<Canvas>();
+            if (panelCanvas == null)
+                panelCanvas = targetPanel.AddComponent<Canvas>();
+        }
 
-        panelRaycaster = targetPanel.GetComponent<GraphicRaycaster>();
-        if (panelRaycaster == null) panelRaycaster = targetPanel.AddComponent<GraphicRaycaster>();
+        if (panelRaycaster == null)
+        {
+            panelRaycaster = targetPanel.GetComponent<GraphicRaycaster>();
+            if (panelRaycaster == null)
+                panelRaycaster = targetPanel.AddComponent<GraphicRaycaster>();
+        }
 
-        // 【核心准备】：在游戏刚启动、动画还没卡死的第一时间，把这个干净的按钮“复制一份”存进内存作为母体
+        return panelCanvas != null && panelRaycaster != null;
+    }
+
+    /// <summary>备份关闭按钮，供克隆重置动画使用。</summary>
+    private void EnsureCloseButtonBackup()
+    {
+        if (closeButton == null || buttonPrefabBackup != null)
+            return;
+
         buttonParent = closeButton.transform.parent;
         buttonPosition = closeButton.transform.localPosition;
         buttonRotation = closeButton.transform.localRotation;
         buttonScale = closeButton.transform.localScale;
 
-        // 复制并隐藏母体备份
-        buttonPrefabBackup = Instantiate(closeButton.gameObject, this.transform);
+        buttonPrefabBackup = Instantiate(closeButton.gameObject, transform);
         buttonPrefabBackup.name = "CloseButton_Backup_DoNotDelete";
         buttonPrefabBackup.SetActive(false);
-
-        // 绑定初始按钮的事件
-        closeButton.onClick.AddListener(HideTopPanel);
-
-        // 初始化：默认关闭 Panel
-        targetPanel.SetActive(false);
     }
 
     /// <summary>
@@ -63,7 +96,12 @@ public class CanvasPanelManager : MonoBehaviour
     /// </summary>
     public void OpenAndTriggerTopPanel()
     {
-        if (targetPanel == null) return;
+        if (!EnsurePanelComponents())
+            return;
+
+        ForceInterruptActiveDialogue();
+        ActivateObjectsAfterDialogueInterrupt();
+        EnsureCloseButtonBackup();
 
         // 1. 激活面板
         targetPanel.SetActive(true);
@@ -127,6 +165,82 @@ public class CanvasPanelManager : MonoBehaviour
         {
             targetPanel.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// 中断当前对话：先 Pause 停住字幕/Action 协程，再 Stop(false) 中止图（不当作成功跑完）。
+    /// 不 SetActive 关闭 DialogueUGUI，保留事件订阅供之后重新对话。
+    /// </summary>
+    private void ForceInterruptActiveDialogue()
+    {
+        if (dialogueControllersToInterrupt != null && dialogueControllersToInterrupt.Length > 0)
+        {
+            for (int i = 0; i < dialogueControllersToInterrupt.Length; i++)
+                InterruptController(dialogueControllersToInterrupt[i], dialoguePortraitHomeAnchor);
+            return;
+        }
+
+        DialogueTree current = DialogueTree.currentDialogue;
+        if (current != null && current.isRunning)
+        {
+            DialogueTreeController owner = FindControllerForTree(current);
+            if (owner != null)
+            {
+                InterruptController(owner, dialoguePortraitHomeAnchor);
+                return;
+            }
+
+            DialogueTreeController ownerWithoutStop = FindControllerForTree(current);
+            PauseDialogueGraph(current);
+            DialoguePortraitReset.ResetForTree(current, dialoguePortraitHomeAnchor, ownerWithoutStop);
+            current.Stop(false);
+            return;
+        }
+
+        DialogueTreeController[] controllers =
+            Object.FindObjectsOfType<DialogueTreeController>(true);
+        for (int i = 0; i < controllers.Length; i++)
+            InterruptController(controllers[i], dialoguePortraitHomeAnchor);
+    }
+
+    private static void InterruptController(DialogueTreeController controller, Transform portraitHomeAnchor)
+    {
+        if (controller == null || !controller.isRunning)
+            return;
+
+        PauseDialogueGraph(controller);
+        DialoguePortraitReset.ResetForController(controller, portraitHomeAnchor);
+        controller.StopBehaviour(false);
+    }
+
+    private void ActivateObjectsAfterDialogueInterrupt()
+    {
+        if (objectToActivateOnInterrupt != null)
+            objectToActivateOnInterrupt.SetActive(true);
+    }
+
+    private static void PauseDialogueGraph(DialogueTreeController controller)
+    {
+        if (controller != null && !controller.isPaused)
+            controller.PauseBehaviour();
+    }
+
+    private static void PauseDialogueGraph(DialogueTree tree)
+    {
+        if (tree != null && !tree.isPaused)
+            tree.Pause();
+    }
+
+    private static DialogueTreeController FindControllerForTree(DialogueTree tree)
+    {
+        DialogueTreeController[] all =
+            Object.FindObjectsOfType<DialogueTreeController>(true);
+        for (int i = 0; i < all.Length; i++)
+        {
+            if (all[i] != null && all[i].isRunning && ReferenceEquals(all[i].graph, tree))
+                return all[i];
+        }
+        return null;
     }
 
     private void MoveElementAbovePanel()
