@@ -219,6 +219,7 @@
     <Compile Include="Assets\mofang\第一关\GameOverController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\mofang\第一关\Point4.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\mofang\魔方案例资源\Shaders\Sky\RubikCube_Sky6.shader" />
     <None Include="Assets\mofang\魔方案例资源\Shaders\RubikCube_Clear.shader" />
@@ -264,6 +265,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\开始UI\UI脚本\水墨流动.shader" />
     <None Include="Assets\mofang\第一关\Point.shader" />
+    <None Include="Assets\mofang\第一关\Point6.shader" />
     <None Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\SharedAssets\Shaders\3DText.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Material\ASE\mian5.shader" />
