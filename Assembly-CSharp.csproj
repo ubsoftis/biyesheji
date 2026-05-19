@@ -83,6 +83,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
+    <Compile Include="Assets\开幕素材\提示UI素材\代码\DialoguePortraitReset.cs" />
     <Compile Include="Assets\mofang\第三关\StencilSingleSampleItemSpriteReplace.cs" />
     <Compile Include="Assets\mofang\第三关\SuccessDisableOneScript.cs" />
     <Compile Include="Assets\mofang\第一关\Level1IntroVideo.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Assets\Scenes\Standard Assets\Character Controllers\Sources\Scripts\MouseLook.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\mofang\StenciCube.cs" />
+    <Compile Include="Assets\开幕素材\提示UI素材\代码\DialoguePortraitHome.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DepthBlit\DepthBlitFeature.cs" />
     <Compile Include="Assets\开始UI\UI脚本\SfxLoopRandomGap.cs" />
     <Compile Include="Assets\背包系统\code\ScenePlacementTarget.cs" />
