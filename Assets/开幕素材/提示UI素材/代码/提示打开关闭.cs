@@ -183,17 +183,23 @@ public class CanvasPanelManager : MonoBehaviour
         DialogueTree current = DialogueTree.currentDialogue;
         if (current != null && current.isRunning)
         {
-            DialogueTreeController owner = FindControllerForTree(current);
+            DialogueTreeController owner = FindControllerForTree(current) ?? FindAnyRunningController();
             if (owner != null)
             {
                 InterruptController(owner, dialoguePortraitHomeAnchor);
                 return;
             }
 
-            DialogueTreeController ownerWithoutStop = FindControllerForTree(current);
             PauseDialogueGraph(current);
-            DialoguePortraitReset.ResetForTree(current, dialoguePortraitHomeAnchor, ownerWithoutStop);
+            DialoguePortraitReset.ResetForTree(current, dialoguePortraitHomeAnchor, null);
             current.Stop(false);
+            return;
+        }
+
+        DialogueTreeController running = FindAnyRunningController();
+        if (running != null)
+        {
+            InterruptController(running, dialoguePortraitHomeAnchor);
             return;
         }
 
@@ -233,13 +239,33 @@ public class CanvasPanelManager : MonoBehaviour
 
     private static DialogueTreeController FindControllerForTree(DialogueTree tree)
     {
+        if (tree == null)
+            return null;
+
         DialogueTreeController[] all =
             Object.FindObjectsOfType<DialogueTreeController>(true);
         for (int i = 0; i < all.Length; i++)
         {
-            if (all[i] != null && all[i].isRunning && ReferenceEquals(all[i].graph, tree))
+            if (all[i] == null || !all[i].isRunning)
+                continue;
+
+            if (ReferenceEquals(all[i].graph, tree) || ReferenceEquals(all[i].behaviour, tree))
                 return all[i];
         }
+
+        return null;
+    }
+
+    private static DialogueTreeController FindAnyRunningController()
+    {
+        DialogueTreeController[] all =
+            Object.FindObjectsOfType<DialogueTreeController>(true);
+        for (int i = 0; i < all.Length; i++)
+        {
+            if (all[i] != null && all[i].isRunning)
+                return all[i];
+        }
+
         return null;
     }
 

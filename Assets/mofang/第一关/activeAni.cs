@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -45,6 +46,37 @@ public class activeAni : MonoBehaviour
     [Tooltip("播放时自动隐藏 Screen Space - Overlay 的 Canvas，避免挡住视频。")]
     public bool autoHideOverlayCanvasesWhileCutscene = true;
 
+    [Header("过场音频")]
+    public AudioClip cutsceneClip;
+    [Tooltip("不填则自动在本物体上查找或添加 AudioSource")]
+    public AudioSource cutsceneSource;
+    [Tooltip("一般留空：自动从 DontDestroyOnLoad 的 AudioManager 同物体/子物体上找 BackgroundMusicPlayer。")]
+    public BackgroundMusicPlayer backgroundMusic;
+
+    [Header("Mixer（可选：过场音走 Sfx 总线）")]
+    public AudioMixerGroup cutsceneOutputMixerGroup;
+
+    [Header("音量")]
+    [Range(0f, 1f)]
+    [Tooltip("过场片段最终音量 = 本系数 ×（走 Mixer 时为 1；否则为 AudioManager 的 SFX 有效音量）")]
+    public float cutsceneVolumeScale = 1f;
+
+    [Header("过场期间其它声音")]
+    [Tooltip("为 true：过场开始时把混音器 Ambient 通道临时拉到 0，结束再恢复。")]
+    public bool muteAmbientDuringCutscene = true;
+    [Tooltip("为 true：过场开始时把 Sfx 总线临时拉到 0；会静音 UI 点击等，一般保持关闭。")]
+    public bool muteSfxDuringCutscene = false;
+
+    [Header("背景音乐彻底静音")]
+    [Tooltip("为 true：BGM 渐隐结束后 Pause 音乐 AudioSource；过场结束会先 UnPause 再渐回。")]
+    public bool pauseBackgroundMusicWhenFullyDucked = true;
+
+    [Header("渐入渐出（秒，0 表示瞬间）")]
+    public float bgmFadeOutDuration = 0.6f;
+    public float cutsceneFadeInDuration = 0.4f;
+    public float cutsceneFadeOutDuration = 0.5f;
+    public float bgmFadeInDuration = 0.8f;
+
     [Header("结束后切换关卡")]
     [Tooltip("要加载的场景名（确保已加入 Build Settings）。")]
     public string nextSceneName = "第二关场景";
@@ -64,6 +96,18 @@ public class activeAni : MonoBehaviour
     readonly List<Canvas> _autoHiddenCanvases = new List<Canvas>();
     readonly List<bool> _autoHiddenPrevStates = new List<bool>();
 
+    float _cutsceneTargetVolume = 1f;
+    bool _mutedAmbientForCutscene;
+    bool _mutedSfxForCutscene;
+    bool _pausedBgmForCutscene;
+
+    public bool HasCutsceneAudio => cutsceneClip != null;
+
+    void Awake()
+    {
+        EnsureCutsceneSource();
+    }
+
     void OnEnable()
     {
         RegisterButton();
@@ -77,7 +121,6 @@ public class activeAni : MonoBehaviour
     void Update()
     {
         bool canTriggerCutscene = gbb != null && gbb.GetVariableValue<bool>(CutsceneTriggerKey);
-        // 「闭眼层未显示」：未引用或已隐藏；或「主角本体」已激活。与未引用闭眼物体时 stateOk 不应恒为 false。
         bool closedLayerOff = heroEyeClosedObject == null || !heroEyeClosedObject.activeInHierarchy;
         bool protagonistOn = heroProtagonist != null && heroProtagonist.activeInHierarchy;
         bool stateOk = closedLayerOff || protagonistOn;
@@ -102,17 +145,23 @@ public class activeAni : MonoBehaviour
 
     IEnumerator PlayAndLoad()
     {
+        bool hasAudio = HasCutsceneAudio;
+        if (hasAudio)
+            yield return BeginCutsceneAudio();
+
         if (cutsceneVideoPlayer == null)
         {
             var from = cutsceneObjectToActivate;
             if (from != null) cutsceneVideoPlayer = from.GetComponentInChildren<VideoPlayer>(true);
         }
 
-        if (cutsceneVideoPlayer != null && (cutsceneVideoClip != null || !string.IsNullOrEmpty(cutsceneVideoUrl) || cutsceneVideoPlayer.clip != null))
+        bool hasVideo = cutsceneVideoPlayer != null &&
+            (cutsceneVideoClip != null || !string.IsNullOrEmpty(cutsceneVideoUrl) || cutsceneVideoPlayer.clip != null);
+
+        if (hasVideo)
         {
             ActivateCutsceneObjectIfNeeded();
 
-            // 避免被 VideoPlayer 自己 Play On Awake 干扰时序
             cutsceneVideoPlayer.playOnAwake = false;
             cutsceneVideoPlayer.isLooping = false;
             if (cutsceneVideoPlayer.renderMode != VideoRenderMode.CameraNearPlane &&
@@ -121,9 +170,7 @@ public class activeAni : MonoBehaviour
                 cutsceneVideoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
             }
             if (cutsceneVideoPlayer.targetCamera == null)
-            {
                 cutsceneVideoPlayer.targetCamera = Camera.main;
-            }
             if (cutsceneVideoPlayer.renderMode == VideoRenderMode.CameraNearPlane ||
                 cutsceneVideoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
                 cutsceneVideoPlayer.targetCameraAlpha = 1f;
@@ -145,7 +192,6 @@ public class activeAni : MonoBehaviour
             void OnLoopPointReached(VideoPlayer _) => finished = true;
             cutsceneVideoPlayer.loopPointReached += OnLoopPointReached;
 
-            // Prepare 有助于减少首帧黑屏/卡顿（某些平台上仍可能是异步）
             cutsceneVideoPlayer.Prepare();
             float prepareDeadline = Time.realtimeSinceStartup + 5f;
             while (!cutsceneVideoPlayer.isPrepared && Time.realtimeSinceStartup < prepareDeadline)
@@ -168,14 +214,202 @@ public class activeAni : MonoBehaviour
             }
             cutsceneVideoPlayer.Stop();
         }
-        else
+        else if (!hasAudio)
         {
-            Debug.LogWarning("[activeAni] 未配置可播放视频，跳过过场视频并直接切场景。");
+            Debug.LogWarning("[activeAni] 未配置可播放视频或过场音频，跳过过场并直接切场景。");
         }
 
+        if (hasAudio)
+            yield return EndCutsceneAudio();
+
         if (!string.IsNullOrEmpty(nextSceneName))
-        {
             SceneManager.LoadScene(nextSceneName);
+    }
+
+    IEnumerator BeginCutsceneAudio()
+    {
+        if (cutsceneClip == null)
+            yield break;
+
+        EnsureCutsceneSource();
+        var bgm = ResolveBackgroundMusic();
+
+        ApplyTemporaryMixSilence();
+
+        _cutsceneTargetVolume = GetCutsceneTargetVolume() * Mathf.Clamp01(cutsceneVolumeScale);
+        cutsceneSource.clip = cutsceneClip;
+        cutsceneSource.time = 0f;
+        cutsceneSource.volume = 0f;
+        if (cutsceneOutputMixerGroup != null)
+            cutsceneSource.outputAudioMixerGroup = cutsceneOutputMixerGroup;
+        cutsceneSource.Play();
+
+        float maxDur = Mathf.Max(bgmFadeOutDuration, cutsceneFadeInDuration);
+        if (maxDur <= 0.001f)
+        {
+            if (bgm != null)
+                yield return bgm.DuckForCutscene(0f);
+            cutsceneSource.volume = _cutsceneTargetVolume;
+            if (pauseBackgroundMusicWhenFullyDucked && bgm != null)
+            {
+                bgm.PauseForCutscene();
+                _pausedBgmForCutscene = true;
+            }
+            yield break;
+        }
+
+        Coroutine duckCo = null;
+        if (bgm != null)
+            duckCo = StartCoroutine(bgm.DuckForCutscene(bgmFadeOutDuration));
+
+        float t = 0f;
+        while (t < maxDur)
+        {
+            t += Time.unscaledDeltaTime;
+            float cutK = cutsceneFadeInDuration <= 0.001f
+                ? 1f
+                : Mathf.Clamp01(t / cutsceneFadeInDuration);
+            cutsceneSource.volume = Mathf.Lerp(0f, _cutsceneTargetVolume, cutK);
+            yield return null;
+        }
+
+        cutsceneSource.volume = _cutsceneTargetVolume;
+        if (duckCo != null)
+            yield return duckCo;
+
+        if (pauseBackgroundMusicWhenFullyDucked && bgm != null)
+        {
+            bgm.PauseForCutscene();
+            _pausedBgmForCutscene = true;
+        }
+    }
+
+    IEnumerator EndCutsceneAudio()
+    {
+        if (cutsceneClip == null)
+        {
+            RestoreTemporaryMixSilence();
+            yield break;
+        }
+
+        EnsureCutsceneSource();
+        var bgm = ResolveBackgroundMusic();
+
+        if (_pausedBgmForCutscene && bgm != null)
+        {
+            bgm.UnpauseForCutscene();
+            _pausedBgmForCutscene = false;
+        }
+
+        float maxDur = Mathf.Max(cutsceneFadeOutDuration, bgmFadeInDuration);
+        Coroutine unduckCo = null;
+        if (bgm != null)
+            unduckCo = StartCoroutine(bgm.UnduckAfterCutscene(bgmFadeInDuration));
+
+        if (maxDur <= 0.001f || !cutsceneSource.isPlaying)
+        {
+            cutsceneSource.Stop();
+            if (unduckCo != null)
+                yield return unduckCo;
+            RestoreTemporaryMixSilence();
+            yield break;
+        }
+
+        float startVol = cutsceneSource.volume;
+        float t = 0f;
+        while (t < maxDur)
+        {
+            t += Time.unscaledDeltaTime;
+            float cutK = cutsceneFadeOutDuration <= 0.001f
+                ? 1f
+                : Mathf.Clamp01(t / cutsceneFadeOutDuration);
+            cutsceneSource.volume = Mathf.Lerp(startVol, 0f, cutK);
+            yield return null;
+        }
+
+        cutsceneSource.Stop();
+        cutsceneSource.volume = 0f;
+        if (unduckCo != null)
+            yield return unduckCo;
+
+        RestoreTemporaryMixSilence();
+    }
+
+    void EnsureCutsceneSource()
+    {
+        if (cutsceneSource != null)
+            return;
+        cutsceneSource = GetComponent<AudioSource>();
+        if (cutsceneSource == null)
+            cutsceneSource = gameObject.AddComponent<AudioSource>();
+        cutsceneSource.playOnAwake = false;
+        cutsceneSource.loop = false;
+        cutsceneSource.spatialBlend = 0f;
+    }
+
+    BackgroundMusicPlayer ResolveBackgroundMusic()
+    {
+        if (backgroundMusic != null)
+            return backgroundMusic;
+
+        if (AudioManager.Instance != null)
+        {
+            var onRoot = AudioManager.Instance.GetComponent<BackgroundMusicPlayer>();
+            if (onRoot != null)
+                return onRoot;
+            var inHierarchy = AudioManager.Instance.GetComponentInChildren<BackgroundMusicPlayer>(true);
+            if (inHierarchy != null)
+                return inHierarchy;
+        }
+
+        return FindFirstObjectByType<BackgroundMusicPlayer>();
+    }
+
+    float GetCutsceneTargetVolume()
+    {
+        if (cutsceneOutputMixerGroup != null)
+            return 1f;
+        if (AudioManager.Instance != null)
+            return AudioManager.Instance.GetEffectiveSfxVolume();
+        return 1f;
+    }
+
+    void ApplyTemporaryMixSilence()
+    {
+        if (AudioManager.Instance == null)
+            return;
+        if (muteAmbientDuringCutscene)
+        {
+            AudioManager.Instance.ApplyAmbientToMixerWithoutSaving(0f);
+            _mutedAmbientForCutscene = true;
+        }
+
+        if (muteSfxDuringCutscene)
+        {
+            AudioManager.Instance.ApplySfxToMixerWithoutSaving(0f);
+            _mutedSfxForCutscene = true;
+        }
+    }
+
+    void RestoreTemporaryMixSilence()
+    {
+        if (AudioManager.Instance == null)
+        {
+            _mutedAmbientForCutscene = false;
+            _mutedSfxForCutscene = false;
+            return;
+        }
+
+        if (_mutedAmbientForCutscene)
+        {
+            AudioManager.Instance.RestoreSavedAmbientToMixer();
+            _mutedAmbientForCutscene = false;
+        }
+
+        if (_mutedSfxForCutscene)
+        {
+            AudioManager.Instance.RestoreSavedSfxToMixer();
+            _mutedSfxForCutscene = false;
         }
     }
 

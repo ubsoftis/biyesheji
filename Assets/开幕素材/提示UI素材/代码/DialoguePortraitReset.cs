@@ -9,8 +9,8 @@ public static class DialoguePortraitReset
 {
     public const string DefaultHomeObjectName = "对话角色背景框";
 
-    /// <summary>本项目中 boundGraphObjectReferences[3] 为 MoveTowards 的 overrideAgent（立绘 UI）。</summary>
-    public const int BoundGraphMoveAgentIndex = 3;
+    /// <summary>不同关卡对话树里 MoveTowards 的 overrideAgent 引用下标（开幕=3，第一关=5）。</summary>
+    private static readonly int[] MoveAgentReferenceIndices = { 3, 5 };
 
     public static void ResetForController(DialogueTreeController controller, Transform sharedHomeAnchor = null)
     {
@@ -125,11 +125,18 @@ public static class DialoguePortraitReset
             return;
 
         var refs = controller.boundGraphObjectReferences;
-        if (refs == null || refs.Count <= BoundGraphMoveAgentIndex)
+        if (refs == null)
             return;
 
-        if (refs[BoundGraphMoveAgentIndex] is Component portrait && portrait != null)
-            portrait.gameObject.SetActive(true);
+        for (int i = 0; i < MoveAgentReferenceIndices.Length; i++)
+        {
+            int index = MoveAgentReferenceIndices[i];
+            if (refs.Count <= index)
+                continue;
+
+            if (refs[index] is Component portrait && portrait != null)
+                portrait.gameObject.SetActive(true);
+        }
     }
 
     private static void ResetPortraitHomesInScene()
@@ -148,11 +155,18 @@ public static class DialoguePortraitReset
             return;
 
         var refs = controller.boundGraphObjectReferences;
-        if (refs == null || refs.Count <= BoundGraphMoveAgentIndex)
+        if (refs == null)
             return;
 
-        if (refs[BoundGraphMoveAgentIndex] is Transform agent && agent != home)
-            SnapToHome(agent, home);
+        for (int i = 0; i < MoveAgentReferenceIndices.Length; i++)
+        {
+            int index = MoveAgentReferenceIndices[i];
+            if (refs.Count <= index)
+                continue;
+
+            if (refs[index] is Transform agent && agent != home)
+                SnapToHome(agent, home);
+        }
     }
 
     private static Transform FindTransformByName(string objectName)
