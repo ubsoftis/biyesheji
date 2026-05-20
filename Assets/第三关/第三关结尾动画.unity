@@ -12607,7 +12607,7 @@ MonoBehaviour:
   blackFadeStartDelay: 0
   blackFadeTime: 1.2
   blackFinalAlpha: 1
-  sceneIndexToLoad: 5
+  sceneIndexToLoad: 4
   waitBeforeLoadScene: 0
   enableSceneJump: 1
   playOnStart: 1
