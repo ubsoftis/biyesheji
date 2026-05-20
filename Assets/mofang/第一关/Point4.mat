@@ -30,9 +30,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _Count: 3
-    - _Speed: 0
+    - _Speed: 1.06
     - _Strength: 0.38
     - _Width: 0.05
     m_Colors:
-    - _Color: {r: 0.7610062, g: 0.541724, b: 0.332641, a: 1}
+    - _Color: {r: 0.45911938, g: 0.31582734, b: 0, a: 1}
   m_BuildTextureStacks: []

@@ -1,4 +1,4 @@
-Shader "Unlit/Point3"
+Shader "Unlit/Point4"
 {
     Properties
     {
@@ -27,7 +27,7 @@ Shader "Unlit/Point3"
         {
             Stencil
             {
-                Ref 3
+                Ref 4
                 Comp Equal
                 Pass Keep
                 Fail Keep

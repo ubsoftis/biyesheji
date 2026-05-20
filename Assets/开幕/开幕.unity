@@ -6239,7 +6239,9 @@ MonoBehaviour:
   closeButton: {fileID: 227825039}
   topSortingOrder: 999
   elementToPlaceAbovePanel: {fileID: 1013340058}
-  dialogueControllersToInterrupt: []
+  dialogueControllersToInterrupt:
+  - {fileID: 1962335105}
+  - {fileID: 1478273851}
   dialoguePortraitHomeAnchor: {fileID: 2034704464}
   objectToActivateOnInterrupt: {fileID: 600721113}
 --- !u!1 &526203786
@@ -8197,7 +8199,9 @@ MonoBehaviour:
   closeButton: {fileID: 589193573}
   topSortingOrder: 999
   elementToPlaceAbovePanel: {fileID: 468031296}
-  dialogueControllersToInterrupt: []
+  dialogueControllersToInterrupt:
+  - {fileID: 1962335105}
+  - {fileID: 1478273851}
   dialoguePortraitHomeAnchor: {fileID: 2034704464}
   objectToActivateOnInterrupt: {fileID: 600721113}
 --- !u!114 &729284288

@@ -1,4 +1,4 @@
-Shader "Custom/Point6"
+Shader "Unlit/Point3"
 {
    Properties
     {
