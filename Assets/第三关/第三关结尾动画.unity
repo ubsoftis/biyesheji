@@ -210,6 +210,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   showDebugInfo: 1
+  clickSfx: {fileID: 0}
+  volumeScale: 1
 --- !u!114 &15718872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708,6 +710,9 @@ MonoBehaviour:
   spriteAfterSuccess: {fileID: 21300000, guid: a21c0e2538af9d44ca610c9f6a2191d2, type: 3}
   deactivateSelfOnSuccess: 1
   autoRunSuccessDestroyOnSameObject: 1
+  pickupSfx: {fileID: 0}
+  pickupSfxTag: 
+  pickupSfxVolume: 1
   onSuccess:
     m_PersistentCalls:
       m_Calls: []
@@ -1527,231 +1532,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127228162}
   m_Mesh: {fileID: -4347875952297597050, guid: 0d3a5a56972a95a4699753bc878a4e59, type: 3}
---- !u!1 &153327869
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 153327877}
-  - component: {fileID: 153327876}
-  - component: {fileID: 153327875}
-  - component: {fileID: 153327874}
-  - component: {fileID: 153327873}
-  - component: {fileID: 153327872}
-  - component: {fileID: 153327871}
-  - component: {fileID: 153327870}
-  m_Layer: 5
-  m_Name: "\u4E3B\u89D2"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &153327870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153327869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d71fb7c52372e244baf2e69a9d0d116, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _name: "\u533B\u751F\u7B2C\u4E00\u6BB5"
-  _portrait: {fileID: 2800000, guid: 39b7029ca6ab7e34daa5be394512b181, type: 3}
-  portraitAnimSource: {fileID: 0}
-  _dialogueColor: {r: 1, g: 0.79559743, b: 0.79559743, a: 1}
-  _dialogueOffset: {x: 0, y: 0, z: 0}
---- !u!114 &153327871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153327869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c96f50f9811d544ebc381217e0f175a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueTree: {fileID: 153327874}
---- !u!114 &153327872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153327869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 153327875}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 153327871}
-        m_TargetAssemblyTypeName: StartDialogue, Assembly-CSharp
-        m_MethodName: Talk
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &153327873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153327869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b98a6db0b653f764eac834f85857a9dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _parentBlackboard: {fileID: 0}
-  _serializedBlackboard: '{"_variables":{}}'
-  _objectReferences: []
-  _serializedVariables: []
---- !u!114 &153327874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153327869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c32e4b851ebd8fa4ea0645b99be1cf97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _serializedExposedParameters: []
-  _boundGraphSerialization: "{\"type\":\"NodeCanvas.DialogueTrees.DialogueTree\",\"nodes\":[{\"_action\":{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":1},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},\"_color\":{\"r\":1.0,\"g\":0.3205823,\"a\":1.0},\"_position\":{\"x\":2564.039,\"y\":-658.8123},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"0\"},{\"_action\":{\"target\":{\"_value\":2},\"speed\":{\"_value\":10000000.0},\"stopDistance\":{},\"waitActionFinish\":true,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":3},\"$type\":\"NodeCanvas.Tasks.Actions.MoveTowards\"},\"_position\":{\"x\":2519.822,\"y\":-534.3709},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"1\"},{\"statement\":{\"_text\":\"\\u6700\\u7ec8\\u6211\\u7684\\u75c5\\u60c5\\u5728\\u6162\\u6162\\u6062\\u590d\\uff0c\\u6211\\u6b63\\u5728\\u6162\\u6162\\u4eab\\u53d7\\u73b0\\u6709\\u7684\\u751f\\u6d3b\\uff0c\\u6211\\u4ece\\u7236\\u4eb2\\u90a3\\u7ee7\\u627f\\u4e86\\u4e00\\u4e2a\\u65b0\\u7684\\u7231\\u597d\\uff1a\\u79cd\\u82b1\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2392.73,\"y\":-412.4781},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"2\"},{\"statement\":{\"_text\":\"\\u62ff\\u4e86\\u51e0\\u76c6\\u4ed6\\u7684\\u82b1\\u6765\\u517b\\uff0c\\u4e5f\\u79cd\\u4e86\\u81ea\\u5df1\\u7684\\u82b1\\uff0c\\u8fd9\\u662f\\u6211\\u4e4b\\u524d\\u8ba4\\u4e3a\\u6d6a\\u8d39\\u65f6\\u95f4\\u4e14\\u65e0\\u8da3\\u7684\\u7231\\u597d\\uff0c\\u4f46\\u73b0\\u5728\\u5374\\u4e5f\\u54c1\\u51fa\\u4e9b\\u8bb8\\u8da3\\u5473\\u3002\"},\"_actorName\":\"\\u4e3b\\u89d2\",\"_actorParameterID\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_position\":{\"x\":2411.845,\"y\":-123.9058},\"$type\":\"NodeCanvas.DialogueTrees.StatementNode\",\"$id\":\"3\"},{\"_action\":{\"target\":{},\"speed\":{\"_value\":10000000.0},\"stopDistance\":{},\"waitActionFinish\":true,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":3},\"$type\":\"NodeCanvas.Tasks.Actions.MoveTowards\"},\"_position\":{\"x\":2535.754,\"y\":208.7709},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"4\"},{\"_action\":{\"actions\":[{\"setTo\":0,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":4},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":0,\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":5},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":6},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"},{\"setTo\":1,\"overrideAgent\":{\"_type\":\"UnityEngine.Transform\",\"_value\":7},\"$type\":\"NodeCanvas.Tasks.Actions.SetObjectActive\"}],\"$type\":\"NodeCanvas.Framework.ActionList\"},\"_color\":{\"r\":1.0,\"g\":0.3205823,\"a\":1.0},\"_position\":{\"x\":2657.279,\"y\":305.6751},\"$type\":\"NodeCanvas.DialogueTrees.ActionNode\",\"$id\":\"5\"},{\"_position\":{\"x\":2573.227,\"y\":681.0181},\"$type\":\"NodeCanvas.DialogueTrees.FinishNode\",\"$id\":\"6\"}],\"connections\":[{\"_sourceNode\":{\"$ref\":\"0\"},\"_targetNode\":{\"$ref\":\"1\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"1\"},\"_targetNode\":{\"$ref\":\"2\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"2\"},\"_targetNode\":{\"$ref\":\"3\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"3\"},\"_targetNode\":{\"$ref\":\"4\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"4\"},\"_targetNode\":{\"$ref\":\"5\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"},{\"_sourceNode\":{\"$ref\":\"5\"},\"_targetNode\":{\"$ref\":\"6\"},\"$type\":\"NodeCanvas.DialogueTrees.DTConnection\"}],\"canvasGroups\":[],\"localBlackboard\":{\"_variables\":{\"\u7B2C\u4E00\u6B21\u5BF9\u8BDD\":{\"_name\":\"\\u7b2c\\u4e00\\u6b21\\u5bf9\\u8bdd\",\"_id\":\"d5168460-7dfa-4b2e-824d-415b7e04a604\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"StrageHouse\":{\"_name\":\"StrageHouse\",\"_id\":\"985cf835-16ef-4610-ba47-442719ce6840\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"\u533B\u751F\u7B2C\u4E00\u6B21\":{\"_value\":true,\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e00\\u6b21\",\"_id\":\"5522a177-2277-4eb2-ace1-8b75d6071172\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"\u533B\u751F\u7B2C\u4E8C\u6B21\":{\"_name\":\"\\u533b\\u751f\\u7b2c\\u4e8c\\u6b21\",\"_id\":\"fd858bdc-eace-428b-a844-b0f92ee135f0\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"},\"\u7236\u6BCD\u5BF9\u8BDD\u7B2C\u4E00\u6B21\":{\"_value\":true,\"_name\":\"\\u7236\\u6bcd\\u5bf9\\u8bdd\\u7b2c\\u4e00\\u6b21\",\"_id\":\"35743089-2ca2-4459-ac9b-60a9fa06c8e5\",\"$type\":\"NodeCanvas.Framework.Variable`1[[System.Boolean,
-    mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]\"}}},\"derivedData\":{\"actorParameters\":[{\"_keyName\":\"\\u4e3b\\u89d2\",\"_id\":\"593b734b-d4f8-4419-b4b0-518d55e8b778\",\"_actorObject\":8}],\"$type\":\"NodeCanvas.DialogueTrees.DialogueTree+DerivedSerializationData\"}}"
-  _boundGraphObjectReferences:
-  - {fileID: 0}
-  - {fileID: 1558949108}
-  - {fileID: 1359182482}
-  - {fileID: 153327877}
-  - {fileID: 1732779517}
-  - {fileID: 928969571}
-  - {fileID: 1794680981}
-  - {fileID: 1857471688}
-  - {fileID: 1224819274}
-  _boundGraphSource:
-    _version: 3.33
-    _category: 
-    _comments: 
-    _translation: {x: -1759.3397, y: 585.50494}
-    _zoomFactor: 0.74107385
-  _firstActivation: 1
-  _enableAction: 1
-  _disableAction: 2
-  _lockBoundGraphPrefabOverrides: 1
-  _preInitializeSubGraphs: 0
-  _updateMode: 0
-  _graph: {fileID: 0}
-  _blackboard: {fileID: 1669466510}
---- !u!114 &153327875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153327869}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 39b7029ca6ab7e34daa5be394512b181, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &153327876
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153327869}
-  m_CullTransparentMesh: 1
---- !u!224 &153327877
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153327869}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.83, y: 0.94, z: 0.83}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 271257416}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -682.6, y: -67.2}
-  m_SizeDelta: {x: 562.0067, y: 936.6022}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &170717194
 GameObject:
   m_ObjectHideFlags: 0
@@ -2816,7 +2596,6 @@ RectTransform:
   - {fileID: 1009271793}
   - {fileID: 1198788616}
   - {fileID: 1368322656}
-  - {fileID: 153327877}
   - {fileID: 1669466515}
   - {fileID: 320127837}
   - {fileID: 224998811}
@@ -3854,6 +3633,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blackMask: {fileID: 0}
   fadeSpeed: 1.2
+  clickSfx: {fileID: 0}
+  sfxVolumeScale: 1
 --- !u!65 &450355511
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6185,6 +5966,9 @@ MonoBehaviour:
   spriteAfterSuccess: {fileID: 21300000, guid: a21c0e2538af9d44ca610c9f6a2191d2, type: 3}
   deactivateSelfOnSuccess: 1
   autoRunSuccessDestroyOnSameObject: 0
+  pickupSfx: {fileID: 0}
+  pickupSfxTag: 
+  pickupSfxVolume: 1
   onSuccess:
     m_PersistentCalls:
       m_Calls: []
@@ -7438,6 +7222,9 @@ MonoBehaviour:
   spriteAfterSuccess: {fileID: 21300000, guid: a21c0e2538af9d44ca610c9f6a2191d2, type: 3}
   deactivateSelfOnSuccess: 1
   autoRunSuccessDestroyOnSameObject: 0
+  pickupSfx: {fileID: 0}
+  pickupSfxTag: 
+  pickupSfxVolume: 1
   onSuccess:
     m_PersistentCalls:
       m_Calls: []
@@ -9250,9 +9037,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1d1130bb479121e41a4d236792f834fa, type: 2}
   - {fileID: 11400000, guid: 4a400a3eba48bfc40b217291d94a6db4, type: 2}
   - {fileID: 11400000, guid: 821eb27ff336e0143847274195595dbc, type: 2}
-  objectToActivateA: {fileID: 153327869}
+  objectToActivateA: {fileID: 0}
   objectToActivateB: {fileID: 1558949105}
   debugEverHadPositive: 0000000000
+  debugCurrentCounts: 0000000000000000000000000000000000000000
   hasActivatedTargets: 0
   debugLog: 0
 --- !u!114 &1057238266
@@ -9293,6 +9081,10 @@ MonoBehaviour:
     type: 3}
   gridParent: {fileID: 1635168636}
   selectedSlotIndex: -1
+  defaultPickupSound: {fileID: 0}
+  defaultSelectSound: {fileID: 0}
+  defaultPlaceSound: {fileID: 0}
+  sfxSource: {fileID: 0}
 --- !u!224 &1057238268
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9594,6 +9386,8 @@ MonoBehaviour:
   retractedJudgeAreaSize: {x: 0, y: 0}
   expandedJudgeAreaSize: {x: 171, y: 0}
   clickNoteToToggle: 1
+  toggleSfx: {fileID: 0}
+  sfxTag: 
   toggleButton: {fileID: 63354075}
 --- !u!114 &1088236966
 MonoBehaviour:
@@ -12584,6 +12378,8 @@ MonoBehaviour:
   blackMask: {fileID: 0}
   targetSceneIndex: 0
   fadeSpeed: 1.2
+  clickSfx: {fileID: 0}
+  sfxVolumeScale: 1
 --- !u!65 &1525223117
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12908,6 +12704,9 @@ MonoBehaviour:
   spriteAfterSuccess: {fileID: 21300000, guid: a21c0e2538af9d44ca610c9f6a2191d2, type: 3}
   deactivateSelfOnSuccess: 1
   autoRunSuccessDestroyOnSameObject: 1
+  pickupSfx: {fileID: 0}
+  pickupSfxTag: 
+  pickupSfxVolume: 1
   onSuccess:
     m_PersistentCalls:
       m_Calls: []
@@ -13332,6 +13131,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 229888
   duration: 0.2
+  rotateSound: {fileID: 0}
+  rotateAudioSource: {fileID: 0}
   List_History: []
   List_Str: []
   dir_R: 1
@@ -15745,6 +15546,8 @@ MonoBehaviour:
   targetUI: {fileID: 0}
   startHidden: 1
   closeOtherUI: 1
+  toggleClickSfx: {fileID: 0}
+  sfxVolumeScale: 1
 --- !u!65 &1823869271
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15946,6 +15749,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2d0c1356f637fcf4a99e76277a844ec2, type: 3}
   - {fileID: 21300000, guid: 2c10e60294b62974db3840d53c92438c, type: 3}
   blockWhenPointerOverUi: 1
+  clickSfx: {fileID: 0}
+  clickSfxTag: 
+  clickSfxVolume: 1
   fullscreenBlackOverlay: {fileID: 0}
   holdDurationAfterLastSprite: 0.75
   fadeOutDuration: 1
@@ -16338,6 +16144,8 @@ MonoBehaviour:
   targetUI: {fileID: 0}
   startHidden: 1
   closeOtherUI: 1
+  toggleClickSfx: {fileID: 0}
+  sfxVolumeScale: 1
 --- !u!65 &1868692904
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17770,6 +17578,9 @@ MonoBehaviour:
   spriteAfterSuccess: {fileID: 21300000, guid: a21c0e2538af9d44ca610c9f6a2191d2, type: 3}
   deactivateSelfOnSuccess: 1
   autoRunSuccessDestroyOnSameObject: 0
+  pickupSfx: {fileID: 0}
+  pickupSfxTag: 
+  pickupSfxVolume: 1
   onSuccess:
     m_PersistentCalls:
       m_Calls: []
