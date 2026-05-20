@@ -96,6 +96,17 @@ public class StencilSingleSampleItemSpriteReplace : MonoBehaviour, IStencilClick
         "可避免「忘记在 onSuccess 里接线」导致整颗物体先被关掉、收尾逻辑从未执行」的问题。")]
     public bool autoRunSuccessDestroyOnSameObject = true;
 
+    [Header("拾取音效")]
+    [Tooltip("拾取成功时播放；留空则尝试 requiredItem.pickupSound 或 InventoryManager.defaultPickupSound")]
+    public AudioClip pickupSfx;
+
+    [Tooltip("Sfx 子标签；与总 Sfx 相乘。留空则仅用总 Sfx")]
+    public string pickupSfxTag = "";
+
+    [Tooltip("仅此拾取音效的音量（0~1）")]
+    [Range(0f, 1f)]
+    public float pickupSfxVolume = 1f;
+
     [Header("可选")]
     public UnityEvent onSuccess;
 
@@ -240,6 +251,8 @@ public class StencilSingleSampleItemSpriteReplace : MonoBehaviour, IStencilClick
 
         completed = true;
 
+        PlayPickupSfxIfConfigured();
+
         if (spriteRendererOnOtherObject != null && spriteAfterSuccess != null)
             spriteRendererOnOtherObject.sprite = spriteAfterSuccess;
         else if (debugLog && spriteRendererOnOtherObject == null)
@@ -263,6 +276,23 @@ public class StencilSingleSampleItemSpriteReplace : MonoBehaviour, IStencilClick
 
         if (deactivateSelfOnSuccess && gameObject.activeSelf)
             gameObject.SetActive(false);
+    }
+
+    void PlayPickupSfxIfConfigured()
+    {
+        if (pickupSfx != null && AudioManager.Instance != null)
+        {
+            string tag = string.IsNullOrWhiteSpace(pickupSfxTag) ? null : pickupSfxTag.Trim();
+            AudioManager.Instance.PlaySfx2D(pickupSfx, tag, pickupSfxVolume);
+            return;
+        }
+
+        if (requiredItem == null)
+            return;
+
+        InventoryManager inv = InventoryManager.Instance;
+        if (inv != null)
+            inv.PlayPickupSound(requiredItem);
     }
 
     bool TryPickCubePieceAtSingleSample()

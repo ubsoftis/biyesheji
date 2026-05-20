@@ -22,6 +22,17 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
     [Tooltip("为 true：指针在 UI 上时不响应（需场景里有 EventSystem）。")]
     public bool blockWhenPointerOverUi = true;
 
+    [Header("点击音效")]
+    [Tooltip("每次有效点击换图时播放；留空则不播放")]
+    public AudioClip clickSfx;
+
+    [Tooltip("Sfx 子标签；与总 Sfx 相乘。留空则仅用总 Sfx")]
+    public string clickSfxTag = "";
+
+    [Tooltip("仅此点击音效的音量（0~1）")]
+    [Range(0f, 1f)]
+    public float clickSfxVolume = 1f;
+
     [Header("黑屏（二选一）")]
     [Tooltip("可选：全屏黑色 Image，初始 alpha 建议为 0；若赋值则用其做渐隐，否则用 OnGUI 绘制。")]
     public Image fullscreenBlackOverlay;
@@ -103,6 +114,7 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
 
         spriteRenderer.sprite = next;
         _step++;
+        PlayClickSfxIfConfigured();
         onAfterSpriteStep?.Invoke(_step);
 
         if (_step >= 3)
@@ -112,6 +124,15 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
                 StopCoroutine(_fadeCo);
             _fadeCo = StartCoroutine(FadeOutAndLoadRoutine());
         }
+    }
+
+    void PlayClickSfxIfConfigured()
+    {
+        if (clickSfx == null || AudioManager.Instance == null)
+            return;
+
+        string tag = string.IsNullOrWhiteSpace(clickSfxTag) ? null : clickSfxTag.Trim();
+        AudioManager.Instance.PlaySfx2D(clickSfx, tag, clickSfxVolume);
     }
 
     IEnumerator FadeOutAndLoadRoutine()

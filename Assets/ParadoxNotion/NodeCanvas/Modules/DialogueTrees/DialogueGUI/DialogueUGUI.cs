@@ -128,6 +128,15 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
             var audio = info.statement.GetLocalizedAudio(language);
             var actor = info.actor;
 
+            if ( actor == null ) {
+                Debug.LogWarning(
+                    "[DialogueUGUI] SubtitlesRequestInfo.actor 为 null，请检查对话树 Actor 参数是否已绑定 DialogueActor。将跳过本条字幕并继续对话树。",
+                    this);
+                if ( dialogueTree != null && dialogueTree.isRunning && !dialogueTree.isPaused )
+                    info.Continue();
+                yield break;
+            }
+
             subtitlesGroup.gameObject.SetActive(true);
             subtitlesGroup.position = originalSubsPosition;
             actorSpeech.text = "";
