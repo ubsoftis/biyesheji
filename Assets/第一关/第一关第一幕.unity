@@ -13674,7 +13674,7 @@ MonoBehaviour:
   _UID: 5d2e1c22-7a1b-4f17-b19c-3deba631c69b
   _identifier: Global
   _singletonMode: 0
-  _dontDestroyOnLoad: 0
+  _dontDestroyOnLoad: 1
 --- !u!1 &827812415
 GameObject:
   m_ObjectHideFlags: 0

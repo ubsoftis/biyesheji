@@ -20338,7 +20338,7 @@ MonoBehaviour:
   _UID: 7671ce34-975b-4ca0-804d-d612d62a27da
   _identifier: Global
   _singletonMode: 0
-  _dontDestroyOnLoad: 0
+  _dontDestroyOnLoad: 1
 --- !u!4 &1920156340
 Transform:
   m_ObjectHideFlags: 0

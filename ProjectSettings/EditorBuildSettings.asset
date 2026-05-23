@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: "Assets/\u5F00\u59CBUI/stateRotate 1.unity"
-    guid: d0f05f3730ca06f43bd415a2bcecb4a9
-  - enabled: 1
     path: "Assets/\u5F00\u5E55/\u5F00\u5E55.unity"
     guid: da05eb03c5f115b4fb7b0b98dd9dd7d1
   - enabled: 1
@@ -20,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: "Assets/\u7B2C\u4E09\u5173/\u7B2C\u4E09\u5173.unity"
     guid: 8ef20d9641427694a9fc9cbe847fe904
+  - enabled: 1
+    path: "Assets/\u5F00\u59CBUI/stateRotate 1.unity"
+    guid: d0f05f3730ca06f43bd415a2bcecb4a9
   - enabled: 1
     path: "Assets/\u7B2C\u4E09\u5173/\u7B2C\u4E09\u5173\u7ED3\u5C3E\u52A8\u753B.unity"
     guid: 62267e19db1a5264a81629cab34873bf
