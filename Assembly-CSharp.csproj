@@ -110,6 +110,7 @@
     <Compile Include="Assets\第一关\第一关代码\纸条收放UI代码.cs" />
     <Compile Include="Assets\mofang\第一关\CutscenePlaybackGate.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DistortTunnel\DistortTunnelRendererFeature.cs" />
+    <Compile Include="Assets\背包系统\code\FiveItemsInInventoryActivateGate.cs" />
     <Compile Include="Assets\背包系统\code\InventoryManager.cs" />
     <Compile Include="Assets\背包系统\code\FiveItemsAppearedThenConsumedDualActivateGate.cs" />
     <Compile Include="Assets\mofang\第一关\FishChildrenCheck.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Assets\背包系统\code\ScenePlacementTarget.cs" />
     <Compile Include="Assets\mofang\第一关\StenciCube1.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
+    <Compile Include="Assets\开始UI\UI脚本\GlobalSceneTransition.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\开始UI\UI脚本\复刻退出效果.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />

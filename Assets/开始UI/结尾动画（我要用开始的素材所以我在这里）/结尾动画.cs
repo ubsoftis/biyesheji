@@ -5,6 +5,64 @@ using UnityEngine.SceneManagement;
 
 public class CubeAnimationController : MonoBehaviour
 {
+    // ===================================================================
+    // ====== 制作人名单（新增）======
+    // ===================================================================
+    [Header("==== 制作人名单 ====")]
+    [Tooltip("是否启用片头制作人名单（关闭后直接播放原动画）")]
+    public bool enableCredits = true;
+
+    [Tooltip("制作人名单总Canvas的CanvasGroup（用于整体显隐）")]
+    public CanvasGroup creditsCanvasGroup;
+
+    [Tooltip("名单各段（每段一个CanvasGroup，按播放顺序拖入）\n例如：特别感谢、游戏美术、游戏策划、游戏程序、感谢游玩")]
+    public CanvasGroup[] creditsSegments;
+
+    [Tooltip("每段淡入时间（秒）")]
+    public float creditsFadeInTime = 0.8f;
+    [Tooltip("每段完全显示停留时间（秒）")]
+    public float creditsHoldTime = 2.6f;
+    [Tooltip("每段淡出时间（秒）")]
+    public float creditsFadeOutTime = 0.6f;
+    [Tooltip("段与段之间的重叠时间（上一段还剩多少秒淡出时，下一段开始淡入；0=完全消失后再出现）")]
+    public float creditsSegmentOverlap = 0f;
+
+    [Tooltip("名单全部播放完后，整个Canvas淡出的时间（衔接到开场黑屏）")]
+    public float creditsCanvasFadeOutTime = 0.5f;
+    [Tooltip("名单结束后等待多少秒再进入原动画")]
+    public float delayAfterCredits = 0.3f;
+
+    [Header("==== 名单背景图 ====")]
+    [Tooltip("名单期间的背景图（Image或RawImage，放在CreditsCanvas下作为子物体）")]
+    public CanvasGroup creditsBackgroundGroup;
+    [Tooltip("背景图从黑屏淡入的时间")]
+    public float creditsBackgroundFadeInTime = 1.5f;
+
+    [Header("==== 片尾开头黑屏 ====")]
+    [Tooltip("片尾开始前先停留黑屏的时间（让玩家有一个'准备进入片尾'的过渡）")]
+    public float creditsOpeningBlackHoldTime = 1.0f;
+
+    [Header("==== 段落上浮入场 ====")]
+    [Tooltip("段落入场时从下方多少像素的位置浮上来（0=不浮动，只淡入）")]
+    public float segmentRiseDistance = 60f;
+
+    [Header("==== 片尾期间隐藏的其他Canvas ====")]
+    [Tooltip("片尾期间需要隐藏的其他Canvas（比如游戏中的UI Canvas），原动画开始时会自动显示")]
+    public GameObject[] hideDuringCredits;
+
+    [Header("==== 片尾BGM（新增）====")]
+    [Tooltip("片尾曲BGM（贯穿整个片尾：名单→Cube动画→故障效果）")]
+    public AudioClip creditsBGM;
+    [Range(0f, 1f)]
+    public float creditsBGMVolume = 0.8f;
+    [Tooltip("BGM是否循环（一般关闭，让它自然播放完）")]
+    public bool creditsBGMLoop = false;
+
+    private AudioSource creditsBGMSource; // 自动创建
+    // ===================================================================
+    // ====== 制作人名单字段结束 ======
+    // ===================================================================
+
     [Header("==== 摄像机设置 ====")]
     public Camera targetCamera;
     public Camera[] camerasToDisable;
@@ -106,6 +164,7 @@ public class CubeAnimationController : MonoBehaviour
         SetupCameras();
         InitOverlays();
         InitAudio();
+        InitCredits(); // ====== 制作人名单（新增）======
 
         if (cube != null && pos3 != null)
         {
@@ -188,6 +247,14 @@ public class CubeAnimationController : MonoBehaviour
 
     IEnumerator AnimationSequence()
     {
+        // ====== 制作人名单（新增）======
+        if (enableCredits)
+        {
+            yield return StartCoroutine(PlayCreditsSequence());
+            yield return new WaitForSeconds(delayAfterCredits);
+        }
+        // ====== 制作人名单结束，以下为原动画逻辑，未做改动 ======
+
         // === 开场黑屏淡出 ===
         if (enableOpeningFade)
         {
@@ -626,4 +693,222 @@ public class CubeAnimationController : MonoBehaviour
         }
         backgroundImage.color = endColor;
     }
+
+    // ===================================================================
+    // ====== 制作人名单（新增）======
+    // ===================================================================
+
+    /// <summary>
+    /// 初始化：把名单Canvas设为完全显示，但每个段落初始alpha=0（不可见）
+    /// 创建独立的AudioSource用于播放片尾BGM
+    /// </summary>
+    void InitCredits()
+    {
+        // 名单总Canvas初始化为可见（alpha=1），等需要时再整体淡出
+        if (creditsCanvasGroup != null)
+        {
+            creditsCanvasGroup.alpha = enableCredits ? 1f : 0f;
+            creditsCanvasGroup.gameObject.SetActive(enableCredits);
+        }
+
+        // 每个段落初始全部隐藏
+        if (creditsSegments != null)
+        {
+            foreach (var seg in creditsSegments)
+            {
+                if (seg != null) seg.alpha = 0f;
+            }
+        }
+
+        // 背景图初始为透明（从黑屏淡入）
+        if (creditsBackgroundGroup != null)
+            creditsBackgroundGroup.alpha = 0f;
+
+        // 片尾期间需要隐藏的其他Canvas
+        if (enableCredits && hideDuringCredits != null)
+        {
+            foreach (var go in hideDuringCredits)
+            {
+                if (go != null) go.SetActive(false);
+            }
+        }
+
+        // 创建独立的BGM AudioSource（与原pos3AudioSource分开，互不干扰）
+        creditsBGMSource = gameObject.AddComponent<AudioSource>();
+        creditsBGMSource.playOnAwake = false;
+    }
+
+    /// <summary>
+    /// 播放整个制作人名单序列：BGM启动 + 各段依次淡入淡出 + Canvas整体淡出
+    /// </summary>
+    IEnumerator PlayCreditsSequence()
+    {
+        // 临时关闭blackOverlay（让背景图能透过来），名单结束后会恢复
+        // 这样不影响原动画的"开场黑屏淡出"逻辑
+        float savedBlackAlpha = 0f;
+        if (blackOverlay != null)
+        {
+            savedBlackAlpha = blackOverlay.color.a;
+            // 先保持黑屏，等"片尾开头黑屏"时间过完再开始
+            Color c = blackOverlay.color; c.a = 1f;
+            blackOverlay.color = c;
+        }
+
+        // 片尾开头黑屏停留（让玩家有一个进入片尾的过渡）
+        yield return new WaitForSeconds(creditsOpeningBlackHoldTime);
+
+        // 停留结束，关闭黑屏让背景能透过来
+        if (blackOverlay != null)
+        {
+            Color c = blackOverlay.color; c.a = 0f;
+            blackOverlay.color = c;
+        }
+
+        // 启动BGM（贯穿整个片尾）
+        if (creditsBGM != null && creditsBGMSource != null)
+        {
+            creditsBGMSource.clip = creditsBGM;
+            creditsBGMSource.volume = creditsBGMVolume;
+            creditsBGMSource.loop = creditsBGMLoop;
+            creditsBGMSource.Play();
+        }
+
+        // 背景图淡入（与第一段名单同时进行，让画面不空）
+        if (creditsBackgroundGroup != null)
+            StartCoroutine(FadeCreditsBackground());
+
+        // 各段依次播放（带重叠）
+        if (creditsSegments != null && creditsSegments.Length > 0)
+        {
+            for (int i = 0; i < creditsSegments.Length; i++)
+            {
+                CanvasGroup current = creditsSegments[i];
+                if (current == null) continue;
+
+                bool isLast = (i == creditsSegments.Length - 1);
+
+                // 启动当前段落的淡入→停留→淡出
+                StartCoroutine(FadeSegment(current));
+
+                // 计算下一段开始的等待时间
+                // 段落总时长 = 淡入 + 停留 + 淡出
+                // 下一段应该在当前段淡出还剩 overlap 秒时启动
+                float segmentTotal = creditsFadeInTime + creditsHoldTime + creditsFadeOutTime;
+                float waitBeforeNext = segmentTotal - creditsSegmentOverlap;
+
+                if (isLast)
+                {
+                    // 最后一段：等它完整播完
+                    yield return new WaitForSeconds(segmentTotal);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(waitBeforeNext);
+                }
+            }
+        }
+
+        // 名单整体Canvas淡出，衔接到原动画的开场黑屏
+        if (creditsCanvasGroup != null)
+        {
+            float timer = 0f;
+            float startAlpha = creditsCanvasGroup.alpha;
+            while (timer < creditsCanvasFadeOutTime)
+            {
+                float t = timer / creditsCanvasFadeOutTime;
+                creditsCanvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, t);
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            creditsCanvasGroup.alpha = 0f;
+            creditsCanvasGroup.gameObject.SetActive(false); // 彻底关掉，避免挡住后面
+        }
+
+        // 恢复blackOverlay到原始alpha，让原动画的"开场黑屏淡出"正常工作
+        if (blackOverlay != null)
+        {
+            Color c = blackOverlay.color; c.a = savedBlackAlpha;
+            blackOverlay.color = c;
+        }
+
+        // 恢复之前隐藏的Canvas，让它们能在原动画开始时显示
+        if (hideDuringCredits != null)
+        {
+            foreach (var go in hideDuringCredits)
+            {
+                if (go != null) go.SetActive(true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 背景图从黑屏（alpha=0）淡入到完全显示
+    /// 名单结束时会跟随CreditsCanvasGroup整体淡出，不需要单独淡出
+    /// </summary>
+    IEnumerator FadeCreditsBackground()
+    {
+        if (creditsBackgroundGroup == null) yield break;
+
+        float timer = 0f;
+        while (timer < creditsBackgroundFadeInTime)
+        {
+            creditsBackgroundGroup.alpha = timer / creditsBackgroundFadeInTime;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        creditsBackgroundGroup.alpha = 1f;
+    }
+
+    /// <summary>
+    /// 单个段落的淡入（同时上浮）→停留→淡出（位置不动）
+    /// </summary>
+    IEnumerator FadeSegment(CanvasGroup seg)
+    {
+        // 记录原始位置，淡入结束后会回到这个位置
+        RectTransform rt = seg.GetComponent<RectTransform>();
+        Vector2 originalPos = Vector2.zero;
+        Vector2 startPos = Vector2.zero;
+        bool canRise = (rt != null && segmentRiseDistance > 0.01f);
+
+        if (canRise)
+        {
+            originalPos = rt.anchoredPosition;
+            startPos = originalPos + new Vector2(0, -segmentRiseDistance);
+            rt.anchoredPosition = startPos;
+        }
+
+        // 淡入 + 上浮（同步进行）
+        float timer = 0f;
+        while (timer < creditsFadeInTime)
+        {
+            float t = timer / creditsFadeInTime;
+            float smoothT = Mathf.SmoothStep(0f, 1f, t); // 加缓动让上浮更自然
+            seg.alpha = t;
+
+            if (canRise)
+                rt.anchoredPosition = Vector2.Lerp(startPos, originalPos, smoothT);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        seg.alpha = 1f;
+        if (canRise) rt.anchoredPosition = originalPos;
+
+        // 停留
+        yield return new WaitForSeconds(creditsHoldTime);
+
+        // 淡出（位置不动，只淡）
+        timer = 0f;
+        while (timer < creditsFadeOutTime)
+        {
+            seg.alpha = 1f - (timer / creditsFadeOutTime);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        seg.alpha = 0f;
+    }
+
+    // ===================================================================
+    // ====== 制作人名单结束 ======
+    // ===================================================================
 }
