@@ -38,13 +38,34 @@ public class CubeAnimationController : MonoBehaviour
     [Tooltip("背景图从黑屏淡入的时间")]
     public float creditsBackgroundFadeInTime = 1.5f;
 
+    [Header("==== 3D场景黑色遮罩（防止3D场景露出来）====")]
+    [Tooltip("一个独立的黑色遮罩Canvas/Image的CanvasGroup，Sort Order应设为最低，覆盖在3D场景上层、CreditsCanvas下层")]
+    public CanvasGroup blackMaskGroup;
+    [Tooltip("遮罩是否在片尾结束时跟随淡出（一般不淡出，让原动画的blackOverlay接管）")]
+    public bool fadeBlackMaskOnEnd = false;
+    [Tooltip("如果上面勾选了，遮罩淡出的时间")]
+    public float blackMaskFadeOutTime = 0.5f;
+
+    [Header("==== 装饰白线（独立于段落，开头淡入结尾淡出）====")]
+    [Tooltip("装饰白线的CanvasGroup（独立放在CreditsCanvas下，不在任何Segment里）")]
+    public CanvasGroup decorationLinesGroup;
+    [Tooltip("白线淡入时间（在第一段开始之前完成）")]
+    public float decorationFadeInTime = 0.8f;
+    [Tooltip("白线完全显示后，等待多少秒再开始第一段（让白线先稳定显示一会儿）")]
+    public float decorationHoldBeforeFirstSegment = 0.5f;
+    [Tooltip("白线淡出时间（与最后一段淡出同时进行）")]
+    public float decorationFadeOutTime = 0.6f;
+
     [Header("==== 片尾开头黑屏 ====")]
     [Tooltip("片尾开始前先停留黑屏的时间（让玩家有一个'准备进入片尾'的过渡）")]
     public float creditsOpeningBlackHoldTime = 1.0f;
 
     [Header("==== 段落上浮入场 ====")]
-    [Tooltip("段落入场时从下方多少像素的位置浮上来（0=不浮动，只淡入）")]
+    [Tooltip("【全局默认值】带 RiseOnFadeIn 组件的Text从下方多少像素的位置浮上来。\n每个RiseOnFadeIn组件可以单独覆盖这个值。\n不挂RiseOnFadeIn组件的Text将不会上浮，只淡入。")]
     public float segmentRiseDistance = 60f;
+
+    [Tooltip("上浮文字完全到位后，等待多少秒再让段落里其他（不上浮的）文字淡入。\n0=同时出现；越大=层次感越强")]
+    public float delayBeforeNonRisingFadeIn = 0.3f;
 
     [Header("==== 片尾期间隐藏的其他Canvas ====")]
     [Tooltip("片尾期间需要隐藏的其他Canvas（比如游戏中的UI Canvas），原动画开始时会自动显示")]
@@ -720,9 +741,39 @@ public class CubeAnimationController : MonoBehaviour
             }
         }
 
+        // 预处理：所有RiseOnFadeIn组件在游戏开始时强制配置CanvasGroup
+        // 这样即使没在Inspector里勾ignoreParentGroups，运行时也会正确
+        if (creditsSegments != null)
+        {
+            foreach (var seg in creditsSegments)
+            {
+                if (seg == null) continue;
+                RiseOnFadeIn[] risers = seg.GetComponentsInChildren<RiseOnFadeIn>(true);
+                foreach (var r in risers)
+                {
+                    if (r == null) continue;
+                    var cg = r.GetComponent<CanvasGroup>();
+                    if (cg == null) cg = r.gameObject.AddComponent<CanvasGroup>();
+                    cg.ignoreParentGroups = true;
+                    cg.alpha = 0f; // 初始隐藏
+                }
+            }
+        }
+
         // 背景图初始为透明（从黑屏淡入）
         if (creditsBackgroundGroup != null)
             creditsBackgroundGroup.alpha = 0f;
+
+        // 3D场景黑色遮罩：片尾开始就保持全黑显示，挡住3D场景
+        if (enableCredits && blackMaskGroup != null)
+        {
+            blackMaskGroup.gameObject.SetActive(true);
+            blackMaskGroup.alpha = 1f;
+        }
+
+        // 装饰白线：初始为透明，等第一段开始时一起淡入
+        if (decorationLinesGroup != null)
+            decorationLinesGroup.alpha = 0f;
 
         // 片尾期间需要隐藏的其他Canvas
         if (enableCredits && hideDuringCredits != null)
@@ -773,9 +824,16 @@ public class CubeAnimationController : MonoBehaviour
             creditsBGMSource.Play();
         }
 
-        // 背景图淡入（与第一段名单同时进行，让画面不空）
+        // 背景图淡入（与白线/第一段同时进行，让画面不空）
         if (creditsBackgroundGroup != null)
             StartCoroutine(FadeCreditsBackground());
+
+        // 装饰白线先淡入并停留一会儿，再开始播放段落
+        if (decorationLinesGroup != null)
+        {
+            yield return StartCoroutine(FadeCanvasGroup(decorationLinesGroup, 0f, 1f, decorationFadeInTime));
+            yield return new WaitForSeconds(decorationHoldBeforeFirstSegment);
+        }
 
         // 各段依次播放（带重叠）
         if (creditsSegments != null && creditsSegments.Length > 0)
@@ -790,15 +848,22 @@ public class CubeAnimationController : MonoBehaviour
                 // 启动当前段落的淡入→停留→淡出
                 StartCoroutine(FadeSegment(current));
 
+                // 最后一段：在它开始淡出时同步淡出白线
+                if (isLast && decorationLinesGroup != null)
+                {
+                    StartCoroutine(FadeDecorationOutDelayed());
+                }
+
                 // 计算下一段开始的等待时间
-                // 段落总时长 = 淡入 + 停留 + 淡出
-                // 下一段应该在当前段淡出还剩 overlap 秒时启动
-                float segmentTotal = creditsFadeInTime + creditsHoldTime + creditsFadeOutTime;
+                // 段落总时长 = 上浮阶段（如果有上浮文字）+ 延迟 + 淡入 + 停留 + 淡出
+                // 上浮阶段时长用全局淡入时间近似（如果有自定义时长更长的情况，可能略有偏差，但通常足够）
+                bool hasRisers = (current.GetComponentsInChildren<RiseOnFadeIn>(false).Length > 0);
+                float risingPhase = hasRisers ? (creditsFadeInTime + delayBeforeNonRisingFadeIn) : 0f;
+                float segmentTotal = risingPhase + creditsFadeInTime + creditsHoldTime + creditsFadeOutTime;
                 float waitBeforeNext = segmentTotal - creditsSegmentOverlap;
 
                 if (isLast)
                 {
-                    // 最后一段：等它完整播完
                     yield return new WaitForSeconds(segmentTotal);
                 }
                 else
@@ -839,6 +904,17 @@ public class CubeAnimationController : MonoBehaviour
                 if (go != null) go.SetActive(true);
             }
         }
+
+        // 黑色遮罩：默认保持显示，让原动画的blackOverlay接管；勾选了fadeBlackMaskOnEnd则淡出
+        if (blackMaskGroup != null)
+        {
+            if (fadeBlackMaskOnEnd)
+            {
+                yield return StartCoroutine(FadeCanvasGroup(blackMaskGroup, blackMaskGroup.alpha, 0f, blackMaskFadeOutTime));
+                blackMaskGroup.gameObject.SetActive(false);
+            }
+            // 不勾选则保持全黑，作为底板继续遮挡3D场景，原动画的blackOverlay淡出时仍能看到黑色
+        }
     }
 
     /// <summary>
@@ -860,52 +936,207 @@ public class CubeAnimationController : MonoBehaviour
     }
 
     /// <summary>
-    /// 单个段落的淡入（同时上浮）→停留→淡出（位置不动）
+    /// 通用的CanvasGroup淡入淡出协程
+    /// </summary>
+    IEnumerator FadeCanvasGroup(CanvasGroup cg, float fromAlpha, float toAlpha, float duration)
+    {
+        if (cg == null) yield break;
+        if (duration <= 0f)
+        {
+            cg.alpha = toAlpha;
+            yield break;
+        }
+
+        float timer = 0f;
+        cg.alpha = fromAlpha;
+        while (timer < duration)
+        {
+            cg.alpha = Mathf.Lerp(fromAlpha, toAlpha, timer / duration);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        cg.alpha = toAlpha;
+    }
+
+    /// <summary>
+    /// 装饰白线延迟淡出：等最后一段进入"淡出阶段"时再开始淡出
+    /// 时机 = 最后一段的（上浮阶段 +）淡入时间 + 停留时间（也就是它开始淡出的那一刻）
+    /// </summary>
+    IEnumerator FadeDecorationOutDelayed()
+    {
+        if (decorationLinesGroup == null) yield break;
+
+        // 检查最后一段是否有上浮文字，决定要不要等上浮阶段
+        float risingPhase = 0f;
+        if (creditsSegments != null && creditsSegments.Length > 0)
+        {
+            CanvasGroup last = creditsSegments[creditsSegments.Length - 1];
+            if (last != null && last.GetComponentsInChildren<RiseOnFadeIn>(false).Length > 0)
+                risingPhase = creditsFadeInTime + delayBeforeNonRisingFadeIn;
+        }
+
+        yield return new WaitForSeconds(risingPhase + creditsFadeInTime + creditsHoldTime);
+        yield return StartCoroutine(FadeCanvasGroup(decorationLinesGroup, 1f, 0f, decorationFadeOutTime));
+    }
+
+    /// <summary>
+    /// 单个段落的播放流程：
+    /// 1. 段落整体先alpha=0（所有不上浮的Text隐藏）
+    /// 2. 上浮文字（ignoreParentGroups=true）单独淡入+上浮
+    /// 3. 等上浮完成 + 延迟
+    /// 4. 段落整体淡入（带动所有不上浮的Text显示出来，上浮文字因为ignoreParentGroups不受影响）
+    /// 5. 停留
+    /// 6. 段落整体淡出（同时手动淡出上浮文字）
     /// </summary>
     IEnumerator FadeSegment(CanvasGroup seg)
     {
-        // 记录原始位置，淡入结束后会回到这个位置
-        RectTransform rt = seg.GetComponent<RectTransform>();
-        Vector2 originalPos = Vector2.zero;
-        Vector2 startPos = Vector2.zero;
-        bool canRise = (rt != null && segmentRiseDistance > 0.01f);
+        // 查找当前段落下所有带 RiseOnFadeIn 标记的子物体
+        RiseOnFadeIn[] risers = seg.GetComponentsInChildren<RiseOnFadeIn>(false);
 
-        if (canRise)
+        // 关键：在运行时强制确保每个 RiseOnFadeIn 的 CanvasGroup 配置正确
+        // 不依赖 Inspector 手动勾选 ignoreParentGroups
+        foreach (var r in risers)
         {
-            originalPos = rt.anchoredPosition;
-            startPos = originalPos + new Vector2(0, -segmentRiseDistance);
-            rt.anchoredPosition = startPos;
+            if (r == null) continue;
+            var cg = r.GetComponent<CanvasGroup>();
+            if (cg == null) cg = r.gameObject.AddComponent<CanvasGroup>();
+            cg.ignoreParentGroups = true; // 强制：不受Segment整体CanvasGroup影响
+            cg.alpha = 0f;                 // 先隐藏，等下统一淡入
         }
 
-        // 淡入 + 上浮（同步进行）
+        // 段落整体alpha=0：所有不上浮的Text都隐藏
+        // 上浮文字因为ignoreParentGroups=true，alpha由它们自己的CanvasGroup控制（已经是0）
+        seg.alpha = 0f;
+
+        // 把所有上浮文字移到下方起始位置
+        foreach (var r in risers)
+        {
+            if (r == null) continue;
+            RectTransform rt = r.GetComponent<RectTransform>();
+            if (rt != null)
+            {
+                float dist = (r.riseDistance > 0.01f) ? r.riseDistance : segmentRiseDistance;
+                if (dist > 0.01f)
+                    rt.anchoredPosition = rt.anchoredPosition + new Vector2(0, -dist);
+            }
+        }
+
+        // 步骤1：上浮文字单独淡入+上浮
+        float maxRiseDuration = 0f;
+        foreach (var r in risers)
+        {
+            if (r == null) continue;
+            StartCoroutine(RiseOneItem(r));
+            float d = r.useGlobalDuration ? creditsFadeInTime : r.customRiseDuration;
+            if (d > maxRiseDuration) maxRiseDuration = d;
+        }
+
+        // 步骤2：等上浮全部完成
+        if (risers.Length > 0)
+        {
+            yield return new WaitForSeconds(maxRiseDuration);
+            // 步骤2b：上浮完成后停顿一下，再让非上浮文字出现
+            yield return new WaitForSeconds(delayBeforeNonRisingFadeIn);
+        }
+
+        // 步骤3：段落整体淡入
+        // 上浮文字因为ignoreParentGroups=true，不会被这次淡入再次"亮起来"
+        // 这次淡入只影响那些"没挂RiseOnFadeIn"的Text
         float timer = 0f;
         while (timer < creditsFadeInTime)
         {
-            float t = timer / creditsFadeInTime;
-            float smoothT = Mathf.SmoothStep(0f, 1f, t); // 加缓动让上浮更自然
-            seg.alpha = t;
-
-            if (canRise)
-                rt.anchoredPosition = Vector2.Lerp(startPos, originalPos, smoothT);
-
+            seg.alpha = timer / creditsFadeInTime;
             timer += Time.deltaTime;
             yield return null;
         }
         seg.alpha = 1f;
-        if (canRise) rt.anchoredPosition = originalPos;
 
-        // 停留
+        // 步骤4：停留
         yield return new WaitForSeconds(creditsHoldTime);
 
-        // 淡出（位置不动，只淡）
+        // 步骤5：淡出
+        // 段落整体淡出（带动非上浮文字）
+        // 同时手动淡出上浮文字（因为它们ignoreParentGroups不受段落alpha影响）
         timer = 0f;
         while (timer < creditsFadeOutTime)
         {
-            seg.alpha = 1f - (timer / creditsFadeOutTime);
+            float a = 1f - (timer / creditsFadeOutTime);
+            seg.alpha = a;
+
+            foreach (var r in risers)
+            {
+                if (r == null) continue;
+                var cg = r.GetComponent<CanvasGroup>();
+                if (cg != null) cg.alpha = a;
+            }
+
             timer += Time.deltaTime;
             yield return null;
         }
         seg.alpha = 0f;
+        foreach (var r in risers)
+        {
+            if (r == null) continue;
+            var cg = r.GetComponent<CanvasGroup>();
+            if (cg != null) cg.alpha = 0f;
+        }
+    }
+
+    /// <summary>
+    /// 让单个带 RiseOnFadeIn 标记的物体从下方上浮到原位
+    /// 注意：起始位置已经在 FadeSegment 里设置过了，这里直接从当前位置浮到目标位置
+    /// </summary>
+    IEnumerator RiseOneItem(RiseOnFadeIn riser)
+    {
+        RectTransform rt = riser.GetComponent<RectTransform>();
+        if (rt == null) yield break;
+
+        // 决定距离
+        float distance = (riser.riseDistance > 0.01f) ? riser.riseDistance : segmentRiseDistance;
+
+        // 决定时长
+        float duration = riser.useGlobalDuration ? creditsFadeInTime : riser.customRiseDuration;
+
+        var cg = riser.GetComponent<CanvasGroup>();
+
+        // 如果距离≈0，只淡入不上浮
+        if (distance < 0.01f)
+        {
+            float t = 0f;
+            while (t < duration)
+            {
+                if (cg != null) cg.alpha = t / duration;
+                t += Time.deltaTime;
+                yield return null;
+            }
+            if (cg != null) cg.alpha = 1f;
+            yield break;
+        }
+
+        // 起始位置：当前位置（FadeSegment已经把它移到下方了）
+        Vector2 startPos = rt.anchoredPosition;
+        // 目标位置：当前位置 + 距离（往上）
+        Vector2 originalPos = startPos + new Vector2(0, distance);
+
+        if (duration <= 0f)
+        {
+            rt.anchoredPosition = originalPos;
+            if (cg != null) cg.alpha = 1f;
+            yield break;
+        }
+
+        float timer = 0f;
+        while (timer < duration)
+        {
+            float t = timer / duration;
+            float smoothT = Mathf.SmoothStep(0f, 1f, t);
+            rt.anchoredPosition = Vector2.Lerp(startPos, originalPos, smoothT);
+            if (cg != null) cg.alpha = t; // 同步淡入
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        rt.anchoredPosition = originalPos;
+        if (cg != null) cg.alpha = 1f;
     }
 
     // ===================================================================

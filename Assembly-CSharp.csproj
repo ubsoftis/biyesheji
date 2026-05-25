@@ -154,6 +154,7 @@
     <Compile Include="Assets\mofang\开幕\raycastButton.cs" />
     <Compile Include="Assets\mofang\第一关\activeAni.cs" />
     <Compile Include="Assets\Samples\Universal RP\14.0.11\URP Package Samples\RendererFeatures\DistortTunnel\DistortTunnelPass_Distort.cs" />
+    <Compile Include="Assets\开始UI\结尾动画（我要用开始的素材所以我在这里）\文字上浮.cs" />
     <Compile Include="Assets\背包系统\code\ObjectAppearDualActivateGate.cs" />
     <Compile Include="Assets\开始UI\UI脚本\LoadScene.cs" />
     <Compile Include="Assets\mofang\第二关\StencilActivateTwoOnClick.cs" />
