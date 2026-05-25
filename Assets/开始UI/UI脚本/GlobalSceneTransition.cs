@@ -4,10 +4,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// 全局切关淡入淡出：挂在一个场景里的空物体上即可，<see cref="DontDestroyOnLoad"/> 后全项目共用。
+/// 全局切关淡入淡出：DontDestroyOnLoad 后全项目共用。
 /// 调用 <see cref="LoadScene"/> / <see cref="LoadSceneByBuildIndex"/> 会先渐隐黑屏再加载，新场景加载完成后自动渐显。
 /// </summary>
 [DisallowMultipleComponent]
+[DefaultExecutionOrder(-100)]
 public class GlobalSceneTransition : MonoBehaviour
 {
     public static GlobalSceneTransition Instance { get; private set; }
@@ -22,8 +23,8 @@ public class GlobalSceneTransition : MonoBehaviour
     [SerializeField] private Color fadeColor = Color.black;
 
     [Header("首场景")]
-    [Tooltip("为 true 时，游戏第一次进入时从黑屏渐显（不先渐隐）。")]
-    [SerializeField] private bool fadeInOnFirstScene = true;
+    [Tooltip("为 true 时，游戏第一次进入时从黑屏渐显（不先渐隐）。开始菜单若已有 OpeningFadeIn，请保持 false。")]
+    [SerializeField] private bool fadeInOnFirstScene = false;
 
     [Header("加载")]
     [SerializeField] private LoadSceneMode loadMode = LoadSceneMode.Single;
@@ -31,7 +32,17 @@ public class GlobalSceneTransition : MonoBehaviour
     Canvas _canvas;
     Image _fadeImage;
     bool _isTransitioning;
-    bool _hasShownFirstScene;
+    static bool _hasShownFirstScene;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void Bootstrap()
+    {
+        if (Instance != null)
+            return;
+
+        var go = new GameObject(nameof(GlobalSceneTransition));
+        go.AddComponent<GlobalSceneTransition>();
+    }
 
     void Awake()
     {
@@ -78,6 +89,36 @@ public class GlobalSceneTransition : MonoBehaviour
     /// <summary>按场景名切关（渐隐 → 加载 → 渐显）。</summary>
     public static void LoadScene(string sceneName)
     {
+        LoadScene(sceneName, false);
+    }
+
+    /// <summary>按 Build Settings 索引切关。</summary>
+    public static void LoadSceneByBuildIndex(int buildIndex)
+    {
+        LoadSceneByBuildIndex(buildIndex, false);
+    }
+
+    /// <summary>重新加载当前场景（带淡入淡出）。</summary>
+    public static void ReloadCurrentScene()
+    {
+        Scene current = SceneManager.GetActiveScene();
+        LoadScene(current.name);
+    }
+
+    /// <summary>屏幕已是黑屏时调用，跳过渐隐，仅加载并在新场景渐显。</summary>
+    public static void LoadSceneFromBlack(string sceneName)
+    {
+        LoadScene(sceneName, true);
+    }
+
+    /// <summary>屏幕已是黑屏时调用，跳过渐隐，仅加载并在新场景渐显。</summary>
+    public static void LoadSceneByBuildIndexFromBlack(int buildIndex)
+    {
+        LoadSceneByBuildIndex(buildIndex, true);
+    }
+
+    static void LoadScene(string sceneName, bool skipFadeOut)
+    {
         if (Instance == null)
         {
             Debug.LogWarning("[GlobalSceneTransition] 场景中未放置实例，将直接 LoadScene。");
@@ -85,11 +126,10 @@ public class GlobalSceneTransition : MonoBehaviour
             return;
         }
 
-        Instance.StartTransition(sceneName, -1);
+        Instance.StartTransition(sceneName, -1, skipFadeOut);
     }
 
-    /// <summary>按 Build Settings 索引切关。</summary>
-    public static void LoadSceneByBuildIndex(int buildIndex)
+    static void LoadSceneByBuildIndex(int buildIndex, bool skipFadeOut)
     {
         if (Instance == null)
         {
@@ -98,14 +138,7 @@ public class GlobalSceneTransition : MonoBehaviour
             return;
         }
 
-        Instance.StartTransition(null, buildIndex);
-    }
-
-    /// <summary>重新加载当前场景（带淡入淡出）。</summary>
-    public static void ReloadCurrentScene()
-    {
-        Scene current = SceneManager.GetActiveScene();
-        LoadScene(current.name);
+        Instance.StartTransition(null, buildIndex, skipFadeOut);
     }
 
     /// <summary>仅渐隐到黑（不加载场景）。</summary>
@@ -126,7 +159,16 @@ public class GlobalSceneTransition : MonoBehaviour
         StartCoroutine(FadeRoutine(GetCurrentAlpha(), 0f));
     }
 
-    void StartTransition(string sceneName, int buildIndex)
+    /// <summary>立即设为全黑（用于本地黑幕动画结束后与全局过渡衔接）。</summary>
+    public void SnapToBlack()
+    {
+        EnsureOverlay();
+        SetFadeAlpha(1f);
+        if (_fadeImage != null)
+            _fadeImage.raycastTarget = true;
+    }
+
+    void StartTransition(string sceneName, int buildIndex, bool skipFadeOut)
     {
         if (_isTransitioning)
             return;
@@ -137,15 +179,24 @@ public class GlobalSceneTransition : MonoBehaviour
             return;
         }
 
-        StartCoroutine(TransitionRoutine(sceneName, buildIndex));
+        StartCoroutine(TransitionRoutine(sceneName, buildIndex, skipFadeOut));
     }
 
-    IEnumerator TransitionRoutine(string sceneName, int buildIndex)
+    IEnumerator TransitionRoutine(string sceneName, int buildIndex, bool skipFadeOut)
     {
         _isTransitioning = true;
+        EnsureOverlay();
         _fadeImage.raycastTarget = true;
 
-        yield return FadeRoutine(GetCurrentAlpha(), 1f);
+        float currentAlpha = GetCurrentAlpha();
+        if (skipFadeOut || currentAlpha >= 0.99f)
+        {
+            SetFadeAlpha(1f);
+        }
+        else
+        {
+            yield return FadeRoutine(currentAlpha, 1f);
+        }
 
         if (!string.IsNullOrEmpty(sceneName))
             SceneManager.LoadScene(sceneName, loadMode);
@@ -167,7 +218,8 @@ public class GlobalSceneTransition : MonoBehaviour
         }
 
         SetFadeAlpha(toAlpha);
-        _fadeImage.raycastTarget = toAlpha > 0.01f;
+        if (_fadeImage != null)
+            _fadeImage.raycastTarget = toAlpha > 0.01f;
     }
 
     float GetCurrentAlpha()

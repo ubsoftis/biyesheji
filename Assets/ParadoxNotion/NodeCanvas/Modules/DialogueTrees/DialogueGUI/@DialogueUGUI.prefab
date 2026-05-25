@@ -505,6 +505,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5d3613a99f5e0ac43a2acdfd87d61a4e, type: 3}
   optionsGroup: {fileID: 22400012}
   optionButton: {fileID: 11400016}
+  showFastForwardButton: 1
+  fastForwardButton: {fileID: 0}
 --- !u!1 &100012
 GameObject:
   m_ObjectHideFlags: 0

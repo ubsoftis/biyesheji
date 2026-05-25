@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -394,7 +393,7 @@ public class ChapterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     #endregion
 
-    #region 场景跳转（带黑屏过渡）
+    #region 场景跳转（全局黑幕过渡）
 
     IEnumerator LoadSceneWithFade()
     {
@@ -420,35 +419,7 @@ public class ChapterButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             yield return null;
         }
 
-        // ===== 渐黑 =====
-        if (screenFade != null)
-        {
-            timer = 0f;
-            while (timer < fadeToBlackDuration)
-            {
-                timer += Time.deltaTime;
-                float t = timer / fadeToBlackDuration;
-                // 平滑曲线
-                t = t * t * (3f - 2f * t);
-
-                Color c = screenFade.color;
-                c.a = Mathf.Lerp(0f, 1f, t);
-                screenFade.color = c;
-
-                yield return null;
-            }
-
-            // 确保完全黑
-            Color black = screenFade.color;
-            black.a = 1f;
-            screenFade.color = black;
-
-            // 黑屏停留
-            yield return new WaitForSeconds(stayBlackDuration);
-        }
-
-        // ===== 加载场景 =====
-        SceneManager.LoadScene(sceneIndex);
+        GlobalSceneTransition.LoadSceneByBuildIndex(sceneIndex);
     }
 
     void PlaySfxIfConfigured(AudioClip clip)

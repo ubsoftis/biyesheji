@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class CubeAnimationController : MonoBehaviour
 {
@@ -327,7 +326,7 @@ public class CubeAnimationController : MonoBehaviour
         if (enableSceneJump)
         {
             yield return new WaitForSeconds(waitBeforeLoadScene);
-            SceneManager.LoadScene(sceneIndexToLoad);
+            GlobalSceneTransition.LoadSceneByBuildIndexFromBlack(sceneIndexToLoad);
         }
 
         Debug.Log("✅ 动画播放完成！");

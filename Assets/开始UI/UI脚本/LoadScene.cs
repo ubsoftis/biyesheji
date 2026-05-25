@@ -1,11 +1,10 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 /// <summary>
 /// 通用场景加载：挂到按钮或任意物体，在 Inspector 配目标场景后调用 <see cref="LoadTargetScene"/>。
 /// 场景名优先；名为空且 build index >= 0 时按索引加载。
+/// 切关黑幕由 <see cref="GlobalSceneTransition"/> 统一处理（约 0.6 秒渐入渐出）。
 /// </summary>
 public class LoadScene : MonoBehaviour
 {
@@ -15,17 +14,6 @@ public class LoadScene : MonoBehaviour
 
     [Tooltip("当 sceneName 为空且本值 >= 0 时，按 Build Settings 索引加载。")]
     public int sceneBuildIndex = -1;
-
-    [Header("加载方式")]
-    public LoadSceneMode loadMode = LoadSceneMode.Single;
-
-    [Header("可选：黑屏淡出后再加载")]
-    [Tooltip("全屏黑色 Image，初始 alpha 建议为 0；不拖则立即切场景。")]
-    public Image blackMask;
-    [Min(0.01f)]
-    public float fadeDuration = 0.5f;
-    [Tooltip("淡出是否使用非缩放时间（Time.timeScale=0 时仍可用）。")]
-    public bool fadeUsesUnscaledTime = true;
 
     [Header("音效（可选，走 AudioManager Sfx）")]
     public AudioClip clickSfx;
@@ -43,7 +31,6 @@ public class LoadScene : MonoBehaviour
     void OnEnable()
     {
         _isLoading = false;
-        ResetBlackMaskForIdle();
     }
 
     /// <summary>给 UI Button 的 OnClick 绑定。</summary>
@@ -61,11 +48,7 @@ public class LoadScene : MonoBehaviour
 
         PlayClickSfxIfConfigured();
         _isLoading = true;
-
-        if (blackMask != null && fadeDuration > 0f)
-            StartCoroutine(LoadWithFade());
-        else
-            LoadNow();
+        LoadNow();
     }
 
     /// <summary>按场景名加载（可代码调用）。</summary>
@@ -111,45 +94,12 @@ public class LoadScene : MonoBehaviour
             && UILockSignManager.uiIsOpen;
     }
 
-    void ResetBlackMaskForIdle()
-    {
-        if (blackMask == null)
-            return;
-
-        Color col = blackMask.color;
-        col.a = 0f;
-        blackMask.color = col;
-        blackMask.raycastTarget = false;
-    }
-
     void LoadNow()
     {
         if (!string.IsNullOrEmpty(sceneName))
-            SceneManager.LoadScene(sceneName, loadMode);
+            GlobalSceneTransition.LoadScene(sceneName);
         else
-            SceneManager.LoadScene(sceneBuildIndex, loadMode);
-    }
-
-    IEnumerator LoadWithFade()
-    {
-        blackMask.raycastTarget = true;
-
-        Color col = blackMask.color;
-        float startAlpha = col.a;
-        float elapsed = 0f;
-
-        while (elapsed < fadeDuration)
-        {
-            elapsed += fadeUsesUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / fadeDuration);
-            col.a = Mathf.Lerp(startAlpha, 1f, t);
-            blackMask.color = col;
-            yield return null;
-        }
-
-        col.a = 1f;
-        blackMask.color = col;
-        LoadNow();
+            GlobalSceneTransition.LoadSceneByBuildIndex(sceneBuildIndex);
     }
 
     void PlayClickSfxIfConfigured()

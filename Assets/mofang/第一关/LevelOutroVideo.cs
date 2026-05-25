@@ -2,7 +2,6 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 /// <summary>
@@ -37,7 +36,7 @@ public class LevelOutroVideo : MonoBehaviour
     [Header("播完后")]
     [Tooltip("留空则使用 nextSceneBuildIndexIfNameEmpty（>=0 时）。")]
     public string nextSceneName;
-    [Tooltip("当 nextSceneName 为空且本值 >= 0 时，使用 SceneManager.LoadScene(buildIndex)。")]
+    [Tooltip("当 nextSceneName 为空且本值 >= 0 时，使用 GlobalSceneTransition 按 buildIndex 加载。")]
     public int nextSceneBuildIndexIfNameEmpty = -1;
     [Tooltip("为 true：播放结束后强制 Stop VideoPlayer，避免停在最后一帧继续覆盖画面。")]
     public bool stopVideoPlayerAfterFinish = true;
@@ -156,9 +155,9 @@ public class LevelOutroVideo : MonoBehaviour
             RestoreAfter(root, loadScene: willLoad, deactivateRoot: deactivateRootAfterFinishIfNoLoad && !willLoad);
 
             if (!string.IsNullOrEmpty(nextSceneName))
-                SceneManager.LoadScene(nextSceneName);
+                GlobalSceneTransition.LoadScene(nextSceneName);
             else if (nextSceneBuildIndexIfNameEmpty >= 0)
-                SceneManager.LoadScene(nextSceneBuildIndexIfNameEmpty);
+                GlobalSceneTransition.LoadSceneByBuildIndex(nextSceneBuildIndexIfNameEmpty);
             else
                 Debug.LogWarning("[LevelOutroVideo] 未配置 nextSceneName 或 nextSceneBuildIndexIfNameEmpty，播完后不会切场景。");
 

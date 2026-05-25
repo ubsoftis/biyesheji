@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -184,15 +183,18 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
 
     void LoadNextScene()
     {
+        if (GlobalSceneTransition.Instance != null)
+            GlobalSceneTransition.Instance.SnapToBlack();
+
         if (!string.IsNullOrEmpty(nextSceneName))
         {
-            SceneManager.LoadScene(nextSceneName);
+            GlobalSceneTransition.LoadSceneFromBlack(nextSceneName);
             return;
         }
 
         if (nextSceneBuildIndexIfNameEmpty >= 0)
         {
-            SceneManager.LoadScene(nextSceneBuildIndexIfNameEmpty);
+            GlobalSceneTransition.LoadSceneByBuildIndexFromBlack(nextSceneBuildIndexIfNameEmpty);
             return;
         }
 

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameOverController : MonoBehaviour
 {
@@ -54,7 +53,7 @@ public class GameOverController : MonoBehaviour
     public void Retry()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GlobalSceneTransition.ReloadCurrentScene();
     }
 
     public void Quit()

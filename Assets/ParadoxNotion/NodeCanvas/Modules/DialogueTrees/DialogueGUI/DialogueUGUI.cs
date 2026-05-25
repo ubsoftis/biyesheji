@@ -29,6 +29,11 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
         public bool skipOnInput;
         public bool waitForInput;
 
+        [Header("Fast Forward")]
+        [Tooltip("对话进行时在右下角显示快进按钮；点击可跳过打字/语音并进入下一句。")]
+        public bool showFastForwardButton = true;
+        public Button fastForwardButton;
+
         //Group...
         [Header("Subtitles")]
         public RectTransform subtitlesGroup;
@@ -55,11 +60,16 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
         Coroutine _portraitSyncRoutine;
 
         private bool anyKeyDown;
+        private bool skipRequested;
         public void OnPointerClick(PointerEventData eventData) => anyKeyDown = true;
         void LateUpdate() => anyKeyDown = false;
 
 
-        void Awake() { Subscribe(); Hide(); }
+        void Awake() {
+            EnsureFastForwardButton();
+            Subscribe();
+            Hide();
+        }
         void OnEnable() { UnSubscribe(); Subscribe(); }
         void OnDisable() { UnSubscribe(); }
 
@@ -84,6 +94,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
             optionsGroup.gameObject.SetActive(false);
             optionButton.gameObject.SetActive(false);
             waitInputIndicator.gameObject.SetActive(false);
+            SetFastForwardVisible(false);
             originalSubsPosition = subtitlesGroup.transform.position;
         }
 
@@ -94,6 +105,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
         void OnDialoguePaused(DialogueTree dlg) {
             subtitlesGroup.gameObject.SetActive(false);
             optionsGroup.gameObject.SetActive(false);
+            SetFastForwardVisible(false);
             StopAllCoroutines();
             _portraitSyncRoutine = null;
             playSource?.Stop();
@@ -102,6 +114,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
         void OnDialogueFinished(DialogueTree dlg) {
             subtitlesGroup.gameObject.SetActive(false);
             optionsGroup.gameObject.SetActive(false);
+            SetFastForwardVisible(false);
             if ( cachedButtons != null ) {
                 foreach ( var tempBtn in cachedButtons.Keys ) {
                     if ( tempBtn != null ) {
@@ -123,6 +136,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
 
         IEnumerator Internal_OnSubtitlesRequestInfo(SubtitlesRequestInfo info) {
             DialogueTree dialogueTree = DialogueTree.currentDialogue;
+            skipRequested = false;
 
             var text = info.statement.GetLocalizedText(language);
             var audio = info.statement.GetLocalizedAudio(language);
@@ -140,6 +154,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
             subtitlesGroup.gameObject.SetActive(true);
             subtitlesGroup.position = originalSubsPosition;
             actorSpeech.text = "";
+            SetFastForwardVisible(showFastForwardButton);
 
             actorName.text = actor.name;
             actorSpeech.color = actor.dialogueColor;
@@ -189,7 +204,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
                 actorSpeech.text = text;
                 var timer = 0f;
                 while ( timer < audio.length ) {
-                    if ( skipOnInput && anyKeyDown ) {
+                    if ( ShouldSkip() ) {
                         playSource.Stop();
                         break;
                     }
@@ -200,14 +215,13 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
 
             if ( audio == null ) {
                 var tempText = string.Empty;
-                var inputDown = false;
                 if ( skipOnInput ) {
-                    StartCoroutine(CheckInput(() => { inputDown = true; }));
+                    StartCoroutine(CheckInput(() => { skipRequested = true; }));
                 }
 
                 for ( int i = 0; i < text.Length; i++ ) {
 
-                    if ( skipOnInput && inputDown ) {
+                    if ( ShouldSkip() ) {
                         actorSpeech.text = text;
                         yield return null;
                         break;
@@ -223,14 +237,14 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
 
                     char c = text[i];
                     tempText += c;
-                    yield return StartCoroutine(DelayPrint(subtitleDelays.characterDelay));
+                    yield return StartCoroutine(DelayPrint(subtitleDelays.characterDelay, ShouldSkip));
                     PlayTypeSound();
                     if ( c == '.' || c == '!' || c == '?' ) {
-                        yield return StartCoroutine(DelayPrint(subtitleDelays.sentenceDelay));
+                        yield return StartCoroutine(DelayPrint(subtitleDelays.sentenceDelay, ShouldSkip));
                         PlayTypeSound();
                     }
                     if ( c == ',' ) {
-                        yield return StartCoroutine(DelayPrint(subtitleDelays.commaDelay));
+                        yield return StartCoroutine(DelayPrint(subtitleDelays.commaDelay, ShouldSkip));
                         PlayTypeSound();
                     }
 
@@ -238,19 +252,20 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
                 }
 
                 if ( !waitForInput ) {
-                    yield return StartCoroutine(DelayPrint(subtitleDelays.finalDelay));
+                    yield return StartCoroutine(DelayPrint(subtitleDelays.finalDelay, ShouldSkip));
                 }
             }
 
             if ( waitForInput ) {
                 waitInputIndicator.gameObject.SetActive(true);
-                while ( !Input.anyKeyDown ) {
+                while ( !Input.anyKeyDown && !skipRequested ) {
                     yield return null;
                 }
                 waitInputIndicator.gameObject.SetActive(false);
             }
 
             yield return null;
+            SetFastForwardVisible(false);
             if ( _portraitSyncRoutine != null ) {
                 StopCoroutine(_portraitSyncRoutine);
                 _portraitSyncRoutine = null;
@@ -292,9 +307,73 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
             Do();
         }
 
-        IEnumerator DelayPrint(float time) {
+        bool ShouldSkip() {
+            return skipRequested || (skipOnInput && anyKeyDown);
+        }
+
+        void EnsureFastForwardButton() {
+            if ( fastForwardButton != null ) {
+                fastForwardButton.onClick.RemoveListener(OnFastForwardClicked);
+                fastForwardButton.onClick.AddListener(OnFastForwardClicked);
+                SetFastForwardVisible(false);
+                return;
+            }
+
+            if ( !showFastForwardButton )
+                return;
+
+            var root = transform as RectTransform;
+            if ( root == null )
+                return;
+
+            var buttonGo = new GameObject("FastForwardButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            buttonGo.transform.SetParent(root, false);
+
+            var rt = buttonGo.GetComponent<RectTransform>();
+            rt.anchorMin = new Vector2(1f, 0f);
+            rt.anchorMax = new Vector2(1f, 0f);
+            rt.pivot = new Vector2(1f, 0f);
+            rt.anchoredPosition = new Vector2(-24f, 24f);
+            rt.sizeDelta = new Vector2(88f, 36f);
+
+            var image = buttonGo.GetComponent<Image>();
+            image.color = new Color(0f, 0f, 0f, 0.55f);
+
+            var textGo = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+            textGo.transform.SetParent(buttonGo.transform, false);
+            var textRt = textGo.GetComponent<RectTransform>();
+            textRt.anchorMin = Vector2.zero;
+            textRt.anchorMax = Vector2.one;
+            textRt.offsetMin = Vector2.zero;
+            textRt.offsetMax = Vector2.zero;
+
+            var label = textGo.GetComponent<Text>();
+            label.text = "快进";
+            label.alignment = TextAnchor.MiddleCenter;
+            label.color = Color.white;
+            label.fontSize = 16;
+            label.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+
+            fastForwardButton = buttonGo.GetComponent<Button>();
+            fastForwardButton.targetGraphic = image;
+            fastForwardButton.onClick.AddListener(OnFastForwardClicked);
+            SetFastForwardVisible(false);
+        }
+
+        void OnFastForwardClicked() {
+            skipRequested = true;
+        }
+
+        void SetFastForwardVisible(bool visible) {
+            if ( fastForwardButton != null )
+                fastForwardButton.gameObject.SetActive(visible && showFastForwardButton);
+        }
+
+        IEnumerator DelayPrint(float time, System.Func<bool> shouldBreak = null) {
             var timer = 0f;
             while ( timer < time ) {
+                if ( shouldBreak != null && shouldBreak() )
+                    yield break;
                 timer += Time.deltaTime;
                 yield return null;
             }
@@ -304,6 +383,7 @@ namespace NodeCanvas.DialogueTrees.UI.Examples
 
         void OnMultipleChoiceRequest(MultipleChoiceRequestInfo info) {
 
+            SetFastForwardVisible(false);
             optionsGroup.gameObject.SetActive(true);
             var buttonHeight = optionButton.GetComponent<RectTransform>().rect.height;
             optionsGroup.sizeDelta = new Vector2(optionsGroup.sizeDelta.x, ( info.options.Values.Count * buttonHeight ) + 20);

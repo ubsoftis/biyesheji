@@ -3551,10 +3551,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: stateRotate 1
   sceneBuildIndex: 4
-  loadMode: 0
-  blackMask: {fileID: 901000004}
-  fadeDuration: 0.5
-  fadeUsesUnscaledTime: 1
   clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
   sfxTag: 
   sfxVolumeScale: 1
@@ -20338,7 +20334,7 @@ MonoBehaviour:
   _UID: 7671ce34-975b-4ca0-804d-d612d62a27da
   _identifier: Global
   _singletonMode: 0
-  _dontDestroyOnLoad: 1
+  _dontDestroyOnLoad: 0
 --- !u!4 &1920156340
 Transform:
   m_ObjectHideFlags: 0

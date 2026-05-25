@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
 using NodeCanvas.Framework;
@@ -223,7 +222,7 @@ public class activeAni : MonoBehaviour
             yield return EndCutsceneAudio();
 
         if (!string.IsNullOrEmpty(nextSceneName))
-            SceneManager.LoadScene(nextSceneName);
+            GlobalSceneTransition.LoadScene(nextSceneName);
     }
 
     IEnumerator BeginCutsceneAudio()

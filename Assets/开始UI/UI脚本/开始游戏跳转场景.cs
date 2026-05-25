@@ -1,13 +1,8 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class ClickSignLoadScene : MonoBehaviour
 {
-    [Header("拖入全屏黑色遮罩Image")]
-    public Image blackMask;
     public int targetSceneIndex;
-    public float fadeSpeed = 1f;
 
     [Header("音效（可选，走 AudioManager 总 Sfx）")]
     [Tooltip("点开始淡出时播一次；不拖则不播")]
@@ -15,12 +10,11 @@ public class ClickSignLoadScene : MonoBehaviour
     [Range(0f, 2f)]
     public float sfxVolumeScale = 1f;
 
-    bool isFading = false;
+    bool _isLoading;
 
     void OnEnable()
     {
-        isFading = false;
-        ResetBlackMaskForIdle();
+        _isLoading = false;
     }
 
     void Update()
@@ -28,34 +22,23 @@ public class ClickSignLoadScene : MonoBehaviour
         if (UILockSignManager.ExistsInActiveScene() && UILockSignManager.uiIsOpen)
             return;
 
-        if (!isFading && Input.GetMouseButtonDown(0))
-        {
-            if (Camera.main == null)
-                return;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                Transform hitT = hit.collider.transform;
-                if (hitT == transform || hitT.IsChildOf(transform))
-                {
-                    isFading = true;
-                    if (blackMask != null)
-                        blackMask.raycastTarget = true;
-                    PlayClickSfx();
-                }
-            }
-        }
+        if (_isLoading || !Input.GetMouseButtonDown(0))
+            return;
 
-        if (isFading && blackMask != null)
-        {
-            Color col = blackMask.color;
-            col.a += fadeSpeed * Time.deltaTime;
-            col.a = Mathf.Clamp01(col.a);
-            blackMask.color = col;
+        if (Camera.main == null)
+            return;
 
-            if (col.a >= 1f)
-                SceneManager.LoadScene(targetSceneIndex);
-        }
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out RaycastHit hit))
+            return;
+
+        Transform hitT = hit.collider.transform;
+        if (hitT != transform && !hitT.IsChildOf(transform))
+            return;
+
+        _isLoading = true;
+        PlayClickSfx();
+        GlobalSceneTransition.LoadSceneByBuildIndex(targetSceneIndex);
     }
 
     void PlayClickSfx()
@@ -63,16 +46,5 @@ public class ClickSignLoadScene : MonoBehaviour
         if (clickSfx == null || AudioManager.Instance == null)
             return;
         AudioManager.Instance.PlaySfx2D(clickSfx, null, sfxVolumeScale);
-    }
-
-    void ResetBlackMaskForIdle()
-    {
-        if (blackMask == null)
-            return;
-
-        Color col = blackMask.color;
-        col.a = 0f;
-        blackMask.color = col;
-        blackMask.raycastTarget = false;
     }
 }
