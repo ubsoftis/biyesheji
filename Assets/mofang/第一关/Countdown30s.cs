@@ -101,6 +101,19 @@ public class Countdown30s : MonoBehaviour
         _co = StartCoroutine(CoCountdown());
     }
 
+    /// <summary>停止倒计时并隐藏 UI（过场/切关时可调用）。</summary>
+    public void StopCountdown()
+    {
+        StopCountdownAndHideUi();
+    }
+
+    /// <summary>结尾过场播放时调用：停止倒计时且不再自动重启。</summary>
+    public void StopCountdownForOutro()
+    {
+        enableCountdown = false;
+        StopCountdownAndHideUi();
+    }
+
     void StopCountdownAndHideUi()
     {
         if (_co != null)

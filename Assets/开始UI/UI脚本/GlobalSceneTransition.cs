@@ -33,6 +33,45 @@ public class GlobalSceneTransition : MonoBehaviour
     Image _fadeImage;
     bool _isTransitioning;
     static bool _hasShownFirstScene;
+    Coroutine _fadeInAfterLoadCo;
+
+    /// <summary>进入新场景时阻止全局黑幕提前渐显（例如开场视频 Prepare 期间）。</summary>
+    public static class SceneEntryBlackHold
+    {
+        static int _holdCount;
+
+        public static bool IsHeld => _holdCount > 0;
+
+        public static void Hold() => _holdCount++;
+
+        public static void Release(bool clearOverlayImmediately = false)
+        {
+            _holdCount = Mathf.Max(0, _holdCount - 1);
+            if (clearOverlayImmediately && !IsHeld)
+                Instance?.ClearOverlayImmediate();
+        }
+
+        internal static void Reset() => _holdCount = 0;
+    }
+
+    /// <summary>开场视频结束后：停止等待中的切关渐显，并从黑幕渐亮露出关卡。</summary>
+    public void RevealSceneAfterEntryIntro()
+    {
+        SceneEntryBlackHold.Reset();
+
+        if (_fadeInAfterLoadCo != null)
+        {
+            StopCoroutine(_fadeInAfterLoadCo);
+            _fadeInAfterLoadCo = null;
+        }
+
+        EnsureOverlayActive();
+        SetFadeAlpha(1f);
+        if (_fadeImage != null)
+            _fadeImage.raycastTarget = true;
+
+        StartCoroutine(FadeRoutine(1f, 0f));
+    }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     static void Bootstrap()
@@ -83,7 +122,9 @@ public class GlobalSceneTransition : MonoBehaviour
             return;
 
         _isTransitioning = false;
-        StartCoroutine(FadeRoutine(1f, 0f));
+        if (_fadeInAfterLoadCo != null)
+            StopCoroutine(_fadeInAfterLoadCo);
+        _fadeInAfterLoadCo = StartCoroutine(FadeInAfterEntryGate());
     }
 
     /// <summary>按场景名切关（渐隐 → 加载 → 渐显）。</summary>
@@ -126,7 +167,10 @@ public class GlobalSceneTransition : MonoBehaviour
             return;
         }
 
-        Instance.StartTransition(sceneName, -1, skipFadeOut);
+        if (skipFadeOut)
+            Instance.LoadSceneImmediateFromBlack(sceneName, -1);
+        else
+            Instance.StartTransition(sceneName, -1, false);
     }
 
     static void LoadSceneByBuildIndex(int buildIndex, bool skipFadeOut)
@@ -138,7 +182,10 @@ public class GlobalSceneTransition : MonoBehaviour
             return;
         }
 
-        Instance.StartTransition(null, buildIndex, skipFadeOut);
+        if (skipFadeOut)
+            Instance.LoadSceneImmediateFromBlack(null, buildIndex);
+        else
+            Instance.StartTransition(null, buildIndex, false);
     }
 
     /// <summary>仅渐隐到黑（不加载场景）。</summary>
@@ -162,10 +209,35 @@ public class GlobalSceneTransition : MonoBehaviour
     /// <summary>立即设为全黑（用于本地黑幕动画结束后与全局过渡衔接）。</summary>
     public void SnapToBlack()
     {
-        EnsureOverlay();
+        EnsureOverlayActive();
         SetFadeAlpha(1f);
         if (_fadeImage != null)
             _fadeImage.raycastTarget = true;
+    }
+
+    /// <summary>立即撤掉黑幕（视频已开始渲染到摄像机时使用）。</summary>
+    public void ClearOverlayImmediate()
+    {
+        EnsureOverlayActive();
+        SetFadeAlpha(0f);
+        if (_fadeImage != null)
+            _fadeImage.raycastTarget = false;
+    }
+
+    void LoadSceneImmediateFromBlack(string sceneName, int buildIndex)
+    {
+        EnsureOverlayActive();
+        SetFadeAlpha(1f);
+        if (_fadeImage != null)
+            _fadeImage.raycastTarget = true;
+
+        _isTransitioning = true;
+        SceneEntryBlackHold.Reset();
+
+        if (!string.IsNullOrEmpty(sceneName))
+            SceneManager.LoadScene(sceneName, loadMode);
+        else
+            SceneManager.LoadScene(buildIndex, loadMode);
     }
 
     void StartTransition(string sceneName, int buildIndex, bool skipFadeOut)
@@ -198,10 +270,31 @@ public class GlobalSceneTransition : MonoBehaviour
             yield return FadeRoutine(currentAlpha, 1f);
         }
 
+        SceneEntryBlackHold.Reset();
+
         if (!string.IsNullOrEmpty(sceneName))
             SceneManager.LoadScene(sceneName, loadMode);
         else
             SceneManager.LoadScene(buildIndex, loadMode);
+    }
+
+    IEnumerator FadeInAfterEntryGate()
+    {
+        EnsureOverlay();
+        SetFadeAlpha(1f);
+        _fadeImage.raycastTarget = true;
+
+        while (SceneEntryBlackHold.IsHeld)
+            yield return null;
+
+        if (GetCurrentAlpha() <= 0.01f)
+        {
+            _fadeInAfterLoadCo = null;
+            yield break;
+        }
+
+        yield return FadeRoutine(1f, 0f);
+        _fadeInAfterLoadCo = null;
     }
 
     IEnumerator FadeRoutine(float fromAlpha, float toAlpha)
@@ -264,6 +357,13 @@ public class GlobalSceneTransition : MonoBehaviour
         _fadeImage.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, 0f);
         _fadeImage.raycastTarget = false;
         _fadeImage.sprite = CreateSolidSprite();
+    }
+
+    void EnsureOverlayActive()
+    {
+        EnsureOverlay();
+        if (_canvas != null && !_canvas.gameObject.activeInHierarchy)
+            _canvas.gameObject.SetActive(true);
     }
 
     static Sprite CreateSolidSprite()

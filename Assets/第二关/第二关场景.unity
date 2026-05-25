@@ -4453,10 +4453,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: stateRotate 1
   sceneBuildIndex: 4
-  loadMode: 0
-  blackMask: {fileID: 0}
-  fadeDuration: 0.5
-  fadeUsesUnscaledTime: 1
   clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
   sfxTag: 
   sfxVolumeScale: 1
@@ -12274,7 +12270,7 @@ MonoBehaviour:
   controlColliderByVisibility: 1
   useThreeRTForVisibility: 1
   rtPicker: {fileID: 919132148186213059}
-  hideRTDebugPreview: 1
+  showRTDebugPreview: 0
   blackRgbThreshold: 0.02
   blackAlphaThreshold: 0.01
   invertIsVisible: 0
@@ -15582,7 +15578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a721b4626e1f1428ac4b45a9f70d7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cutsceneClip: {fileID: 8300000, guid: 453959f0cf183504b9780e5856481d57, type: 3}
+  cutsceneClip: {fileID: 8300000, guid: 4ef2ec3133bfad14689ecb257fd13bda, type: 3}
   cutsceneSource: {fileID: 0}
   backgroundMusic: {fileID: 0}
   cutsceneOutputMixerGroup: {fileID: 0}
@@ -26275,6 +26271,8 @@ MonoBehaviour:
   videoUrl: 
   videoPlayer: {fileID: 1300864663}
   videoRootToActivate: {fileID: 1787906883}
+  hideSceneUntilIntroFinished: 1
+  gameplayRoots: []
   disableWhilePlaying: []
   autoHideOverlayCanvases: 1
   cutsceneAudio: {fileID: 0}
@@ -30960,7 +30958,7 @@ MonoBehaviour:
   nodeBackName: Layer_Back
   nodeMidName: Layer_Middle
   nodeFrontName: Layer_Front
-  showDebugRTPreviews: 1
+  showDebugRTPreviews: 0
   debugPickOnClick: 1
   cubeMaskLayerMask:
     serializedVersion: 2

@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.Video;
 
 /// <summary>
-/// 进入第一关时播放一段视频：播放期间可选择禁用指定物体，播完再恢复。
-/// 挂到任意物体即可（推荐挂到“过场动画”面板/节点上）。
+/// 进入关卡时：先全黑 → 播放开场视频（关卡内容尚未显示）→ 视频结束后再显示关卡并渐亮。
 /// </summary>
+[DefaultExecutionOrder(-300)]
 public class Level1IntroVideo : MonoBehaviour
 {
     [Header("视频源（二选一：Clip 优先）")]
@@ -22,11 +22,18 @@ public class Level1IntroVideo : MonoBehaviour
     [Tooltip("播放时激活的根物体（例如黑底/过场UI）。不填则默认使用当前 GameObject。")]
     public GameObject videoRootToActivate;
 
-    [Header("播放期间禁用的对象（可选）")]
+    [Header("进场隐藏关卡")]
+    [Tooltip("为 true 时，开场视频播完之前禁用场景中除摄像机/VideoPlayer/本脚本以外的根物体。")]
+    public bool hideSceneUntilIntroFinished = true;
+
+    [Tooltip("可选：手动指定“关卡内容”根；留空则自动隐藏其它场景根物体。")]
+    public GameObject[] gameplayRoots;
+
+    [Header("播放期间禁用的对象（可选，额外）")]
     public GameObject[] disableWhilePlaying;
 
     [Header("自动遮挡处理")]
-    [Tooltip("播放期间自动隐藏所有 Screen Space - Overlay 的 Canvas，避免挡住视频。")]
+    [Tooltip("播放期间自动隐藏本场景内 Screen Space - Overlay 的 Canvas（不含 DontDestroyOnLoad 的全局黑幕）。")]
     public bool autoHideOverlayCanvases = true;
 
     [Header("过场音效")]
@@ -44,6 +51,26 @@ public class Level1IntroVideo : MonoBehaviour
     Coroutine _co;
     readonly List<Canvas> _autoHiddenCanvases = new List<Canvas>();
     readonly List<bool> _autoHiddenPrevStates = new List<bool>();
+    readonly List<GameObject> _hiddenRoots = new List<GameObject>();
+    bool _holdsEntryBlack;
+    Camera _mainCamera;
+    CameraClearFlags _prevClearFlags;
+    Color _prevBackgroundColor;
+
+    void Awake()
+    {
+        if (!ShouldRunEntryIntro())
+            return;
+
+        _holdsEntryBlack = true;
+        GlobalSceneTransition.SceneEntryBlackHold.Hold();
+        GlobalSceneTransition.Instance?.SnapToBlack();
+
+        if (hideSceneUntilIntroFinished)
+            HideSceneContent();
+
+        SetupCameraBlackBackground();
+    }
 
     void Start()
     {
@@ -59,15 +86,7 @@ public class Level1IntroVideo : MonoBehaviour
             var root = videoRootToActivate != null ? videoRootToActivate : gameObject;
             if (root != null && !root.activeSelf) root.SetActive(true);
 
-            if (disableWhilePlaying != null)
-            {
-                for (int i = 0; i < disableWhilePlaying.Length; i++)
-                {
-                    var go = disableWhilePlaying[i];
-                    if (go != null) go.SetActive(false);
-                }
-            }
-
+            DisableExtraObjectsWhilePlaying();
             AutoHideOverlayCanvases(root);
 
             var audio = ResolveCutsceneAudio();
@@ -80,22 +99,17 @@ public class Level1IntroVideo : MonoBehaviour
             videoPlayer.playOnAwake = false;
             videoPlayer.isLooping = false;
 
-            // 默认渲染到主摄像机近裁剪面，避免你还要额外配 RawImage/RenderTexture
-            if (videoPlayer.renderMode == VideoRenderMode.CameraNearPlane || videoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
-            {
-                // 已经是 Camera 模式就尊重现有配置
-            }
-            else
+            if (videoPlayer.renderMode != VideoRenderMode.CameraNearPlane &&
+                videoPlayer.renderMode != VideoRenderMode.CameraFarPlane)
             {
                 videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
             }
 
             if (videoPlayer.targetCamera == null)
-            {
                 videoPlayer.targetCamera = Camera.main;
-            }
 
-            if (videoPlayer.renderMode == VideoRenderMode.CameraNearPlane || videoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
+            if (videoPlayer.renderMode == VideoRenderMode.CameraNearPlane ||
+                videoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
             {
                 videoPlayer.targetCameraAlpha = 1f;
             }
@@ -114,6 +128,7 @@ public class Level1IntroVideo : MonoBehaviour
             {
                 if (audio != null && audio.HasClip)
                     yield return audio.EndCutsceneAudio();
+                RevealSceneAfterIntro();
                 RestoreAfter();
                 yield break;
             }
@@ -123,11 +138,16 @@ public class Level1IntroVideo : MonoBehaviour
             videoPlayer.loopPointReached += OnLoopPointReached;
 
             videoPlayer.Prepare();
-            float prepareDeadline = Time.realtimeSinceStartup + 5f;
+            float prepareDeadline = Time.realtimeSinceStartup + 8f;
             while (!videoPlayer.isPrepared && Time.realtimeSinceStartup < prepareDeadline)
                 yield return null;
 
             videoPlayer.Play();
+            yield return WaitForVideoFirstFrame();
+
+            // 关卡仍隐藏、摄像机纯黑底；仅撤掉全局黑幕以露出视频。
+            GlobalSceneTransition.Instance?.ClearOverlayImmediate();
+
             while (!finished && (videoPlayer.isPlaying || videoPlayer.frame < (long)videoPlayer.frameCount - 1))
                 yield return null;
 
@@ -136,11 +156,159 @@ public class Level1IntroVideo : MonoBehaviour
             if (audio != null && audio.HasClip)
                 yield return audio.EndCutsceneAudio();
 
+            RevealSceneAfterIntro();
             RestoreAfter();
         }
         finally
         {
+            if (_holdsEntryBlack)
+            {
+                _holdsEntryBlack = false;
+                GlobalSceneTransition.SceneEntryBlackHold.Reset();
+                GlobalSceneTransition.Instance?.RevealSceneAfterEntryIntro();
+            }
             CutscenePlaybackGate.Exit();
+        }
+    }
+
+    IEnumerator WaitForVideoFirstFrame()
+    {
+        float deadline = Time.realtimeSinceStartup + 3f;
+        while (Time.realtimeSinceStartup < deadline)
+        {
+            if (videoPlayer != null && videoPlayer.isPlaying && videoPlayer.frame > 0)
+                yield break;
+            yield return null;
+        }
+    }
+
+    void RevealSceneAfterIntro()
+    {
+        ShowSceneContent();
+        RestoreCameraBackground();
+
+        _holdsEntryBlack = false;
+        GlobalSceneTransition.Instance?.RevealSceneAfterEntryIntro();
+    }
+
+    void HideSceneContent()
+    {
+        _hiddenRoots.Clear();
+
+        if (gameplayRoots != null && gameplayRoots.Length > 0)
+        {
+            for (int i = 0; i < gameplayRoots.Length; i++)
+            {
+                var go = gameplayRoots[i];
+                if (go == null || !go.activeSelf)
+                    continue;
+                _hiddenRoots.Add(go);
+                go.SetActive(false);
+            }
+            return;
+        }
+
+        var introRoot = GetIntroRoot();
+        var scene = gameObject.scene;
+        if (!scene.IsValid())
+            return;
+
+        var roots = scene.GetRootGameObjects();
+        for (int i = 0; i < roots.Length; i++)
+        {
+            var root = roots[i];
+            if (root == null || !root.activeSelf)
+                continue;
+            if (IsEssentialIntroRoot(root, introRoot))
+                continue;
+
+            _hiddenRoots.Add(root);
+            root.SetActive(false);
+        }
+    }
+
+    void ShowSceneContent()
+    {
+        for (int i = 0; i < _hiddenRoots.Count; i++)
+        {
+            var go = _hiddenRoots[i];
+            if (go != null)
+                go.SetActive(true);
+        }
+        _hiddenRoots.Clear();
+    }
+
+    bool IsEssentialIntroRoot(GameObject root, GameObject introRoot)
+    {
+        if (introRoot != null && (root == introRoot || root.transform == introRoot.transform))
+            return true;
+        if (introRoot != null && introRoot.transform.IsChildOf(root.transform))
+            return true;
+        if (root.GetComponentInChildren<Level1IntroVideo>(true) != null)
+            return true;
+        if (root.GetComponentInChildren<VideoPlayer>(true) != null)
+            return true;
+        if (root.GetComponentInChildren<Camera>(true) != null)
+            return true;
+        return false;
+    }
+
+    GameObject GetIntroRoot()
+    {
+        return videoRootToActivate != null ? videoRootToActivate : gameObject;
+    }
+
+    void SetupCameraBlackBackground()
+    {
+        _mainCamera = Camera.main;
+        if (_mainCamera == null)
+            return;
+
+        _prevClearFlags = _mainCamera.clearFlags;
+        _prevBackgroundColor = _mainCamera.backgroundColor;
+        _mainCamera.clearFlags = CameraClearFlags.SolidColor;
+        _mainCamera.backgroundColor = Color.black;
+    }
+
+    void RestoreCameraBackground()
+    {
+        if (_mainCamera == null)
+            return;
+
+        _mainCamera.clearFlags = _prevClearFlags;
+        _mainCamera.backgroundColor = _prevBackgroundColor;
+        _mainCamera = null;
+    }
+
+    bool ShouldRunEntryIntro()
+    {
+        if (!playOnStart)
+            return false;
+        if (videoClip != null)
+            return true;
+        if (!string.IsNullOrEmpty(videoUrl))
+            return true;
+        if (videoPlayer != null && videoPlayer.clip != null)
+            return true;
+        return videoPlayer != null && !string.IsNullOrEmpty(videoPlayer.url);
+    }
+
+    void ReleaseEntryBlackHold()
+    {
+        _holdsEntryBlack = false;
+        GlobalSceneTransition.SceneEntryBlackHold.Reset();
+    }
+
+    void DisableExtraObjectsWhilePlaying()
+    {
+        if (disableWhilePlaying == null)
+            return;
+
+        for (int i = 0; i < disableWhilePlaying.Length; i++)
+        {
+            var go = disableWhilePlaying[i];
+            if (go != null)
+                go.SetActive(false);
         }
     }
 
@@ -187,14 +355,15 @@ public class Level1IntroVideo : MonoBehaviour
         _autoHiddenCanvases.Clear();
         _autoHiddenPrevStates.Clear();
 
+        var scene = gameObject.scene;
         var canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
         for (int i = 0; i < canvases.Length; i++)
         {
             var c = canvases[i];
             if (c == null) continue;
             if (c.renderMode != RenderMode.ScreenSpaceOverlay) continue;
-
-            // 过场根节点下的 Canvas 不自动处理，避免误伤你的视频容器。
+            // 不碰 DontDestroyOnLoad 的全局黑幕（GlobalSceneTransition）。
+            if (!c.gameObject.scene.IsValid() || c.gameObject.scene != scene) continue;
             if (root != null && c.transform.IsChildOf(root.transform)) continue;
 
             _autoHiddenCanvases.Add(c);
@@ -218,12 +387,9 @@ public class Level1IntroVideo : MonoBehaviour
 
     static string NormalizeUrl(string urlOrFileName)
     {
-        // 已经是完整 URL（含协议）或绝对路径：直接用
         if (urlOrFileName.Contains("://") || Path.IsPathRooted(urlOrFileName))
             return urlOrFileName;
 
-        // 只给了文件名/相对路径：默认从 StreamingAssets 读取
         return Path.Combine(Application.streamingAssetsPath, urlOrFileName);
     }
 }
-

@@ -244,4 +244,31 @@ public class CutsceneAudioController : MonoBehaviour
 
         RestoreTemporaryMixSilence();
     }
+
+    /// <summary>即将切场景时立即停止过场音，避免淡出期间露出关卡画面。</summary>
+    public void StopCutsceneImmediate()
+    {
+        if (cutsceneClip == null)
+        {
+            RestoreTemporaryMixSilence();
+            return;
+        }
+
+        EnsureCutsceneSource();
+        var bgm = ResolveBackgroundMusic();
+
+        if (_pausedBgmForCutscene && bgm != null)
+        {
+            bgm.UnpauseForCutscene();
+            _pausedBgmForCutscene = false;
+        }
+
+        if (cutsceneSource != null && cutsceneSource.isPlaying)
+        {
+            cutsceneSource.Stop();
+            cutsceneSource.volume = 0f;
+        }
+
+        RestoreTemporaryMixSilence();
+    }
 }

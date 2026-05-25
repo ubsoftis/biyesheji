@@ -80,6 +80,10 @@ public class activeAni : MonoBehaviour
     [Tooltip("要加载的场景名（确保已加入 Build Settings）。")]
     public string nextSceneName = "第二关场景";
 
+    [Header("结尾过场：停止倒计时")]
+    [Tooltip("不填则运行时自动 FindFirstObjectByType。")]
+    public Countdown30s countdownToStop;
+
     [Header("输出：条件是否满足（bool）")]
     public bool conditionsMet;
 
@@ -131,8 +135,17 @@ public class activeAni : MonoBehaviour
         if (!conditionsMet) return;
 
         _triggered = true;
+        StopLevelCountdown();
         ActivateCutsceneObjectIfNeeded();
         StartCoroutine(PlayAndLoad());
+    }
+
+    void StopLevelCountdown()
+    {
+        if (countdownToStop == null)
+            countdownToStop = FindFirstObjectByType<Countdown30s>();
+        if (countdownToStop != null)
+            countdownToStop.StopCountdownForOutro();
     }
 
     void ActivateCutsceneObjectIfNeeded()
@@ -205,24 +218,46 @@ public class activeAni : MonoBehaviour
             }
 
             cutsceneVideoPlayer.loopPointReached -= OnLoopPointReached;
-            RestoreOverlayCanvases();
-            if (cutsceneVideoPlayer.renderMode == VideoRenderMode.CameraNearPlane ||
-                cutsceneVideoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
+
+            bool willLoadNext = !string.IsNullOrEmpty(nextSceneName);
+            if (willLoadNext)
             {
-                cutsceneVideoPlayer.targetCameraAlpha = 0f;
+                GlobalSceneTransition.Instance?.SnapToBlack();
+                yield return new WaitForEndOfFrame();
+                if (cutsceneVideoPlayer.renderMode == VideoRenderMode.CameraNearPlane ||
+                    cutsceneVideoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
+                {
+                    cutsceneVideoPlayer.targetCameraAlpha = 0f;
+                }
+                cutsceneVideoPlayer.Stop();
             }
-            cutsceneVideoPlayer.Stop();
+            else
+            {
+                RestoreOverlayCanvases();
+                if (cutsceneVideoPlayer.renderMode == VideoRenderMode.CameraNearPlane ||
+                    cutsceneVideoPlayer.renderMode == VideoRenderMode.CameraFarPlane)
+                {
+                    cutsceneVideoPlayer.targetCameraAlpha = 0f;
+                }
+                cutsceneVideoPlayer.Stop();
+            }
         }
         else if (!hasAudio)
         {
             Debug.LogWarning("[activeAni] 未配置可播放视频或过场音频，跳过过场并直接切场景。");
         }
 
+        bool loadingNext = !string.IsNullOrEmpty(nextSceneName);
         if (hasAudio)
-            yield return EndCutsceneAudio();
+        {
+            if (loadingNext)
+                StopCutsceneAudioImmediate();
+            else
+                yield return EndCutsceneAudio();
+        }
 
-        if (!string.IsNullOrEmpty(nextSceneName))
-            GlobalSceneTransition.LoadScene(nextSceneName);
+        if (loadingNext)
+            GlobalSceneTransition.LoadSceneFromBlack(nextSceneName);
     }
 
     IEnumerator BeginCutsceneAudio()
@@ -334,6 +369,26 @@ public class activeAni : MonoBehaviour
         RestoreTemporaryMixSilence();
     }
 
+    void StopCutsceneAudioImmediate()
+    {
+        EnsureCutsceneSource();
+
+        var bgm = ResolveBackgroundMusic();
+        if (_pausedBgmForCutscene && bgm != null)
+        {
+            bgm.UnpauseForCutscene();
+            _pausedBgmForCutscene = false;
+        }
+
+        if (cutsceneSource != null && cutsceneSource.isPlaying)
+        {
+            cutsceneSource.Stop();
+            cutsceneSource.volume = 0f;
+        }
+
+        RestoreTemporaryMixSilence();
+    }
+
     void EnsureCutsceneSource()
     {
         if (cutsceneSource != null)
@@ -426,11 +481,15 @@ public class activeAni : MonoBehaviour
         _autoHiddenCanvases.Clear();
         _autoHiddenPrevStates.Clear();
 
+        var scene = gameObject.scene;
         var canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
         for (int i = 0; i < canvases.Length; i++)
         {
             var c = canvases[i];
             if (c == null || c.renderMode != RenderMode.ScreenSpaceOverlay) continue;
+            // 保留 DontDestroyOnLoad 的全局切关黑幕。
+            if (!c.gameObject.scene.IsValid() || c.gameObject.scene != scene) continue;
+
             _autoHiddenCanvases.Add(c);
             _autoHiddenPrevStates.Add(c.gameObject.activeSelf);
             c.gameObject.SetActive(false);

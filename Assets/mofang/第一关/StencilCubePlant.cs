@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-150)]
 public class StencilCubePlant : MonoBehaviour
 {
     [Header("相机与蒙版贴图")]
@@ -66,11 +67,8 @@ public class StencilCubePlant : MonoBehaviour
     public bool useThreeRTForVisibility = true;
     [Tooltip("需要时可手动拖引用；不填会运行时自动 FindObjectOfType。")]
     public CubeLayerRTPicker rtPicker;
-    [Tooltip(
-        "勾选：每帧强制关闭 CubeLayerRTPicker 左下角 RT 预览（避免挡画面）。\n" +
-        "不勾选：不改写 CubeLayerRTPicker.Show Debug RT Previews，由你在 RT Picker 上自行开关。"
-    )]
-    public bool hideRTDebugPreview = false;
+    [Tooltip("勾选后在屏幕左下角显示三张 RT 调试预览；默认不显示。")]
+    public bool showRTDebugPreview = false;
     [Tooltip("判定黑色为空的 RGB 阈值（RGB 最大值 <= 该值认为黑）。")]
     public float blackRgbThreshold = 0.02f;
     [Tooltip("判定为空的 Alpha 阈值（alpha <= 该值认为黑）。")]
@@ -98,6 +96,26 @@ public class StencilCubePlant : MonoBehaviour
 
         if (_readTex == null)
             _readTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+
+        ApplyRTDebugPreviewVisibility();
+    }
+
+    void OnEnable()
+    {
+        ApplyRTDebugPreviewVisibility();
+    }
+
+    void ApplyRTDebugPreviewVisibility()
+    {
+        if (!useThreeRTForVisibility)
+            return;
+
+        if (rtPicker == null)
+            rtPicker = FindObjectOfType<CubeLayerRTPicker>();
+        if (rtPicker == null)
+            return;
+
+        rtPicker.showDebugRTPreviews = showRTDebugPreview;
     }
 
     void Update()
@@ -127,9 +145,7 @@ public class StencilCubePlant : MonoBehaviour
         if (rtPicker == null)
             return;
 
-        // 仅在需要遮挡画面时强制关掉预览；为 false 时不覆盖 CubeLayerRTPicker 上的勾选。
-        if (hideRTDebugPreview)
-            rtPicker.showDebugRTPreviews = false;
+        ApplyRTDebugPreviewVisibility();
 
         rtPicker.EnsureRTRenderedForSampling();
         var rtBack = rtPicker.RtBack;

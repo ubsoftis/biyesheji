@@ -148,16 +148,24 @@ public class LevelOutroVideo : MonoBehaviour
 
             videoPlayer.loopPointReached -= OnLoopPointReached;
 
-            if (audio != null && audio.HasClip)
-                yield return audio.EndCutsceneAudio();
-
             bool willLoad = !string.IsNullOrEmpty(nextSceneName) || nextSceneBuildIndexIfNameEmpty >= 0;
+            if (willLoad)
+                GlobalSceneTransition.Instance?.SnapToBlack();
+
+            if (audio != null && audio.HasClip)
+            {
+                if (willLoad)
+                    audio.StopCutsceneImmediate();
+                else
+                    yield return audio.EndCutsceneAudio();
+            }
+
             RestoreAfter(root, loadScene: willLoad, deactivateRoot: deactivateRootAfterFinishIfNoLoad && !willLoad);
 
             if (!string.IsNullOrEmpty(nextSceneName))
-                GlobalSceneTransition.LoadScene(nextSceneName);
+                GlobalSceneTransition.LoadSceneFromBlack(nextSceneName);
             else if (nextSceneBuildIndexIfNameEmpty >= 0)
-                GlobalSceneTransition.LoadSceneByBuildIndex(nextSceneBuildIndexIfNameEmpty);
+                GlobalSceneTransition.LoadSceneByBuildIndexFromBlack(nextSceneBuildIndexIfNameEmpty);
             else
                 Debug.LogWarning("[LevelOutroVideo] 未配置 nextSceneName 或 nextSceneBuildIndexIfNameEmpty，播完后不会切场景。");
 
@@ -173,19 +181,21 @@ public class LevelOutroVideo : MonoBehaviour
     {
         if (videoPlayer != null)
         {
-            if (stopVideoPlayerAfterFinish)
+            if (stopVideoPlayerAfterFinish || loadScene)
                 videoPlayer.Stop();
 
-            if (clearCameraPlaneAfterFinish &&
+            if (!loadScene &&
+                clearCameraPlaneAfterFinish &&
                 (videoPlayer.renderMode == VideoRenderMode.CameraNearPlane || videoPlayer.renderMode == VideoRenderMode.CameraFarPlane))
             {
                 videoPlayer.targetCameraAlpha = 0f;
             }
         }
 
-        RestoreOverlayCanvases();
+        if (!loadScene)
+            RestoreOverlayCanvases();
 
-        if (disableWhilePlaying != null)
+        if (disableWhilePlaying != null && !loadScene)
         {
             for (int i = 0; i < disableWhilePlaying.Length; i++)
             {
@@ -209,12 +219,15 @@ public class LevelOutroVideo : MonoBehaviour
         _autoHiddenPrevStates.Clear();
 
         var canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+        var scene = gameObject.scene;
         for (int i = 0; i < canvases.Length; i++)
         {
             var c = canvases[i];
             if (c == null)
                 continue;
             if (c.renderMode != RenderMode.ScreenSpaceOverlay)
+                continue;
+            if (!c.gameObject.scene.IsValid() || c.gameObject.scene != scene)
                 continue;
 
             if (root != null && c.transform.IsChildOf(root.transform))
