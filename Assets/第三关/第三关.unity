@@ -20256,7 +20256,9 @@ MonoBehaviour:
     type: 3}
   backgroundMusic: {fileID: 0}
   backgroundMusicUseFade: 1
-  cutsceneVideoClip: {fileID: 32900000, guid: 552a9880039de2d40865520b63c9fd2d, type: 3}
+  backgroundMusicOnSceneLoad: {fileID: 0}
+  backgroundMusicOnSceneLoadUseFade: 1
+  cutsceneVideoClip: {fileID: 32900000, guid: ef3608e18ce0d5f4ba4838422342adbd, type: 3}
   cutsceneVideoUrl: 
   cutsceneVideoPlayer: {fileID: 242442034}
   cutsceneVideoRootToActivate: {fileID: 0}
@@ -27718,6 +27720,8 @@ MonoBehaviour:
   duration: 0.2
   rotateSound: {fileID: 8300000, guid: eb324cdb014e5164e9fd3173e5a45d98, type: 3}
   rotateAudioSource: {fileID: 0}
+  controlButtons: []
+  controlButtonsRoot: {fileID: 2040059475}
   List_History: []
   List_Str: []
   dir_R: 1
@@ -27738,8 +27742,6 @@ MonoBehaviour:
   axisSpace_D: 0
   axisSpace_F: 0
   axisSpace_B: 0
-  controlButtons: []
-  controlButtonsRoot: {fileID: 2040059475}
 --- !u!4 &2063572947
 Transform:
   m_ObjectHideFlags: 0

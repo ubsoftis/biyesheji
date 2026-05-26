@@ -112,6 +112,7 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
     float _fadeAlpha;
     Texture2D _blackTex;
     Coroutine _fadeCo;
+    bool _blackHeldAfterVideo;
     readonly List<Canvas> _autoHiddenCanvases = new List<Canvas>();
     readonly List<bool> _autoHiddenPrevStates = new List<bool>();
 
@@ -233,6 +234,7 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
 
     IEnumerator FadeOutAndLoadRoutine()
     {
+        _blackHeldAfterVideo = false;
         float hold = Mathf.Max(0f, holdDurationAfterLastSprite);
         if (hold > 0f)
         {
@@ -244,6 +246,13 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
 
         if (HasCutsceneVideo())
             yield return PlayCutsceneVideoRoutine();
+
+        if (_blackHeldAfterVideo)
+        {
+            LoadNextScene();
+            _fadeCo = null;
+            yield break;
+        }
 
         float dur = Mathf.Max(0.01f, fadeOutDuration);
         float t = 0f;
@@ -365,13 +374,34 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
             }
 
             player.loopPointReached -= OnLoopPointReached;
+            SnapBlackImmediate();
+            yield return new WaitForEndOfFrame();
             CleanupVideoPlayer(player);
         }
         finally
         {
-            RestoreOverlayCanvases();
-            SetObjectsActive(disableWhilePlayingVideo, true);
+            if (!transitionStarted)
+            {
+                RestoreOverlayCanvases();
+                SetObjectsActive(disableWhilePlayingVideo, true);
+            }
+
             CutscenePlaybackGate.Exit();
+        }
+    }
+
+    void SnapBlackImmediate()
+    {
+        _blackHeldAfterVideo = true;
+        _fadeAlpha = 1f;
+        GlobalSceneTransition.Instance?.SnapToBlack();
+
+        if (fullscreenBlackOverlay != null)
+        {
+            fullscreenBlackOverlay.gameObject.SetActive(true);
+            Color c = fullscreenBlackOverlay.color;
+            c.a = 1f;
+            fullscreenBlackOverlay.color = c;
         }
     }
 
@@ -399,7 +429,10 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
 
     void CleanupVideoPlayer(VideoPlayer player)
     {
-        if (player == null || !stopVideoPlayerAfterFinish)
+        if (player == null)
+            return;
+
+        if (!stopVideoPlayerAfterFinish)
             return;
 
         if (player.renderMode == VideoRenderMode.CameraNearPlane ||
@@ -429,6 +462,8 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
             if (!c.gameObject.scene.IsValid() || c.gameObject.scene != scene)
                 continue;
             if (root != null && c.transform.IsChildOf(root.transform))
+                continue;
+            if (c.gameObject.name == "GlobalTransitionCanvas")
                 continue;
 
             _autoHiddenCanvases.Add(c);
