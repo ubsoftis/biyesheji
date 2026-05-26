@@ -4936,9 +4936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db0ca4e796fb2e3469b621ce4a0c3765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blackMask: {fileID: 1740517902}
-  targetSceneIndex: 0
-  fadeSpeed: 1.2
+  targetSceneIndex: 1
   clickSfx: {fileID: 8300000, guid: eb721e7d4ec6ae54395ace74692431bf, type: 3}
   sfxVolumeScale: 1
 --- !u!1 &854292070
@@ -5365,7 +5363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93926e8a35a3272468a98e46e4a5eeb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 3
+  sceneIndex: 4
   clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
   sfxTag: 
   closedImages:
@@ -8142,7 +8140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93926e8a35a3272468a98e46e4a5eeb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 0
+  sceneIndex: 1
   clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
   sfxTag: 
   closedImages:
@@ -12624,6 +12622,55 @@ MonoBehaviour:
   sliderTickSfx: {fileID: 8300000, guid: 5d3613a99f5e0ac43a2acdfd87d61a4e, type: 3}
   sliderReleaseSfx: {fileID: 0}
   sliderTickSfxTag: 
+--- !u!1 &1900000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1900000001}
+  - component: {fileID: 1900000002}
+  m_Layer: 0
+  m_Name: GlobalSceneTransition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1900000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1900000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565d86a5e9c3d1a4bb0421592be1ec9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeDuration: 0.6
+  useUnscaledTime: 1
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeInOnFirstScene: 0
+  loadMode: 0
 --- !u!1 &1907257149
 GameObject:
   m_ObjectHideFlags: 0
@@ -14172,7 +14219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93926e8a35a3272468a98e46e4a5eeb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 1
+  sceneIndex: 2
   clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
   sfxTag: 
   closedImages:
@@ -14298,7 +14345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93926e8a35a3272468a98e46e4a5eeb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneIndex: 2
+  sceneIndex: 3
   clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
   sfxTag: 
   closedImages:
@@ -14665,55 +14712,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144065109}
   m_CullTransparentMesh: 1
---- !u!1 &1900000000
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1900000001}
-  - component: {fileID: 1900000002}
-  m_Layer: 0
-  m_Name: GlobalSceneTransition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1900000001
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1900000000}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1900000002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1900000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 565d86a5e9c3d1a4bb0421592be1ec9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeDuration: 0.6
-  useUnscaledTime: 1
-  fadeColor: {r: 0, g: 0, b: 0, a: 1}
-  fadeInOnFirstScene: 0
-  loadMode: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

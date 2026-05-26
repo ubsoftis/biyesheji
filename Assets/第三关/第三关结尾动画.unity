@@ -13758,9 +13758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db0ca4e796fb2e3469b621ce4a0c3765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blackMask: {fileID: 0}
   targetSceneIndex: 0
-  fadeSpeed: 1.2
   clickSfx: {fileID: 0}
   sfxVolumeScale: 1
 --- !u!65 &1525223117
@@ -14022,10 +14020,11 @@ MonoBehaviour:
   blackFadeStartDelay: 0
   blackFadeTime: 1.2
   blackFinalAlpha: 1
-  sceneIndexToLoad: 4
+  sceneIndexToLoad: 0
   waitBeforeLoadScene: 0
   enableSceneJump: 1
-  backgroundMusicOnSceneJump: {fileID: 8300000, guid: 8fd1ee92abba9d24ab26e63aff3a3d47, type: 3}
+  backgroundMusicOnSceneJump: {fileID: 8300000, guid: 8fd1ee92abba9d24ab26e63aff3a3d47,
+    type: 3}
   backgroundMusicOnSceneJumpUseFade: 1
   playOnStart: 1
 --- !u!1 &1539745248
@@ -14550,6 +14549,8 @@ MonoBehaviour:
   duration: 0.2
   rotateSound: {fileID: 0}
   rotateAudioSource: {fileID: 0}
+  controlButtons: []
+  controlButtonsRoot: {fileID: 0}
   List_History: []
   List_Str: []
   dir_R: 1
@@ -17009,7 +17010,7 @@ MonoBehaviour:
   controlColliderByVisibility: 1
   useThreeRTForVisibility: 1
   rtPicker: {fileID: 1608689648}
-  hideRTDebugPreview: 1
+  showRTDebugPreview: 0
   blackRgbThreshold: 0.02
   blackAlphaThreshold: 0.01
   invertIsVisible: 0
@@ -17690,7 +17691,8 @@ MonoBehaviour:
   backgroundMusicAfterThirdClick: {fileID: 0}
   backgroundMusic: {fileID: 0}
   backgroundMusicUseFade: 1
-  backgroundMusicOnSceneLoad: {fileID: 8300000, guid: 8fd1ee92abba9d24ab26e63aff3a3d47, type: 3}
+  backgroundMusicOnSceneLoad: {fileID: 8300000, guid: 8fd1ee92abba9d24ab26e63aff3a3d47,
+    type: 3}
   backgroundMusicOnSceneLoadUseFade: 1
   cutsceneVideoClip: {fileID: 0}
   cutsceneVideoUrl: 

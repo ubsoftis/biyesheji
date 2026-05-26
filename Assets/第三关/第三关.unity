@@ -27738,6 +27738,8 @@ MonoBehaviour:
   axisSpace_D: 0
   axisSpace_F: 0
   axisSpace_B: 0
+  controlButtons: []
+  controlButtonsRoot: {fileID: 2040059475}
 --- !u!4 &2063572947
 Transform:
   m_ObjectHideFlags: 0

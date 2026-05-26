@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +27,13 @@ public class mofanKeyRotation : MonoBehaviour
     [Tooltip("留空则自动在本物体上查找或添加 AudioSource")]
     public AudioSource rotateAudioSource;
 
+    [Header("控制按钮（忙时禁用，防重复点击与碰撞体错乱）")]
+    [Tooltip("复原 / 打乱 / 重置 等按钮。留空且指定 controlButtonsRoot 时会自动收集。")]
+    public Button[] controlButtons;
+
+    [Tooltip("三个控制按钮的父物体（如「魔方控制button」）。controlButtons 为空时从其子级收集 Button。")]
+    public Transform controlButtonsRoot;
+
     private GameObject BoxColler;
 
     private Dictionary<string, GameObject> Dic_ObjMap = new Dictionary<string, GameObject>();
@@ -36,6 +41,11 @@ public class mofanKeyRotation : MonoBehaviour
     public List<string> List_Str = new List<string>();
     private bool isComplete = true;
     private bool isAuto = false;
+    private bool _batchOperationRunning;
+    private Coroutine _batchCoroutine;
+
+    /// <summary>正在单层旋转、打乱或复原过程中为 true。</summary>
+    public bool IsBusy => !isComplete || _batchOperationRunning;
     private int lastGroupedCount = 0;
     private Vector3 boxPrevPos;
 		private Quaternion boxPrevRot;
@@ -216,6 +226,39 @@ public class mofanKeyRotation : MonoBehaviour
 
         // 记录初始姿态，便于“重置”按钮一键恢复
         CaptureInitialState();
+        CacheControlButtonsIfNeeded();
+        RefreshControlButtonsInteractable();
+    }
+
+    void CacheControlButtonsIfNeeded()
+    {
+        if (controlButtons != null && controlButtons.Length > 0)
+            return;
+
+        if (controlButtonsRoot == null)
+        {
+            var rootGo = GameObject.Find("魔方控制button");
+            if (rootGo != null)
+                controlButtonsRoot = rootGo.transform;
+        }
+
+        if (controlButtonsRoot == null)
+            return;
+
+        controlButtons = controlButtonsRoot.GetComponentsInChildren<Button>(true);
+    }
+
+    void RefreshControlButtonsInteractable()
+    {
+        if (controlButtons == null)
+            return;
+
+        bool interactable = !IsBusy;
+        for (int i = 0; i < controlButtons.Length; i++)
+        {
+            if (controlButtons[i] != null)
+                controlButtons[i].interactable = interactable;
+        }
     }
 
     void CaptureInitialState()
@@ -241,6 +284,9 @@ public class mofanKeyRotation : MonoBehaviour
 
     public void ResetCube()
     {
+        if (IsBusy)
+            return;
+
         // 归还到初始父子关系并还原局部位姿
         foreach (var t in cubeTransforms)
         {
@@ -271,19 +317,18 @@ public class mofanKeyRotation : MonoBehaviour
 
     void KeyDown()
     {
-        string key =KeyCheck();
-        if(key!=null)
-        {
+        if (IsBusy)
+            return;
+
+        string key = KeyCheck();
+        if (key != null)
             RotateObject(key);
-        }
     }
 
     string KeyCheck()
     {
-        if(isComplete == false)// 如果前一次旋转还没完成，则退出
-        {
+        if (!isComplete)
             return null;
-        }
         var keyMap = new Dictionary<KeyCode, string> //键盘按键映射
         {
             {KeyCode.W, "U"},
@@ -313,7 +358,9 @@ public class mofanKeyRotation : MonoBehaviour
 
     public void ButtonClick(string buttonName)
     {
-        isComplete=false;
+        if (IsBusy)
+            return;
+
         RotateObject(buttonName);
     }
     void Check_Coller()
@@ -411,9 +458,10 @@ public class mofanKeyRotation : MonoBehaviour
         rotateAudioSource.PlayOneShot(rotateSound);
     }
 
-    IEnumerator SmoothRotate (string str)
-    { 
+    IEnumerator SmoothRotate(string str)
+    {
         isComplete = false;
+        RefreshControlButtonsInteractable();
         PlayRotateSound();
         float targetAngle = 90f;
         Quaternion startRotation = BoxColler.transform.rotation;
@@ -488,43 +536,91 @@ public class mofanKeyRotation : MonoBehaviour
         isComplete = true;
         if (layerRTPicker != null)
             layerRTPicker.RefreshLayerAssignment();
+        RefreshControlButtonsInteractable();
+    }
+
+    IEnumerator WaitUntilRotationComplete()
+    {
+        while (!isComplete)
+            yield return null;
+    }
+
+    void BeginBatchOperation()
+    {
+        if (_batchCoroutine != null)
+        {
+            StopCoroutine(_batchCoroutine);
+            _batchCoroutine = null;
+        }
+
+        _batchOperationRunning = true;
+        RefreshControlButtonsInteractable();
+    }
+
+    void EndBatchOperation()
+    {
+        _batchOperationRunning = false;
+        _batchCoroutine = null;
+        RefreshControlButtonsInteractable();
     }
 
     //复原魔方
-    public void AutoRotate()//自动复原
-{
+    public void AutoRotate()
+    {
+        if (IsBusy)
+            return;
+
         isAuto = true;
-        StartCoroutine(AutoRotate_IE());
+        _batchCoroutine = StartCoroutine(AutoRotate_IE());
     }
 
-    IEnumerator AutoRotate_IE()//自动复原过程
+    IEnumerator AutoRotate_IE()
     {
+        BeginBatchOperation();
         duration = 0.1f;
-        for (int i = List_History.Count; i> 0; i--)
+        try
         {
-            string str = List_History [i - 1];
-            RotateObject (str);
-            yield return new WaitForSeconds (0.2f);
+            for (int i = List_History.Count; i > 0; i--)
+            {
+                string str = List_History[i - 1];
+                RotateObject(str);
+                yield return WaitUntilRotationComplete();
+            }
         }
-        isAuto = false;
-        List_History.Clear();
-    }
-
-    public void Disruption()//打乱魔方
-    {
-        isAuto = false;
-        StartCoroutine(Disruption_IE());
-    }
-
-    IEnumerator Disruption_IE()//打乱过程
-    {
-        duration = 0.1f;
-        for (int n = 0; n < 10; n++)
+        finally
         {
-            int num = Random.Range (0, List_Str.Count);
-            string str = List_Str [num];
-            RotateObject (str);
-            yield return new WaitForSeconds (0.2f);
+            isAuto = false;
+            List_History.Clear();
+            EndBatchOperation();
+        }
+    }
+
+    public void Disruption()
+    {
+        if (IsBusy)
+            return;
+
+        isAuto = false;
+        _batchCoroutine = StartCoroutine(Disruption_IE());
+    }
+
+    IEnumerator Disruption_IE()
+    {
+        BeginBatchOperation();
+        duration = 0.1f;
+        try
+        {
+            for (int n = 0; n < 10; n++)
+            {
+                int num = Random.Range(0, List_Str.Count);
+                string str = List_Str[num];
+                RotateObject(str);
+                yield return WaitUntilRotationComplete();
+            }
+        }
+        finally
+        {
+            EndBatchOperation();
         }
     }
 }

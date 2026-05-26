@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 using UnityEngine.Animations;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class 魔方 : MonoBehaviour
 {
@@ -22,11 +20,11 @@ public class 魔方 : MonoBehaviour
     小方块[] 记录所有小方块数组;
     GameObject 旋转的点;
     List<小方块> 正在旋转的小正方体列表 = new List<小方块>();
+    mofanKeyRotation _cubeKeyRotation;
 
-
-    // Start is called before the first frame update
     void Start()
     {
+        _cubeKeyRotation = FindFirstObjectByType<mofanKeyRotation>();
         魔方LayerID = LayerMask.NameToLayer("mofang");
         记录所有小方块数组 = this.GetComponentsInChildren<小方块>();
         旋转的点 = new GameObject("旋转的点");
@@ -198,10 +196,10 @@ public class 魔方 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!是否正在旋转)
-        {
-            检测鼠标拖动();
+        if (_cubeKeyRotation != null && _cubeKeyRotation.IsBusy)
+            return;
 
-        }
+        if (!是否正在旋转)
+            检测鼠标拖动();
     }
 }
