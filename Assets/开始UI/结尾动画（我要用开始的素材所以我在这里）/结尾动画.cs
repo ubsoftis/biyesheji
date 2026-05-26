@@ -173,6 +173,12 @@ public class CubeAnimationController : MonoBehaviour
     public float waitBeforeLoadScene = 0.5f;
     public bool enableSceneJump = true;
 
+    [Header("==== 跳转场景时 BGM ====")]
+    [Tooltip("跳转下一关前通过 BackgroundMusicPlayer 切换为此 BGM；留空则不换曲。")]
+    public AudioClip backgroundMusicOnSceneJump;
+    [Tooltip("换曲时是否淡入淡出（沿用 BackgroundMusicPlayer 的 fade 时长）。")]
+    public bool backgroundMusicOnSceneJumpUseFade = true;
+
     [Header("==== 开始播放 ====")]
     public bool playOnStart = true;
 
@@ -326,6 +332,8 @@ public class CubeAnimationController : MonoBehaviour
         if (enableSceneJump)
         {
             yield return new WaitForSeconds(waitBeforeLoadScene);
+            TrySwitchBackgroundMusicOnSceneJump();
+            StopCreditsBgmIfPlaying();
             GlobalSceneTransition.LoadSceneByBuildIndexFromBlack(sceneIndexToLoad);
         }
 
@@ -1141,4 +1149,40 @@ public class CubeAnimationController : MonoBehaviour
     // ===================================================================
     // ====== 制作人名单结束 ======
     // ===================================================================
+
+    void TrySwitchBackgroundMusicOnSceneJump()
+    {
+        if (backgroundMusicOnSceneJump == null)
+            return;
+
+        var bgm = ResolveBackgroundMusic();
+        if (bgm == null)
+        {
+            Debug.LogWarning("[CubeAnimationController] 已配置 backgroundMusicOnSceneJump，但未找到 BackgroundMusicPlayer。");
+            return;
+        }
+
+        bgm.PlayMusic(backgroundMusicOnSceneJump, backgroundMusicOnSceneJumpUseFade);
+    }
+
+    void StopCreditsBgmIfPlaying()
+    {
+        if (creditsBGMSource != null && creditsBGMSource.isPlaying)
+            creditsBGMSource.Stop();
+    }
+
+    BackgroundMusicPlayer ResolveBackgroundMusic()
+    {
+        if (AudioManager.Instance != null)
+        {
+            var onRoot = AudioManager.Instance.GetComponent<BackgroundMusicPlayer>();
+            if (onRoot != null)
+                return onRoot;
+            var inHierarchy = AudioManager.Instance.GetComponentInChildren<BackgroundMusicPlayer>(true);
+            if (inHierarchy != null)
+                return inHierarchy;
+        }
+
+        return FindFirstObjectByType<BackgroundMusicPlayer>();
+    }
 }

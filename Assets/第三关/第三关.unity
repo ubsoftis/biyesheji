@@ -3969,6 +3969,78 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 235281265}
   m_CullTransparentMesh: 1
+--- !u!1 &242442033
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 242442035}
+  - component: {fileID: 242442034}
+  m_Layer: 0
+  m_Name: Video Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!328 &242442034
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242442033}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!224 &242442035
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242442033}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 172.61}
+  m_LocalScale: {x: 0.009259259, y: 0.009259259, z: 0.009259259}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 108}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &254799399
 GameObject:
   m_ObjectHideFlags: 0
@@ -4571,10 +4643,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: stateRotate 1
   sceneBuildIndex: 4
-  loadMode: 0
-  blackMask: {fileID: 0}
-  fadeDuration: 0.5
-  fadeUsesUnscaledTime: 1
   clickSfx: {fileID: 8300000, guid: fd3eb4a0c3267af4eb31d6b3b8d7ba85, type: 3}
   sfxTag: 
   sfxVolumeScale: 1
@@ -11983,7 +12051,7 @@ MonoBehaviour:
   controlColliderByVisibility: 1
   useThreeRTForVisibility: 1
   rtPicker: {fileID: 919132148186213059}
-  hideRTDebugPreview: 1
+  showRTDebugPreview: 0
   blackRgbThreshold: 0.02
   blackAlphaThreshold: 0.01
   invertIsVisible: 0
@@ -20184,6 +20252,18 @@ MonoBehaviour:
   holdDurationAfterLastSprite: 0.75
   fadeOutDuration: 1
   fadeUsesUnscaledTime: 1
+  backgroundMusicAfterThirdClick: {fileID: 8300000, guid: 453959f0cf183504b9780e5856481d57,
+    type: 3}
+  backgroundMusic: {fileID: 0}
+  backgroundMusicUseFade: 1
+  cutsceneVideoClip: {fileID: 32900000, guid: 552a9880039de2d40865520b63c9fd2d, type: 3}
+  cutsceneVideoUrl: 
+  cutsceneVideoPlayer: {fileID: 242442034}
+  cutsceneVideoRootToActivate: {fileID: 0}
+  autoHideOverlayCanvases: 1
+  disableWhilePlayingVideo: []
+  videoPrepareTimeoutSeconds: 5
+  stopVideoPlayerAfterFinish: 1
   nextSceneName: "\u7B2C\u4E09\u5173\u7ED3\u5C3E\u52A8\u753B"
   nextSceneBuildIndexIfNameEmpty: 5
   onAfterSpriteStep:
@@ -32187,6 +32267,7 @@ SceneRoots:
   - {fileID: 942851609}
   - {fileID: 708798545}
   - {fileID: 180703556}
+  - {fileID: 242442035}
   - {fileID: 439196413}
   - {fileID: 729284286}
   - {fileID: 522325809}

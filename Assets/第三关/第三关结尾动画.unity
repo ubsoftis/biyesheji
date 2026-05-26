@@ -14025,6 +14025,8 @@ MonoBehaviour:
   sceneIndexToLoad: 4
   waitBeforeLoadScene: 0
   enableSceneJump: 1
+  backgroundMusicOnSceneJump: {fileID: 8300000, guid: 8fd1ee92abba9d24ab26e63aff3a3d47, type: 3}
+  backgroundMusicOnSceneJumpUseFade: 1
   playOnStart: 1
 --- !u!1 &1539745248
 GameObject:
@@ -17685,6 +17687,19 @@ MonoBehaviour:
   holdDurationAfterLastSprite: 0.75
   fadeOutDuration: 1
   fadeUsesUnscaledTime: 1
+  backgroundMusicAfterThirdClick: {fileID: 0}
+  backgroundMusic: {fileID: 0}
+  backgroundMusicUseFade: 1
+  backgroundMusicOnSceneLoad: {fileID: 8300000, guid: 8fd1ee92abba9d24ab26e63aff3a3d47, type: 3}
+  backgroundMusicOnSceneLoadUseFade: 1
+  cutsceneVideoClip: {fileID: 0}
+  cutsceneVideoUrl: 
+  cutsceneVideoPlayer: {fileID: 0}
+  cutsceneVideoRootToActivate: {fileID: 0}
+  autoHideOverlayCanvases: 1
+  disableWhilePlayingVideo: []
+  videoPrepareTimeoutSeconds: 5
+  stopVideoPlayerAfterFinish: 1
   nextSceneName: stateRotate
   nextSceneBuildIndexIfNameEmpty: -1
   onAfterSpriteStep:

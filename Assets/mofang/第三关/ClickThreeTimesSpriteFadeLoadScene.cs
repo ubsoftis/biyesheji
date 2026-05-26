@@ -1,12 +1,15 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 /// <summary>
 /// 挂在带 <see cref="Collider"/> / <see cref="Collider2D"/> 的可点击物体上（需 Main Camera 与 Physics 射线）：
 /// 每点击一次替换本物体或指定 <see cref="SpriteRenderer"/> 的贴图；共三次；
-/// 第三次换图后先停留一小段时间展示最后一张图，再渐隐黑屏并加载下一关（场景名优先，否则 build index）。
+/// 第三次换图后可换 BGM、播放过场视频，再渐隐黑屏并加载下一关（场景名优先，否则 build index）。
 /// </summary>
 public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
 {
@@ -47,6 +50,47 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
     [Tooltip("停留与渐隐是否使用非缩放时间（与 holdDurationAfterLastSprite、fadeOutDuration 一致）；避免 Time.timeScale=0 时卡住。")]
     public bool fadeUsesUnscaledTime = true;
 
+    [Header("背景音乐（第三次点击后）")]
+    [Tooltip("第三次换图完成后切换为此 BGM；留空则不换曲。")]
+    public AudioClip backgroundMusicAfterThirdClick;
+
+    [Tooltip("一般留空：自动从 AudioManager 上找 BackgroundMusicPlayer。")]
+    public BackgroundMusicPlayer backgroundMusic;
+
+    [Tooltip("换曲时是否淡入淡出（沿用 BackgroundMusicPlayer 的 fade 时长）。")]
+    public bool backgroundMusicUseFade = true;
+
+    [Tooltip("加载下一关前切换为此 BGM；留空则不换曲。")]
+    public AudioClip backgroundMusicOnSceneLoad;
+
+    [Tooltip("加载下一关换曲时是否淡入淡出。")]
+    public bool backgroundMusicOnSceneLoadUseFade = true;
+
+    [Header("过场视频（第三次点击后，黑屏前）")]
+    [Tooltip("视频 Clip；与 videoUrl、VideoPlayer 上已有 clip 三选一。")]
+    public VideoClip cutsceneVideoClip;
+
+    [Tooltip("可填完整 URL，或仅文件名（从 StreamingAssets 读取）。")]
+    public string cutsceneVideoUrl;
+
+    [Tooltip("不填则在 cutsceneVideoRoot 或本物体上查找/添加 VideoPlayer。")]
+    public VideoPlayer cutsceneVideoPlayer;
+
+    [Tooltip("播放前激活的根物体（如黑底 UI）。不填则用本物体。")]
+    public GameObject cutsceneVideoRootToActivate;
+
+    [Tooltip("播放期间自动隐藏本场景 Screen Space Overlay Canvas，避免挡住视频。")]
+    public bool autoHideOverlayCanvases = true;
+
+    [Tooltip("播放视频期间 SetActive(false) 的对象（可选）。")]
+    public GameObject[] disableWhilePlayingVideo;
+
+    [Min(0.1f)]
+    public float videoPrepareTimeoutSeconds = 5f;
+
+    [Tooltip("视频播完后 Stop VideoPlayer，并清除 Camera 平面残留。")]
+    public bool stopVideoPlayerAfterFinish = true;
+
     [Header("下一关（与 LevelOutroVideo 相同优先级）")]
     [Tooltip("非空则 LoadScene(名称)。")]
     public string nextSceneName;
@@ -68,6 +112,8 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
     float _fadeAlpha;
     Texture2D _blackTex;
     Coroutine _fadeCo;
+    readonly List<Canvas> _autoHiddenCanvases = new List<Canvas>();
+    readonly List<bool> _autoHiddenPrevStates = new List<bool>();
 
     void Awake()
     {
@@ -119,10 +165,61 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
         if (_step >= 3)
         {
             transitionStarted = true;
+            TrySwitchBackgroundMusicAfterThirdClick();
             if (_fadeCo != null)
                 StopCoroutine(_fadeCo);
             _fadeCo = StartCoroutine(FadeOutAndLoadRoutine());
         }
+    }
+
+    void TrySwitchBackgroundMusicAfterThirdClick()
+    {
+        if (backgroundMusicAfterThirdClick == null)
+            return;
+
+        var bgm = ResolveBackgroundMusic();
+        if (bgm == null)
+        {
+            Debug.LogWarning(
+                $"[ClickThreeTimesSpriteFadeLoadScene] {name} 已配置 backgroundMusicAfterThirdClick，但未找到 BackgroundMusicPlayer。");
+            return;
+        }
+
+        bgm.PlayMusic(backgroundMusicAfterThirdClick, backgroundMusicUseFade);
+    }
+
+    void TrySwitchBackgroundMusicOnSceneLoad()
+    {
+        if (backgroundMusicOnSceneLoad == null)
+            return;
+
+        var bgm = ResolveBackgroundMusic();
+        if (bgm == null)
+        {
+            Debug.LogWarning(
+                $"[ClickThreeTimesSpriteFadeLoadScene] {name} 已配置 backgroundMusicOnSceneLoad，但未找到 BackgroundMusicPlayer。");
+            return;
+        }
+
+        bgm.PlayMusic(backgroundMusicOnSceneLoad, backgroundMusicOnSceneLoadUseFade);
+    }
+
+    BackgroundMusicPlayer ResolveBackgroundMusic()
+    {
+        if (backgroundMusic != null)
+            return backgroundMusic;
+
+        if (AudioManager.Instance != null)
+        {
+            var onRoot = AudioManager.Instance.GetComponent<BackgroundMusicPlayer>();
+            if (onRoot != null)
+                return onRoot;
+            var inHierarchy = AudioManager.Instance.GetComponentInChildren<BackgroundMusicPlayer>(true);
+            if (inHierarchy != null)
+                return inHierarchy;
+        }
+
+        return FindFirstObjectByType<BackgroundMusicPlayer>();
     }
 
     void PlayClickSfxIfConfigured()
@@ -144,6 +241,9 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
             else
                 yield return new WaitForSeconds(hold);
         }
+
+        if (HasCutsceneVideo())
+            yield return PlayCutsceneVideoRoutine();
 
         float dur = Mathf.Max(0.01f, fadeOutDuration);
         float t = 0f;
@@ -181,8 +281,201 @@ public class ClickThreeTimesSpriteFadeLoadScene : MonoBehaviour
         _fadeCo = null;
     }
 
+    bool HasCutsceneVideo()
+    {
+        if (cutsceneVideoClip != null || !string.IsNullOrWhiteSpace(cutsceneVideoUrl))
+            return true;
+
+        var player = cutsceneVideoPlayer;
+        if (player == null && cutsceneVideoRootToActivate != null)
+            player = cutsceneVideoRootToActivate.GetComponentInChildren<VideoPlayer>(true);
+        if (player == null)
+            player = GetComponentInChildren<VideoPlayer>(true);
+
+        return player != null && (player.clip != null || !string.IsNullOrEmpty(player.url));
+    }
+
+    IEnumerator PlayCutsceneVideoRoutine()
+    {
+        CutscenePlaybackGate.Enter();
+        GameObject root = cutsceneVideoRootToActivate != null ? cutsceneVideoRootToActivate : gameObject;
+        VideoPlayer player = null;
+        try
+        {
+            if (root != null && !root.activeSelf)
+                root.SetActive(true);
+
+            SetObjectsActive(disableWhilePlayingVideo, false);
+            AutoHideOverlayCanvases(root);
+
+            player = ResolveCutsceneVideoPlayer(root);
+            if (player == null)
+                yield break;
+
+            player.playOnAwake = false;
+            player.isLooping = false;
+
+            if (player.renderMode != VideoRenderMode.CameraNearPlane &&
+                player.renderMode != VideoRenderMode.CameraFarPlane)
+            {
+                player.renderMode = VideoRenderMode.CameraNearPlane;
+            }
+
+            if (player.targetCamera == null)
+                player.targetCamera = Camera.main;
+
+            if (player.renderMode == VideoRenderMode.CameraNearPlane ||
+                player.renderMode == VideoRenderMode.CameraFarPlane)
+            {
+                player.targetCameraAlpha = 1f;
+            }
+
+            if (cutsceneVideoClip != null)
+            {
+                player.source = VideoSource.VideoClip;
+                player.clip = cutsceneVideoClip;
+            }
+            else if (!string.IsNullOrWhiteSpace(cutsceneVideoUrl))
+            {
+                player.source = VideoSource.Url;
+                player.url = NormalizeVideoUrl(cutsceneVideoUrl);
+            }
+
+            bool finished = false;
+            void OnLoopPointReached(VideoPlayer _) => finished = true;
+            player.loopPointReached += OnLoopPointReached;
+
+            player.Prepare();
+            float prepareDeadline = Time.realtimeSinceStartup + videoPrepareTimeoutSeconds;
+            while (!player.isPrepared && Time.realtimeSinceStartup < prepareDeadline)
+                yield return null;
+
+            if (!player.isPrepared)
+            {
+                Debug.LogWarning($"[ClickThreeTimesSpriteFadeLoadScene] {name} 视频 Prepare 超时，跳过播放。");
+                player.loopPointReached -= OnLoopPointReached;
+                yield break;
+            }
+
+            player.Play();
+            while (!finished &&
+                   (player.isPlaying || player.frame < (long)player.frameCount - 1))
+            {
+                yield return null;
+            }
+
+            player.loopPointReached -= OnLoopPointReached;
+            CleanupVideoPlayer(player);
+        }
+        finally
+        {
+            RestoreOverlayCanvases();
+            SetObjectsActive(disableWhilePlayingVideo, true);
+            CutscenePlaybackGate.Exit();
+        }
+    }
+
+    VideoPlayer ResolveCutsceneVideoPlayer(GameObject root)
+    {
+        if (cutsceneVideoPlayer != null)
+            return cutsceneVideoPlayer;
+
+        if (root != null)
+        {
+            var fromRoot = root.GetComponent<VideoPlayer>();
+            if (fromRoot != null)
+                return fromRoot;
+            var inRoot = root.GetComponentInChildren<VideoPlayer>(true);
+            if (inRoot != null)
+                return inRoot;
+        }
+
+        var onSelf = GetComponent<VideoPlayer>();
+        if (onSelf != null)
+            return onSelf;
+
+        return GetComponentInChildren<VideoPlayer>(true);
+    }
+
+    void CleanupVideoPlayer(VideoPlayer player)
+    {
+        if (player == null || !stopVideoPlayerAfterFinish)
+            return;
+
+        if (player.renderMode == VideoRenderMode.CameraNearPlane ||
+            player.renderMode == VideoRenderMode.CameraFarPlane)
+        {
+            player.targetCameraAlpha = 0f;
+        }
+
+        player.Stop();
+    }
+
+    void AutoHideOverlayCanvases(GameObject root)
+    {
+        if (!autoHideOverlayCanvases)
+            return;
+
+        _autoHiddenCanvases.Clear();
+        _autoHiddenPrevStates.Clear();
+
+        var scene = gameObject.scene;
+        var canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
+        for (int i = 0; i < canvases.Length; i++)
+        {
+            var c = canvases[i];
+            if (c == null || c.renderMode != RenderMode.ScreenSpaceOverlay)
+                continue;
+            if (!c.gameObject.scene.IsValid() || c.gameObject.scene != scene)
+                continue;
+            if (root != null && c.transform.IsChildOf(root.transform))
+                continue;
+
+            _autoHiddenCanvases.Add(c);
+            _autoHiddenPrevStates.Add(c.gameObject.activeSelf);
+            c.gameObject.SetActive(false);
+        }
+    }
+
+    void RestoreOverlayCanvases()
+    {
+        for (int i = 0; i < _autoHiddenCanvases.Count; i++)
+        {
+            var c = _autoHiddenCanvases[i];
+            if (c == null)
+                continue;
+            bool prev = i < _autoHiddenPrevStates.Count && _autoHiddenPrevStates[i];
+            c.gameObject.SetActive(prev);
+        }
+
+        _autoHiddenCanvases.Clear();
+        _autoHiddenPrevStates.Clear();
+    }
+
+    static void SetObjectsActive(GameObject[] objects, bool active)
+    {
+        if (objects == null)
+            return;
+
+        for (int i = 0; i < objects.Length; i++)
+        {
+            if (objects[i] != null)
+                objects[i].SetActive(active);
+        }
+    }
+
+    static string NormalizeVideoUrl(string urlOrFileName)
+    {
+        if (urlOrFileName.Contains("://") || Path.IsPathRooted(urlOrFileName))
+            return urlOrFileName;
+
+        return Path.Combine(Application.streamingAssetsPath, urlOrFileName);
+    }
+
     void LoadNextScene()
     {
+        TrySwitchBackgroundMusicOnSceneLoad();
+
         if (GlobalSceneTransition.Instance != null)
             GlobalSceneTransition.Instance.SnapToBlack();
 

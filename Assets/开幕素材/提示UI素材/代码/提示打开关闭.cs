@@ -23,7 +23,7 @@ public class CanvasPanelManager : MonoBehaviour
     [Tooltip("立绘回归位置。拖 Hierarchy 里的「对话角色背景框」（与对话树 MoveTowards 终点相同）。不填则自动按名字查找。")]
     [SerializeField] private Transform dialoguePortraitHomeAnchor;
 
-    [Tooltip("打开提示面板、中断对话时额外 SetActive(true) 的对象。不填则仅自动激活「对话角色背景框」与立绘 UI。")]
+    [Tooltip("打开提示面板、且对话仍在进行中被打断时，额外 SetActive(true) 的对象。对话已跑完则不会激活。")]
     [SerializeField] private GameObject objectToActivateOnInterrupt;
 
     // 内部变量：用来保存按钮最干净的母体备份
@@ -99,8 +99,9 @@ public class CanvasPanelManager : MonoBehaviour
         if (!EnsurePanelComponents())
             return;
 
-        ForceInterruptActiveDialogue();
-        ActivateObjectsAfterDialogueInterrupt();
+        bool didInterruptDialogue = ForceInterruptActiveDialogue();
+        if (didInterruptDialogue)
+            ActivateObjectsAfterDialogueInterrupt();
         EnsureCloseButtonBackup();
 
         // 1. 激活面板
@@ -171,13 +172,15 @@ public class CanvasPanelManager : MonoBehaviour
     /// 中断当前对话：先 Pause 停住字幕/Action 协程，再 Stop(false) 中止图（不当作成功跑完）。
     /// 不 SetActive 关闭 DialogueUGUI，保留事件订阅供之后重新对话。
     /// </summary>
-    private void ForceInterruptActiveDialogue()
+    /// <returns>是否有正在运行的对话被中断（已跑完则返回 false）。</returns>
+    private bool ForceInterruptActiveDialogue()
     {
         if (dialogueControllersToInterrupt != null && dialogueControllersToInterrupt.Length > 0)
         {
+            bool interrupted = false;
             for (int i = 0; i < dialogueControllersToInterrupt.Length; i++)
-                InterruptController(dialogueControllersToInterrupt[i], dialoguePortraitHomeAnchor);
-            return;
+                interrupted |= TryInterruptController(dialogueControllersToInterrupt[i], dialoguePortraitHomeAnchor);
+            return interrupted;
         }
 
         DialogueTree current = DialogueTree.currentDialogue;
@@ -185,38 +188,30 @@ public class CanvasPanelManager : MonoBehaviour
         {
             DialogueTreeController owner = FindControllerForTree(current) ?? FindAnyRunningController();
             if (owner != null)
-            {
-                InterruptController(owner, dialoguePortraitHomeAnchor);
-                return;
-            }
+                return TryInterruptController(owner, dialoguePortraitHomeAnchor);
 
             PauseDialogueGraph(current);
             DialoguePortraitReset.ResetForTree(current, dialoguePortraitHomeAnchor, null);
             current.Stop(false);
-            return;
+            return true;
         }
 
         DialogueTreeController running = FindAnyRunningController();
         if (running != null)
-        {
-            InterruptController(running, dialoguePortraitHomeAnchor);
-            return;
-        }
+            return TryInterruptController(running, dialoguePortraitHomeAnchor);
 
-        DialogueTreeController[] controllers =
-            Object.FindObjectsOfType<DialogueTreeController>(true);
-        for (int i = 0; i < controllers.Length; i++)
-            InterruptController(controllers[i], dialoguePortraitHomeAnchor);
+        return false;
     }
 
-    private static void InterruptController(DialogueTreeController controller, Transform portraitHomeAnchor)
+    private static bool TryInterruptController(DialogueTreeController controller, Transform portraitHomeAnchor)
     {
         if (controller == null || !controller.isRunning)
-            return;
+            return false;
 
         PauseDialogueGraph(controller);
         DialoguePortraitReset.ResetForController(controller, portraitHomeAnchor);
         controller.StopBehaviour(false);
+        return true;
     }
 
     private void ActivateObjectsAfterDialogueInterrupt()
