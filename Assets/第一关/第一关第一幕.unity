@@ -35340,6 +35340,8 @@ MonoBehaviour:
   duration: 0.2
   rotateSound: {fileID: 8300000, guid: eb324cdb014e5164e9fd3173e5a45d98, type: 3}
   rotateAudioSource: {fileID: 0}
+  controlButtons: []
+  controlButtonsRoot: {fileID: 0}
   List_History: []
   List_Str: []
   dir_R: 1
